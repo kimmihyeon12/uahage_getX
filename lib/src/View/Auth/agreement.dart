@@ -1,13 +1,13 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/all.dart';
-import 'package:uahage_getx/src/API/auth.dart';
+import 'package:uahage/src/API/auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:uahage_getx/src/Static/Widget/dialog.dart';
-import 'package:uahage_getx/src/Controller/login.controller.dart';
+import 'package:uahage/src/Static/Widget/dialog.dart';
+import 'package:uahage/src/Controller/login.controller.dart';
 import 'package:get/get.dart';
-import 'package:uahage_getx/src/Static/Widget/appbar.dart';
-import 'package:uahage_getx/src/Static/Font/font.dart';
+import 'package:uahage/src/Static/Widget/appbar.dart';
+import 'package:uahage/src/Static/Font/font.dart';
 
 class agreement extends GetView<loginCotroller> {
   auth auths = new auth();

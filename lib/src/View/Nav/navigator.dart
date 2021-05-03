@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:uahage_getx/src/Controller/navigator.controller.dart';
+import 'package:uahage/src/Controller/navigator.controller.dart';
 import 'package:get/get.dart';
-import 'package:uahage_getx/src/View/Nav/home.dart';
-import 'package:uahage_getx/src/View/Nav/search.dart';
-import 'package:uahage_getx/src/View/Nav/star.dart';
-import 'package:uahage_getx/src/View/Nav/mypage.dart';
+import 'package:uahage/src/View/Nav/home.dart';
+import 'package:uahage/src/View/Nav/search.dart';
+import 'package:uahage/src/View/Nav/star.dart';
+import 'package:uahage/src/View/Nav/mypage.dart';
 
 class navigation extends GetView<navigatorController> {
   @override

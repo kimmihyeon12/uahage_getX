@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:uahage_getx/src/Controller/navigator.controller.dart';
+import 'package:uahage/src/Controller/navigator.controller.dart';
 
 class InitBinding implements Bindings {
   @override

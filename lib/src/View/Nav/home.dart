@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:uahage_getx/src/Controller/login.controller.dart';
-import 'package:uahage_getx/src/Static/Font/font.dart';
-import 'package:uahage_getx/src/Static/Widget/appbar.dart';
-import 'package:uahage_getx/src/Controller/homepage.controller.dart';
+import 'package:uahage/src/Controller/login.controller.dart';
+import 'package:uahage/src/Static/Font/font.dart';
+import 'package:uahage/src/Static/Widget/appbar.dart';
+import 'package:uahage/src/Controller/homepage.controller.dart';
 
 import 'package:get/get.dart';
-import 'package:uahage_getx/src/Static/Widget/toast.dart';
-import 'package:uahage_getx/src/View/Nav/HomeSub/searchBar.dart';
+import 'package:uahage/src/Static/Widget/toast.dart';
+import 'package:uahage/src/View/Nav/HomeSub/searchBar.dart';
 
 class home extends GetView<homeContoller> {
   var homeimage = [

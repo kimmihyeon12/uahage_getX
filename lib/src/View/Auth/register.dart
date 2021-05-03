@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:uahage_getx/src/Controller/login.controller.dart';
+import 'package:uahage/src/Controller/login.controller.dart';
 
 class register extends GetView<loginCotroller> {
   String url = "http://121.148.172.38:8000";

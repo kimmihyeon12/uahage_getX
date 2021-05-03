@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uahage_getx/src/View/Auth/login.dart';
-import 'package:uahage_getx/src/View/Nav/navigator.dart';
+import 'package:uahage/src/View/Auth/login.dart';
+import 'package:uahage/src/View/Nav/navigator.dart';
 
 class wrapper extends StatefulWidget {
   //email check page

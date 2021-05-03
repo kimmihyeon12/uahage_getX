@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
-import 'package:uahage_getx/src/Controller/login.controller.dart';
+import 'package:uahage/src/Controller/login.controller.dart';
 
 class auth extends GetView<loginCotroller> {
   String url = FlutterConfig.get('API_URL');

@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:uahage_getx/src/Static/Widget/appbar.dart';
-import 'package:uahage_getx/src/Static/Font/font.dart';
+import 'package:uahage/src/Static/Widget/appbar.dart';
+import 'package:uahage/src/Static/Font/font.dart';
 
 class announce extends StatelessWidget {
   @override

@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:uahage_getx/src/Controller/login.controller.dart';
+import 'package:uahage/src/Controller/login.controller.dart';
 import 'package:flutter/material.dart';
-import 'package:uahage_getx/src/API/auth.dart';
+import 'package:uahage/src/API/auth.dart';
 import 'package:kakao_flutter_sdk/all.dart';
 
 class SnsLogin extends GetView<loginCotroller> {

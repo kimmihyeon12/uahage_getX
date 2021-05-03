@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:uahage_getx/src/Static/Font/font.dart';
+import 'package:uahage/src/Static/Font/font.dart';
 
 // back => back button 여부
 // text => appbar에 들어갈 text

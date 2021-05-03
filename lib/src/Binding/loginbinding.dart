@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:uahage_getx/src/Controller/login.controller.dart';
+import 'package:uahage/src/Controller/login.controller.dart';
 
 class loginBinding implements Bindings {
   @override

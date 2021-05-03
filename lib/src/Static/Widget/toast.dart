@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:uahage_getx/src/Static/Font/font.dart';
+import 'package:uahage/src/Static/Font/font.dart';
 
 toast(context, text) {
   ScreenUtil.init(context, width: 1500, height: 2667);
