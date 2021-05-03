@@ -11,15 +11,37 @@ class loginCotroller extends GetxService {
 
   final nicknames = ''.obs;
   final genders = ''.obs;
-  final girl = false.obs;
-  final boy = false.obs;
+  final girl = true.obs;
+  final boy = true.obs;
   final birthdays = ''.obs;
   final ages = 0.obs;
   final error = false.obs;
   final isIdValid = false.obs;
 
+  final imageLink = ''.obs;
+  final fileimage = ''.obs;
+
   final check = <bool>[false, false, false, false].obs;
   final ageImage = <bool>[false, false, false, false, false, false].obs;
+
+  void initsetting() {
+    installed(false);
+    register(false);
+    userId('');
+    tokens('');
+    emails('');
+    loginOption('');
+    nicknames('');
+    genders('');
+    girl(true);
+    boy(true);
+    birthdays('');
+    ages(0);
+    error(false);
+    isIdValid(false);
+    imageLink('');
+    fileimage('');
+  }
 
   void installedstate(bool state) {
     installed(state);
@@ -61,6 +83,14 @@ class loginCotroller extends GetxService {
     nicknames(nickname);
   }
 
+  void setimage(String image) {
+    imageLink(image);
+  }
+
+  void setfileimage(image) {
+    imageLink(image);
+  }
+
   void setgender(String gender) {
     genders(gender);
   }
@@ -93,64 +123,52 @@ class loginCotroller extends GetxService {
   void setAgeColor(int age) {
     if (age == 10) {
       ages(10);
-      List<bool> image;
-      image[0] = true;
-      image[1] = false;
-      image[2] = false;
-      image[3] = false;
-      image[4] = false;
-      image[5] = false;
-      ageImage(image);
+      ageImage[0] = true;
+      ageImage[1] = false;
+      ageImage[2] = false;
+      ageImage[3] = false;
+      ageImage[4] = false;
+      ageImage[5] = false;
     } else if (age == 20) {
       ages(20);
-      List<bool> image;
-      image[0] = false;
-      image[1] = true;
-      image[2] = false;
-      image[3] = false;
-      image[4] = false;
-      image[5] = false;
-      ageImage(image);
+      ageImage[0] = false;
+      ageImage[1] = true;
+      ageImage[2] = false;
+      ageImage[3] = false;
+      ageImage[4] = false;
+      ageImage[5] = false;
     } else if (age == 30) {
       ages(30);
-      List<bool> image;
-      image[0] = false;
-      image[1] = false;
-      image[2] = true;
-      image[3] = false;
-      image[4] = false;
-      image[5] = false;
-      ageImage(image);
+      ageImage[0] = false;
+      ageImage[1] = false;
+      ageImage[2] = true;
+      ageImage[3] = false;
+      ageImage[4] = false;
+      ageImage[5] = false;
     } else if (age == 40) {
       ages(40);
-      List<bool> image;
-      image[0] = false;
-      image[1] = false;
-      image[2] = false;
-      image[3] = true;
-      image[4] = false;
-      image[5] = false;
-      ageImage(image);
+      ageImage[0] = false;
+      ageImage[1] = false;
+      ageImage[2] = false;
+      ageImage[3] = true;
+      ageImage[4] = false;
+      ageImage[5] = false;
     } else if (age == 50) {
       ages(50);
-      List<bool> image;
-      image[0] = false;
-      image[1] = false;
-      image[2] = false;
-      image[3] = false;
-      image[4] = true;
-      image[5] = false;
-      ageImage(image);
+      ageImage[0] = false;
+      ageImage[1] = false;
+      ageImage[2] = false;
+      ageImage[3] = false;
+      ageImage[4] = true;
+      ageImage[5] = false;
     } else {
       ages(60);
-      List<bool> image;
-      image[0] = false;
-      image[1] = false;
-      image[2] = false;
-      image[3] = false;
-      image[4] = false;
-      image[5] = true;
-      ageImage(image);
+      ageImage[0] = false;
+      ageImage[1] = false;
+      ageImage[2] = false;
+      ageImage[3] = false;
+      ageImage[4] = false;
+      ageImage[5] = true;
     }
   }
 

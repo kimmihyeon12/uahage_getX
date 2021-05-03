@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:uahage/src/Static/Font/font.dart';
+import 'package:uahage/src/Static/Widget/progress.dart';
 
 SpinKitThreeBounce buildSpinKitThreeBounce(double size, double screenWidth) {
   return SpinKitThreeBounce(
@@ -85,12 +86,7 @@ Future awaitdialog(var function, BuildContext context, var heightSize,
             ],
           );
         }
-        return Center(
-          child: SizedBox(
-              height: heightSize,
-              width: widthSize,
-              child: buildSpinKitThreeBounce(height, width)),
-        );
+        return progress();
       },
     ),
   );

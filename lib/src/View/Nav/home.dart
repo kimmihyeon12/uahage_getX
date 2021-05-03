@@ -46,7 +46,7 @@ class home extends GetView<homeContoller> {
         () => SafeArea(
           child: Scaffold(
             backgroundColor: Colors.white,
-            appBar: imageAppbar(context, "홈"),
+            appBar: imageAppbar(context, "우아하게"),
             body: SingleChildScrollView(
               child: Column(
                 children: [
@@ -60,7 +60,7 @@ class home extends GetView<homeContoller> {
                           itemBuilder: (context, index) {
                             print(controller.currentIndex.value);
                             return imageView(
-                                "image${(controller.currentIndex.value) + 1}");
+                                "image${(controller.currentIndex.value)}");
                           },
                           onPageChanged: (int index) {
                             controller.changePageIndex(++index);

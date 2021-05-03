@@ -2,6 +2,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/all.dart';
 import 'package:uahage/src/API/auth.dart';
+import 'package:uahage/src/API/snslogin.dart';
+import 'package:uahage/src/API/user.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:uahage/src/Static/Widget/dialog.dart';
 import 'package:uahage/src/Controller/login.controller.dart';
@@ -10,63 +12,14 @@ import 'package:uahage/src/Static/Widget/appbar.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 
 class agreement extends GetView<loginCotroller> {
-  auth auths = new auth();
-
-  initKakaoTalkInstalled() async {
-    final installed = await isKakaoTalkInstalled();
-    controller.installedstate(installed);
-  }
-
-  kakaoGetEmail() async {
-    final User user = await UserApi.instance.me();
-    controller.setEmail(user.kakaoAccount.email);
-  }
-
-  issueAccessToken(String authCode) async {
-    try {
-      var token = await AuthApi.instance.issueAccessToken(authCode);
-      AccessTokenStore.instance.toStore(token);
-      await kakaoGetEmail();
-      var isAlreadyRegistered = await auths.checkEmail(
-          controller.emails.value, controller.loginOption.value);
-
-      if (!isAlreadyRegistered) {
-        var data = await auths.signIn(
-            controller.emails.value, controller.loginOption.value);
-        controller.userId(data["userId"]);
-        controller.tokens(data["token"]);
-        Get.toNamed("/navigator");
-      } else {
-        Get.toNamed("/register");
-      }
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  loginWithKakao() async {
-    try {
-      var code = await AuthCodeClient.instance.request();
-      await issueAccessToken(code);
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  loginWithTalk() async {
-    try {
-      var code = await AuthCodeClient.instance.requestWithTalk();
-      await issueAccessToken(code);
-    } catch (e) {
-      print(e.toString());
-    }
-  }
+  Auth auths = new Auth();
+  SnsLogin login = new SnsLogin();
 
   @override
   Widget build(BuildContext context) {
     Get.put(loginCotroller());
+    login.initKakaoTalkInstalled();
 
-    initKakaoTalkInstalled();
     KakaoContext.clientId = "581f27a7aed8a99e5b0a78b33c855dab";
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       systemNavigationBarColor: Color(0xffd9d4d5), // navigation bar color
@@ -298,11 +251,11 @@ class agreement extends GetView<loginCotroller> {
                         switch (controller.loginOption.value) {
                           case "kakao":
                             if (controller.installed.value)
-                              awaitdialog(loginWithTalk(), context, 200.h,
+                              awaitdialog(login.loginWithTalk(), context, 200.h,
                                   200.w, 80.w, 100.w, 62.5.sp);
                             else {
-                              awaitdialog(loginWithKakao(), context, 200.h,
-                                  200.w, 80.w, 100.w, 62.5.sp);
+                              awaitdialog(login.loginWithKakao(), context,
+                                  200.h, 200.w, 80.w, 100.w, 62.5.sp);
                             }
                             break;
                           /*       case "naver":

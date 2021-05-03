@@ -75,7 +75,7 @@ flutter:
   assets:
     - assets/firstPage/
     - assets/secondPage/
-    - assets/registrationPage/
+    - assets/register/
     - assets/myPage/
     - assets/agreementPage/
     - assets/homePage/

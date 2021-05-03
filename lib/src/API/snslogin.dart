@@ -3,9 +3,11 @@ import 'package:uahage/src/Controller/login.controller.dart';
 import 'package:flutter/material.dart';
 import 'package:uahage/src/API/auth.dart';
 import 'package:kakao_flutter_sdk/all.dart';
+import 'package:uahage/src/API/user.dart';
 
 class SnsLogin extends GetView<loginCotroller> {
-  auth auths = new auth();
+  Auth auth = new Auth();
+  user users = new user();
 
   initKakaoTalkInstalled() async {
     final installed = await isKakaoTalkInstalled();
@@ -22,11 +24,10 @@ class SnsLogin extends GetView<loginCotroller> {
       var token = await AuthApi.instance.issueAccessToken(authCode);
       AccessTokenStore.instance.toStore(token);
       await kakaoGetEmail();
-      var isAlreadyRegistered = await auths.checkEmail(
-          controller.emails.value, controller.loginOption.value);
+      var isAlreadyRegistered = await users.checkEmail();
 
       if (!isAlreadyRegistered) {
-        var data = await auths.signIn(
+        var data = await auth.signIn(
             controller.emails.value, controller.loginOption.value);
         controller.userId(data["userId"]);
         controller.tokens(data["token"]);
@@ -59,6 +60,7 @@ class SnsLogin extends GetView<loginCotroller> {
 
   @override
   Widget build(BuildContext context) {
+    KakaoContext.clientId = "581f27a7aed8a99e5b0a78b33c855dab";
     return Container();
   }
 }
