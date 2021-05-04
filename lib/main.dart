@@ -16,7 +16,7 @@ import 'package:uahage/src/Binding/homepagebinding.dart';
 import 'package:uahage/src/View/Nav/Search.dart';
 import 'package:uahage/src/View/Nav/Star.dart';
 import 'package:uahage/src/View/Nav/myPage.dart';
-import 'package:uahage/src/View/Nav/userMotify.dart';
+
 import 'package:uahage/src/View/Auth/withdrawal.dart';
 
 void main() {
@@ -43,10 +43,10 @@ class MyApp extends StatelessWidget {
             page: () => navigation(),
             binding: homebinding()),
         GetPage(name: "/home", page: () => home()),
-        GetPage(
+        /* GetPage(
             name: "/userMotify",
             page: () => UserMotify(),
-            binding: homebinding()),
+            binding: homebinding()),*/
         GetPage(
             name: "/withdrawal",
             page: () => withdrawal(),

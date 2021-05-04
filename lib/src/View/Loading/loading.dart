@@ -15,7 +15,7 @@ class _loadingState extends State<loading> {
     await 3.delay();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getString('uahageUserId') != null) {
-      Get.offNamed("/login");
+      Get.offNamed("/navigator");
       //navigator
     } else {
       Get.offNamed("/login");

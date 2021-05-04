@@ -13,7 +13,7 @@ class user extends GetView<loginCotroller> {
   //ALL SELECT
   select() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    print(controller.userId.value);
+
     try {
       var response = await http.get(
           url + "/api/users/${controller.userId.value}",

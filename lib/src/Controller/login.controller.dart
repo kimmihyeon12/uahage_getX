@@ -1,13 +1,15 @@
 import 'package:get/get.dart';
 
-class loginCotroller extends GetxService {
-  static loginCotroller get to => Get.find();
+class LoginCotroller extends GetxService {
+  static LoginCotroller get to => Get.find();
   final installed = false.obs;
   final register = false.obs;
-  final userId = ''.obs;
-  final tokens = ''.obs;
+
   final emails = ''.obs;
   final loginOption = ''.obs;
+
+  final userId = ''.obs;
+  final tokens = ''.obs;
 
   final nicknames = ''.obs;
   final genders = ''.obs;
@@ -20,9 +22,6 @@ class loginCotroller extends GetxService {
 
   final imageLink = ''.obs;
   final fileimage = ''.obs;
-
-  final check = <bool>[false, false, false, false].obs;
-  final ageImage = <bool>[false, false, false, false, false, false].obs;
 
   void initsetting() {
     installed(false);
@@ -75,10 +74,6 @@ class loginCotroller extends GetxService {
     loginOption(option);
   }
 
-  void setcheck(List checked) {
-    check(checked);
-  }
-
   void setnickname(String nickname) {
     nicknames(nickname);
   }
@@ -117,82 +112,6 @@ class loginCotroller extends GetxService {
         boy(true);
         girl(false);
       }
-    }
-  }
-
-  void setAgeColor(int age) {
-    if (age == 10) {
-      ages(10);
-      ageImage[0] = true;
-      ageImage[1] = false;
-      ageImage[2] = false;
-      ageImage[3] = false;
-      ageImage[4] = false;
-      ageImage[5] = false;
-    } else if (age == 20) {
-      ages(20);
-      ageImage[0] = false;
-      ageImage[1] = true;
-      ageImage[2] = false;
-      ageImage[3] = false;
-      ageImage[4] = false;
-      ageImage[5] = false;
-    } else if (age == 30) {
-      ages(30);
-      ageImage[0] = false;
-      ageImage[1] = false;
-      ageImage[2] = true;
-      ageImage[3] = false;
-      ageImage[4] = false;
-      ageImage[5] = false;
-    } else if (age == 40) {
-      ages(40);
-      ageImage[0] = false;
-      ageImage[1] = false;
-      ageImage[2] = false;
-      ageImage[3] = true;
-      ageImage[4] = false;
-      ageImage[5] = false;
-    } else if (age == 50) {
-      ages(50);
-      ageImage[0] = false;
-      ageImage[1] = false;
-      ageImage[2] = false;
-      ageImage[3] = false;
-      ageImage[4] = true;
-      ageImage[5] = false;
-    } else {
-      ages(60);
-      ageImage[0] = false;
-      ageImage[1] = false;
-      ageImage[2] = false;
-      ageImage[3] = false;
-      ageImage[4] = false;
-      ageImage[5] = true;
-    }
-  }
-
-  void setChecked(int number, bool state) {
-    if (number == 0) {
-      print('number');
-      if (state == false) {
-        check[0] = false;
-        check[1] = false;
-        check[2] = false;
-        check[3] = false;
-      } else {
-        check[0] = true;
-        check[1] = true;
-        check[2] = true;
-        check[3] = true;
-      }
-    } else {
-      check[number] = state;
-    }
-    if (check[1] && check[2] && check[3]) {
-      check[0] = true;
-    } else {
-      check[0] = false;
     }
   }
 }
