@@ -5,7 +5,7 @@ import 'package:uahage/src/API/auth.dart';
 import 'package:kakao_flutter_sdk/all.dart';
 import 'package:uahage/src/API/user.dart';
 
-class SnsLogin extends GetView<loginCotroller> {
+class SnsLogin extends GetView<LoginCotroller> {
   Auth auth = new Auth();
   user users = new user();
 
@@ -27,10 +27,8 @@ class SnsLogin extends GetView<loginCotroller> {
       var isAlreadyRegistered = await users.checkEmail();
 
       if (!isAlreadyRegistered) {
-        var data = await auth.signIn(
+        await auth.signIn(
             controller.emails.value, controller.loginOption.value);
-        controller.userId(data["userId"]);
-        controller.tokens(data["token"]);
         Get.toNamed("/navigator");
       } else {
         Get.toNamed("/register");

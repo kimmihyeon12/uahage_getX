@@ -8,13 +8,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:uahage/src/Static/url.dart';
 import 'package:http/http.dart' as http;
 
-class user extends GetView<loginCotroller> {
+import '../Controller/login.controller.dart';
+
+class user extends GetView<LoginCotroller> {
   String url = URL;
   //ALL SELECT
   select() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     try {
+      print('userId ${controller.userId.value}');
+      print('token ${controller.tokens.value}');
       var response = await http.get(
           url + "/api/users/${controller.userId.value}",
           headers: <String, String>{"Authorization": controller.tokens.value});

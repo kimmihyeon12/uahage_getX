@@ -6,12 +6,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:uahage/src/Controller/login.controller.dart';
 
-class Auth extends GetView<loginCotroller> {
+class Auth extends GetView<LoginCotroller> {
   String url = URL;
 
   Future signIn(Email, loginOption) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String userId;
 
     Map<String, dynamic> userData = {
       "email": "'$Email$loginOption'",
@@ -27,12 +26,15 @@ class Auth extends GetView<loginCotroller> {
       var data = jsonDecode(response.body);
 
       String token = data['data']['token'];
-      userId = data['data']['id'].toString();
+      String userId = data['data']['id'].toString();
+      controller.setUserid(userId);
+      controller.setToken(token);
 
       //save user info
-      await sharedPreferences.setString("uahageUserToken", token);
-      await sharedPreferences.setString("uahageUserId", userId);
-      return {"userId": userId, "token": token};
+      await sharedPreferences.setString("token", token);
+      await sharedPreferences.setString("userId", userId);
+
+      return true;
     }
   }
 

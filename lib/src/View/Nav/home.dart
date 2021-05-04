@@ -4,13 +4,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:uahage/src/Controller/login.controller.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 import 'package:uahage/src/Static/Widget/appbar.dart';
-import 'package:uahage/src/Controller/homepage.controller.dart';
+import 'package:uahage/src/Controller/image.controller.dart';
 
 import 'package:get/get.dart';
 import 'package:uahage/src/Static/Widget/toast.dart';
 import 'package:uahage/src/View/Nav/HomeSub/searchBar.dart';
 
-class home extends GetView<homeContoller> {
+import '../../Controller/login.controller.dart';
+
+class Home extends GetView<LoginCotroller> {
   var homeimage = [
     "./assets/homePage/restaurant.png",
     "./assets/homePage/hospital.png",
@@ -32,10 +34,6 @@ class home extends GetView<homeContoller> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(loginCotroller());
-    print(loginCotroller.to.userId.value);
-    print(loginCotroller.to.tokens.value);
-
     FocusScopeNode currentFocus = FocusScope.of(context);
     ScreenUtil.init(context, width: 1500, height: 2667);
     return GestureDetector(
@@ -58,12 +56,12 @@ class home extends GetView<homeContoller> {
                         PageView.builder(
                           itemCount: 5,
                           itemBuilder: (context, index) {
-                            print(controller.currentIndex.value);
+                            print(ImageController.to.slider.value);
                             return imageView(
-                                "image${(controller.currentIndex.value)}");
+                                "image${(ImageController.to.slider.value)}");
                           },
                           onPageChanged: (int index) {
-                            controller.changePageIndex(++index);
+                            ImageController.to.changeslider(++index);
                           },
                         ),
                         Align(
@@ -76,7 +74,7 @@ class home extends GetView<homeContoller> {
                             padding: EdgeInsets.symmetric(
                                 vertical: 1, horizontal: 10),
                             child: Text(
-                              '${(controller.currentIndex.value)}/5',
+                              '${(ImageController.to.slider.value)}/5',
                               style: TextStyle(
                                 fontSize: 62.sp,
                                 color: Colors.white,
@@ -96,7 +94,7 @@ class home extends GetView<homeContoller> {
                           fontFamily: 'NotoSansCJKkr_Medium'),
                       child: TextField(
                         onChanged: (txt) {
-                          controller.changeTextField(txt);
+                          ImageController.to.changeTextField(txt);
                         },
                         cursorColor: Color(0xffff7292),
                         style: TextStyle(
@@ -124,15 +122,16 @@ class home extends GetView<homeContoller> {
                               fontFamily: 'NotoSansCJKkr_Medium',
                               letterSpacing: -1.0),
                           suffixIcon: IconButton(
-                              onPressed: controller.textfield.value != ""
-                                  ? () {
-                                      FocusScope.of(context).unfocus();
-                                      Get.to(searchbar());
-                                    }
-                                  : () {
-                                      toast(context, "주소를 입력해주세요!");
-                                      FocusScope.of(context).unfocus();
-                                    },
+                              onPressed:
+                                  ImageController.to.textfield.value != ""
+                                      ? () {
+                                          FocusScope.of(context).unfocus();
+                                          Get.to(searchbar());
+                                        }
+                                      : () {
+                                          toast(context, "주소를 입력해주세요!");
+                                          FocusScope.of(context).unfocus();
+                                        },
                               icon: Image.asset(
                                 "./assets/homePage/search.png",
                                 width: 88.w,

@@ -2,30 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:uahage/src/API/location.dart';
 import 'dart:async';
 
-class loading extends StatefulWidget {
-  @override
-  _loadingState createState() => _loadingState();
-}
+import '../../API/auth.dart';
+import '../../Controller/login.controller.dart';
 
-class _loadingState extends State<loading> {
+class loading extends GetView<LoginCotroller> {
+  Auth auths = new Auth();
+  Location location = new Location();
   lodingTime() async {
-    await 3.delay();
+    await location.setCurrentLocation();
+    await 1.delay();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('uahageUserId') != null) {
+    if (prefs.getString('userId') != null) {
+      controller.setUserid(prefs.getString('userId'));
+      controller.setToken(prefs.getString('token'));
       Get.offNamed("/navigator");
-      //navigator
     } else {
       Get.offNamed("/login");
     }
   }
 
   @override
-  Widget build(context) {
-    // Get.put(locationController());
-
+  Widget build(BuildContext context) {
     lodingTime();
     ScreenUtil.init(context, width: 1500, height: 2667);
     return Scaffold(

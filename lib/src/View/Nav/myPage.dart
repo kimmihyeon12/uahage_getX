@@ -14,7 +14,7 @@ import 'package:uahage/src/Static/url.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 import 'package:uahage/src/API/user.dart';
 
-class mypage extends GetView<loginCotroller> {
+class MyPage extends GetView<LoginCotroller> {
   user User = new user();
 
   var boy_image = [

@@ -4,10 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:uahage/src/Controller/login.controller.dart';
 import 'package:get/get.dart';
 
-class login extends StatelessWidget {
+import '../../Controller/login.controller.dart';
+
+class login extends GetView<LoginCotroller> {
   @override
   Widget build(context) {
-    Get.put(loginCotroller());
+    Get.put(LoginCotroller());
     ScreenUtil.init(context, width: 1501, height: 2667);
 
     return Scaffold(
@@ -68,7 +70,7 @@ class login extends StatelessWidget {
                 height: 195.h,
                 child: InkWell(
                   onTap: () async {
-                    loginCotroller.to.loginOption("kakao");
+                    controller.loginOption("kakao");
                     Get.toNamed("/agreement");
                   },
                   child: Image.asset(
@@ -85,7 +87,7 @@ class login extends StatelessWidget {
                 height: 195.h,
                 child: InkWell(
                   onTap: () {
-                    loginCotroller.to.loginOption("naver");
+                    controller.loginOption("naver");
                     Get.toNamed("/agreement");
                   },
                   child: Image.asset("./assets/secondPage/naver.png"),

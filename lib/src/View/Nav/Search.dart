@@ -1,10 +1,150 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/screenutil.dart';
+import 'package:get/get.dart';
+import 'package:uahage/src/Controller/image.controller.dart';
+import 'package:uahage/src/Controller/location.controller.dart';
+import 'package:uahage/src/Controller/login.controller.dart';
+import 'package:uahage/src/Static/url.dart';
+import 'dart:async';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:uahage/src/Static/Widget/popup.dart';
 
-class search extends StatelessWidget {
+class Search extends StatefulWidget {
+  @override
+  _SearchState createState() => _SearchState();
+}
+
+class _SearchState extends State<Search> {
+  String url = URL;
+  WebViewController webview;
+  final key = UniqueKey();
+  List<int> grey_image = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+  Future searchCategory() async {
+    webview.loadUrl(url +
+        "/maps/show-place?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=filter&menu=${grey_image[0]}&bed=${grey_image[1]}&tableware=${grey_image[2]}&meetingroom=${grey_image[3]}&diapers=${grey_image[4]}&playroom=${grey_image[5]}&carriage=${grey_image[6]}&nursingroom=${grey_image[7]}&chair=${grey_image[8]}");
+  }
+
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, width: 1500, height: 2667);
+
     return Scaffold(
-      body: Center(child: Text("search")),
+      body: Stack(
+        children: [
+          WebView(
+            key: key,
+            onWebViewCreated: (WebViewController webViewController) async {
+              webview = webViewController;
+
+              await webview.loadUrl(url +
+                  '/maps?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}');
+            },
+            javascriptMode: JavascriptMode.unrestricted,
+            javascriptChannels: Set.from([
+              JavascriptChannel(
+                  name: 'Print',
+                  onMessageReceived: (JavascriptMessage message) async {
+                    // var messages = message.message;
+                    // var Message = messages.split("|");
+                    // var bookmark = await bookmarkSelect(LoginCotroller.to.userId.value, Message[0]);
+                    // var JsonMessage = {
+                    //   "id": Message[0],
+                    //   "name": Message[1],
+                    //   "address": Message[2],
+                    //   "phone": Message[3],
+                    //   "lat": Message[4],
+                    //   "lon": Message[5],
+                    //   "carriage": Message[6],
+                    //   "bed": Message[7],
+                    //   "tableware": Message[8],
+                    //   "nursingroom": Message[9],
+                    //   "meetingroom": Message[10],
+                    //   "diapers": Message[11],
+                    //   "playroom": Message[12],
+                    //   "chair": Message[13],
+                    //   "menu": Message[14],
+                    //   "bookmark": bookmark.toString()
+                    // };
+
+                    // await showpopup.showPopUpbottomMenu(
+                    //     context,
+                    //     2667.h,
+                    //     1501.w,
+                    //     JsonMessage,
+                    //     index,
+                    //     userId,
+                    //     loginOption,
+                    //     "search",
+                    //     "restaurant");
+                  })
+            ]),
+          ),
+          GestureDetector(
+            onTap: () async {
+              pop popup = new pop();
+              bool result = await popup.popup(context);
+              if (result) {
+                grey_image = ImageController.to.filter_image;
+                await searchCategory();
+              }
+              ImageController.to.initFilterImage();
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12.withOpacity(0.3),
+                    spreadRadius: 2,
+                    blurRadius: 3,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+              margin: EdgeInsets.fromLTRB(51.w, 161.h, 51.w, 0),
+              height: 196.h,
+              child: Row(
+                // crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 53.w),
+                    child: Image.asset(
+                      "./assets/searchPage/arrow.png",
+                      height: 68.h,
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 41.w),
+                    width: 1200.w,
+                    child: // 검색 조건을 설정해주세요
+                        Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("검색 조건을 설정해주세요",
+                            style: TextStyle(
+                                color: const Color(0xffed7191),
+                                fontWeight: FontWeight.w500,
+                                fontFamily: "NotoSansCJKkr_Medium",
+                                fontStyle: FontStyle.normal,
+                                fontSize: 60.sp),
+                            textAlign: TextAlign.left),
+                        InkWell(
+                          child: Image.asset(
+                            "./assets/searchPage/cat_btn.png",
+                            height: 158.h,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -11,13 +11,15 @@ import 'package:get/get.dart';
 import 'package:uahage/src/Static/Widget/appbar.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 
-class agreement extends GetView<loginCotroller> {
+import '../../Controller/login.controller.dart';
+
+class agreement extends GetView<LoginCotroller> {
   Auth auths = new Auth();
   SnsLogin login = new SnsLogin();
 
   @override
   Widget build(BuildContext context) {
-    Get.put(loginCotroller());
+    Get.put(LoginCotroller());
     login.initKakaoTalkInstalled();
 
     KakaoContext.clientId = "581f27a7aed8a99e5b0a78b33c855dab";

@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:uahage/src/Controller/login.controller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class Picker extends GetView<loginCotroller> {
+class Picker extends GetView<LoginCotroller> {
   yearPicker(context) {
     TextEditingController yController = TextEditingController();
     final year = DateTime.now().year;

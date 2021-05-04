@@ -15,7 +15,7 @@ import 'package:uahage/src/Static/Widget/progress.dart';
 import 'package:uahage/src/API/auth.dart';
 import 'package:uahage/src/API/user.dart';
 
-class register extends GetView<loginCotroller> {
+class register extends GetView<LoginCotroller> {
   String url = URL;
   Auth auth = new Auth();
   user User = new user();

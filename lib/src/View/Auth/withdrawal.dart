@@ -22,7 +22,6 @@ class _withdrawalState extends State<withdrawal> {
         () => Get.offAllNamed("/login"),
       );
 
-  //popUntil((route) => route.isFirst));
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, width: 1500, height: 2667);
