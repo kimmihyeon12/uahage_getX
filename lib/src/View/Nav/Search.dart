@@ -3,30 +3,27 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:get/get.dart';
 import 'package:uahage/src/Controller/image.controller.dart';
 import 'package:uahage/src/Controller/location.controller.dart';
-import 'package:uahage/src/Controller/login.controller.dart';
+
 import 'package:uahage/src/Static/url.dart';
 import 'dart:async';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:uahage/src/Static/Widget/popup.dart';
 
-class Search extends StatefulWidget {
-  @override
-  _SearchState createState() => _SearchState();
-}
-
-class _SearchState extends State<Search> {
+class Search extends GetView<LocationController> {
   String url = URL;
   WebViewController webview;
   final key = UniqueKey();
   List<int> grey_image = [0, 0, 0, 0, 0, 0, 0, 0, 0];
   Future searchCategory() async {
-    webview.loadUrl(url +
-        "/maps/show-place?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=filter&menu=${grey_image[0]}&bed=${grey_image[1]}&tableware=${grey_image[2]}&meetingroom=${grey_image[3]}&diapers=${grey_image[4]}&playroom=${grey_image[5]}&carriage=${grey_image[6]}&nursingroom=${grey_image[7]}&chair=${grey_image[8]}");
+    ImageController.to.setUrl(
+        "/maps/show-place?lat=${controller.lat.value}&lon=${controller.lon.value}&type=filter&menu=${grey_image[0]}&bed=${grey_image[1]}&tableware=${grey_image[2]}&meetingroom=${grey_image[3]}&diapers=${grey_image[4]}&playroom=${grey_image[5]}&carriage=${grey_image[6]}&nursingroom=${grey_image[7]}&chair=${grey_image[8]}");
+    await webview.loadUrl(url + ImageController.to.url.value);
   }
 
-  @override
   Widget build(BuildContext context) {
+    Get.put(LocationController());
+    Get.put(ImageController());
     ScreenUtil.init(context, width: 1500, height: 2667);
 
     return Scaffold(
@@ -36,9 +33,9 @@ class _SearchState extends State<Search> {
             key: key,
             onWebViewCreated: (WebViewController webViewController) async {
               webview = webViewController;
-
-              await webview.loadUrl(url +
-                  '/maps?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}');
+              ImageController.to.setUrl(
+                  '/maps?lat=${controller.lat.value}&lon=${controller.lon.value}');
+              await webview.loadUrl(url + ImageController.to.url.value);
             },
             javascriptMode: JavascriptMode.unrestricted,
             javascriptChannels: Set.from([

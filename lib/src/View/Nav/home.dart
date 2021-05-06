@@ -162,7 +162,7 @@ class Home extends GetView<LoginCotroller> {
                             ),
                             onTap: () {
                               currentFocus.unfocus();
-                              Get.toNamed("/list", arguments: "restaurant");
+                              Get.toNamed("/list", arguments: 1);
                             },
                           ),
                           Padding(
@@ -177,8 +177,7 @@ class Home extends GetView<LoginCotroller> {
                             ),
                             onTap: () {
                               currentFocus.unfocus();
-                              Get.toNamed("/list",
-                                  arguments: "Examination_institution");
+                              Get.toNamed("/list", arguments: 2);
                             },
                           ),
                           Padding(
@@ -232,7 +231,7 @@ class Home extends GetView<LoginCotroller> {
                             ),
                             onTap: () {
                               currentFocus.unfocus();
-                              Get.toNamed("/list", arguments: "Kids_cafe");
+                              Get.toNamed("/list", arguments: 5);
                             },
                           ),
                           Padding(
@@ -247,8 +246,7 @@ class Home extends GetView<LoginCotroller> {
                             ),
                             onTap: () {
                               currentFocus.unfocus();
-                              Get.toNamed("/list",
-                                  arguments: "Experience_center");
+                              Get.toNamed("/list", arguments: 6);
                             },
                           ),
                           Padding(

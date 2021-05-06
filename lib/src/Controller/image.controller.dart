@@ -5,6 +5,22 @@ class ImageController extends GetxService {
   final filter_image = <int>[0, 0, 0, 0, 0, 0, 0, 0, 0].obs;
   final slider = 1.obs;
   final textfield = ''.obs;
+  final toggle = false.obs;
+  final indexcount = 0.obs;
+
+  final url = ''.obs;
+
+  toggleState(state) {
+    toggle(state);
+  }
+
+  indexcountState(state) {
+    indexcount(state);
+  }
+
+  void setUrl(urls) {
+    url(urls);
+  }
 
   void setFilterImage(int index) {
     if (filter_image[index] == 0)

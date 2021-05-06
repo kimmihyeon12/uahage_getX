@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:uahage/src/Binding/loginbinding.dart';
-import 'package:uahage/src/Binding/urlbinding.dart';
+import 'package:uahage/src/Binding/placebinding.dart';
 import 'package:uahage/src/View/Auth/login.dart';
 import 'package:uahage/src/View/Loading/loading.dart';
 import 'package:uahage/src/View/Nav/navigator.dart';
@@ -17,6 +17,7 @@ import 'package:uahage/src/Binding/locationbinding.dart';
 import 'package:uahage/src/View/Nav/search.dart';
 import 'package:uahage/src/View/Nav/myPage.dart';
 import 'package:uahage/src/View/Auth/withdrawal.dart';
+import 'src/API/places.dart';
 import 'src/Binding/loginbinding.dart';
 import 'src/View/Nav/Star.dart';
 
@@ -56,7 +57,7 @@ class MyApp extends StatelessWidget {
         GetPage(
             name: "/navigator",
             page: () => navigation(),
-            bindings: [LoginBinding(), ImageBinding()]),
+            bindings: [LoginBinding(), ImageBinding(), LocationBinding()]),
         GetPage(name: "/home", page: () => Home()),
         GetPage(
           name: "/search",
@@ -64,7 +65,9 @@ class MyApp extends StatelessWidget {
         ),
         GetPage(name: "/star", page: () => Star()),
         GetPage(name: "/mypage", page: () => MyPage()),
-        GetPage(name: "/list", page: () => list()),
+
+        GetPage(
+            name: "/list", page: () => PlaceList(), binding: PlaceBinding()),
       ],
     );
   }
