@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:uahage/src/Controller/login.controller.dart';
+
 import 'package:get/get.dart';
+import 'package:uahage/src/Controller/user.controller.dart';
 
-import '../../Controller/login.controller.dart';
-
-class login extends GetView<LoginCotroller> {
+class Login extends GetView<UserController> {
   @override
   Widget build(context) {
-    Get.put(LoginCotroller());
     ScreenUtil.init(context, width: 1501, height: 2667);
-
+    Get.put(UserController());
     return Scaffold(
       body: Stack(
         children: [
@@ -70,7 +68,7 @@ class login extends GetView<LoginCotroller> {
                 height: 195.h,
                 child: InkWell(
                   onTap: () async {
-                    controller.loginOption("kakao");
+                    controller.option("kakao");
                     Get.toNamed("/agreement");
                   },
                   child: Image.asset(
@@ -87,7 +85,7 @@ class login extends GetView<LoginCotroller> {
                 height: 195.h,
                 child: InkWell(
                   onTap: () {
-                    controller.loginOption("naver");
+                    controller.option("naver");
                     Get.toNamed("/agreement");
                   },
                   child: Image.asset("./assets/secondPage/naver.png"),

@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uahage/src/API/location.dart';
-import 'dart:async';
+import 'package:uahage/src/Controller/user.controller.dart';
+import 'package:uahage/src/Service/location.dart';
+import '../../Service/auth.dart';
 
-import '../../API/auth.dart';
-import '../../Controller/login.controller.dart';
-
-class loading extends GetView<LoginCotroller> {
+class Loading extends GetView<UserController> {
   Auth auths = new Auth();
   Location location = new Location();
   lodingTime() async {
@@ -27,6 +25,7 @@ class loading extends GetView<LoginCotroller> {
   @override
   Widget build(BuildContext context) {
     lodingTime();
+    Get.put(UserController());
     ScreenUtil.init(context, width: 1500, height: 2667);
     return Scaffold(
         backgroundColor: Color(0xfffff1f0),

@@ -1,18 +1,13 @@
 import 'package:get/get.dart';
-import 'package:uahage/src/Controller/login.controller.dart';
 import 'package:flutter/material.dart';
-import 'package:uahage/src/API/auth.dart';
+import 'package:uahage/src/Controller/user.controller.dart';
+import 'package:uahage/src/Service/auth.dart';
 import 'package:kakao_flutter_sdk/all.dart';
-import 'package:uahage/src/API/user.dart';
+import 'package:uahage/src/Service/user.dart';
 
-class SnsLogin extends GetView<LoginCotroller> {
+class SnsLogin extends GetView<UserController> {
   Auth auth = new Auth();
   user users = new user();
-
-  initKakaoTalkInstalled() async {
-    final installed = await isKakaoTalkInstalled();
-    controller.installedstate(installed);
-  }
 
   kakaoGetEmail() async {
     final User user = await UserApi.instance.me();
@@ -25,10 +20,9 @@ class SnsLogin extends GetView<LoginCotroller> {
       AccessTokenStore.instance.toStore(token);
       await kakaoGetEmail();
       var isAlreadyRegistered = await users.checkEmail();
-
       if (!isAlreadyRegistered) {
-        await auth.signIn(
-            controller.emails.value, controller.loginOption.value);
+        await auth.signIn();
+
         Get.toNamed("/navigator");
       } else {
         Get.toNamed("/register");
@@ -41,6 +35,7 @@ class SnsLogin extends GetView<LoginCotroller> {
   loginWithKakao() async {
     try {
       var code = await AuthCodeClient.instance.request();
+
       await issueAccessToken(code);
     } catch (e) {
       print(e.toString());
@@ -50,6 +45,7 @@ class SnsLogin extends GetView<LoginCotroller> {
   loginWithTalk() async {
     try {
       var code = await AuthCodeClient.instance.requestWithTalk();
+
       await issueAccessToken(code);
     } catch (e) {
       print(e.toString());

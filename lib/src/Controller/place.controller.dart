@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 class PlaceController extends GetxService {
   static PlaceController get to => Get.find();
 
-  final place = <dynamic>[].obs;
+  RxList place = <dynamic>[].obs;
   RxInt placePageNumber = 0.obs;
   placeInit() {
     place(<dynamic>[]);
@@ -16,5 +16,10 @@ class PlaceController extends GetxService {
 
   setPlacePaceNumber() {
     placePageNumber++;
+  }
+
+  setPlaceBookmark(int index, int value) {
+    print('bookmark index $index');
+    place[index].bookmark = value;
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:get/get.dart';
-import 'package:uahage/src/Controller/image.controller.dart';
+
 import 'package:uahage/src/Controller/location.controller.dart';
 
 import 'package:uahage/src/Static/url.dart';
@@ -10,22 +10,24 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:uahage/src/Static/Widget/popup.dart';
 
-class Search extends GetView<LocationController> {
+class Search extends StatefulWidget {
+  @override
+  _SearchState createState() => _SearchState();
+}
+
+class _SearchState extends State<Search> {
   String url = URL;
   WebViewController webview;
   final key = UniqueKey();
   List<int> grey_image = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+
   Future searchCategory() async {
-    ImageController.to.setUrl(
-        "/maps/show-place?lat=${controller.lat.value}&lon=${controller.lon.value}&type=filter&menu=${grey_image[0]}&bed=${grey_image[1]}&tableware=${grey_image[2]}&meetingroom=${grey_image[3]}&diapers=${grey_image[4]}&playroom=${grey_image[5]}&carriage=${grey_image[6]}&nursingroom=${grey_image[7]}&chair=${grey_image[8]}");
-    await webview.loadUrl(url + ImageController.to.url.value);
+    await webview.loadUrl(url +
+        "/maps/show-place?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=filter&menu=${grey_image[0]}&bed=${grey_image[1]}&tableware=${grey_image[2]}&meetingroom=${grey_image[3]}&diapers=${grey_image[4]}&playroom=${grey_image[5]}&carriage=${grey_image[6]}&nursingroom=${grey_image[7]}&chair=${grey_image[8]}");
   }
 
+  @override
   Widget build(BuildContext context) {
-    Get.put(LocationController());
-    Get.put(ImageController());
-    ScreenUtil.init(context, width: 1500, height: 2667);
-
     return Scaffold(
       body: Stack(
         children: [
@@ -33,9 +35,9 @@ class Search extends GetView<LocationController> {
             key: key,
             onWebViewCreated: (WebViewController webViewController) async {
               webview = webViewController;
-              ImageController.to.setUrl(
-                  '/maps?lat=${controller.lat.value}&lon=${controller.lon.value}');
-              await webview.loadUrl(url + ImageController.to.url.value);
+
+              await webview.loadUrl(url +
+                  '/maps?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}');
             },
             javascriptMode: JavascriptMode.unrestricted,
             javascriptChannels: Set.from([
@@ -79,13 +81,15 @@ class Search extends GetView<LocationController> {
           ),
           GestureDetector(
             onTap: () async {
-              pop popup = new pop();
-              bool result = await popup.popup(context);
-              if (result) {
-                grey_image = ImageController.to.filter_image;
+              setState(() {
+                grey_image = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+              });
+
+              List okButton = await popup(context, grey_image);
+              if (okButton != null) {
+                grey_image = okButton;
                 await searchCategory();
               }
-              ImageController.to.initFilterImage();
             },
             child: Container(
               decoration: BoxDecoration(

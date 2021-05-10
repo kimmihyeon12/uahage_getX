@@ -1,21 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:uahage/src/Controller/image.controller.dart';
 import 'package:uahage/src/Controller/place.controller.dart';
-import 'package:uahage/src/API/places.dart';
-import 'package:uahage/src/View/Nav/HomeSub/listMap.dart';
-import '../../../Static/url.dart';
+import 'package:uahage/src/Controller/user.controller.dart';
+import 'package:uahage/src/Service/bookmark.dart';
+import 'package:uahage/src/Service/places.dart';
+import 'package:uahage/src/Static/Widget/icon.dart';
 
-class PlaceList extends GetView<PlaceController> {
+import '../../../Static/url.dart';
+import 'listMap.dart';
+
+class PlaceList extends StatefulWidget {
+  @override
+  _PlaceListState createState() => _PlaceListState();
+}
+
+class _PlaceListState extends State<PlaceList> {
   String url = URL;
   int placeCode = Get.arguments;
   ScrollController scrollController = ScrollController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  int indexcount = 0;
 
   getList() async {
     Place place = new Place();
     await place.getPlaceList(placeCode);
+  }
+
+  @override
+  void initState() {
+    PlaceController.to.placeInit();
+    getList();
+    super.initState();
   }
 
   var restaurantListImage = [
@@ -40,9 +56,6 @@ class PlaceList extends GetView<PlaceController> {
 
   Widget build(BuildContext context) {
     Get.put(PlaceController());
-    Get.put(ImageController());
-    controller.placeInit();
-    getList();
     scrollController.addListener(() {
       double maxScroll = scrollController.position.maxScrollExtent;
       double currentScroll = scrollController.position.pixels;
@@ -50,100 +63,81 @@ class PlaceList extends GetView<PlaceController> {
         getList();
       }
     });
-
     ScreenUtil.init(context, width: 1500, height: 2667);
-    ImageController.to.indexcountState(0);
+
     return SafeArea(
-      child: Obx(
-        () => Scaffold(
-            key: _scaffoldKey,
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    highlightColor: Colors.white,
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          "./assets/listPage/backbutton.png",
-                          width: 44.w,
-                          height: 76.h,
-                        ),
-                        Padding(
-                            padding: EdgeInsets.only(
-                          left: 45.w,
-                        )),
-                        Container(
-                          child: Text(
-                            (() {
-                              if (placeCode == 1) {
-                                return "식당·카페";
-                              } else if (placeCode == 2) {
-                                return "병원";
-                              } else if (placeCode == 5) {
-                                return "키즈카페";
-                              } else {
-                                return "체험관";
-                              }
-                            }()),
-                            style: TextStyle(
-                                fontSize: 62.sp,
-                                fontFamily: 'NotoSansCJKkr_Medium',
-                                color: Color.fromRGBO(255, 114, 148, 1.0)),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(right: 30.w),
-                    child: ImageController.to.indexcount.value == 1
-                        ? GestureDetector(
-                            onTap: () {
-                              ImageController.to.indexcountState(0);
-                            },
-                            child: Image.asset(
-                              './assets/on.png',
-                              width: 284.w,
-                              height: 133.h,
-                            ),
-                          )
-                        : GestureDetector(
-                            onTap: () {
-                              ImageController.to.indexcountState(1);
-                            },
-                            child: Image.asset(
-                              './assets/off.png',
-                              width: 284.w,
-                              height: 133.h,
-                            ),
-                          ),
-                  ),
-                ],
-              ),
+      child: Scaffold(
+          key: _scaffoldKey,
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            title: new Text(
+              (() {
+                if (placeCode == 1) {
+                  return "식당·카페";
+                } else if (placeCode == 2) {
+                  return "병원";
+                } else if (placeCode == 5) {
+                  return "키즈카페";
+                } else {
+                  return "체험관";
+                }
+              }()),
+              style: TextStyle(
+                  fontSize: 62.sp,
+                  fontFamily: 'NotoSansCJKkr_Medium',
+                  color: Color.fromRGBO(255, 114, 148, 1.0)),
             ),
-            body: IndexedStack(
-                index: ImageController.to.indexcount.value,
-                children: <Widget>[
-                  ListViews(),
-                  ListMap(),
-                ])),
-      ),
+            centerTitle: true,
+            backgroundColor: Colors.white,
+            leading: IconButton(
+                icon: Icon(Icons.arrow_back_ios, color: Color(0xffff7292)),
+                onPressed: () {
+                  Get.back();
+                }),
+          ),
+          body: Stack(
+            children: [
+              IndexedStack(index: indexcount, children: <Widget>[
+                ListViews(),
+                ListMap(placeCode: placeCode),
+              ]),
+              Container(
+                margin: EdgeInsets.only(left: 1100.w, top: 2200.w),
+                child: indexcount == 1
+                    ? GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            indexcount = 0;
+                          });
+                        },
+                        child: Image.asset(
+                          './assets/on.png',
+                          width: 284.w,
+                          height: 133.h,
+                        ),
+                      )
+                    : GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            indexcount = 1;
+                          });
+                        },
+                        child: Image.asset(
+                          './assets/off.png',
+                          width: 284.w,
+                          height: 133.h,
+                        ),
+                      ),
+              ),
+            ],
+          )),
     );
   }
 
   ListViews() {
     return ListView.builder(
         controller: scrollController,
-        itemCount: controller.place.length,
+        itemCount: PlaceController.to.place.length,
         shrinkWrap: true,
         itemBuilder: (context, index) {
           return Card(
@@ -187,7 +181,6 @@ class PlaceList extends GetView<PlaceController> {
                           children: [
                             Container(
                               decoration: BoxDecoration(
-                                  // border: Border.all(width: 3.0),
                                   image: DecorationImage(
                                     image: NetworkImage(
                                       (() {
@@ -242,7 +235,7 @@ class PlaceList extends GetView<PlaceController> {
                                       width: 700.w,
                                       height: 82.h,
                                       child: Text(
-                                        controller.place[index].name,
+                                        PlaceController.to.place[index].name,
                                         style: TextStyle(
                                           fontSize: 56.sp,
                                           fontFamily: 'NotoSansCJKkr_Medium',
@@ -255,9 +248,8 @@ class PlaceList extends GetView<PlaceController> {
                                   height: 135.h,
                                   width: 650.w,
                                   child: Text(
-                                    controller.place[index].address,
+                                    PlaceController.to.place[index].address,
                                     style: TextStyle(
-                                      // fontFamily: 'NatoSans',
                                       color: Colors.grey,
                                       fontSize: 56.sp,
                                       fontFamily: 'NotoSansCJKkr_Medium',
@@ -273,42 +265,35 @@ class PlaceList extends GetView<PlaceController> {
                                         alignment: Alignment.bottomRight,
                                         child: Row(
                                           children: [
-                                            // icon.chair(
-                                            //     snapshot
-                                            //         .data[index].chair,
-                                            //     context),
-                                            // icon.carriage(
-                                            //     snapshot.data[index]
-                                            //         .carriage,
-                                            //     context),
-                                            // icon.menu(
-                                            //     snapshot
-                                            //         .data[index].menu,
-                                            //     context),
-                                            // icon.bed(
-                                            //     snapshot
-                                            //         .data[index].bed,
-                                            //     context),
-                                            // icon.tableware(
-                                            //     snapshot.data[index]
-                                            //         .tableware,
-                                            //     context),
-                                            // icon.meetingroom(
-                                            //     snapshot.data[index]
-                                            //         .meetingroom,
-                                            //     context),
-                                            // icon.diapers(
-                                            //     snapshot.data[index]
-                                            //         .diapers,
-                                            //     context),
-                                            // icon.playroom(
-                                            //     snapshot.data[index]
-                                            //         .playroom,
-                                            //     context),
-                                            // icon.nursingroom(
-                                            //     snapshot.data[index]
-                                            //         .nursingroom,
-                                            //     context),
+                                            icon(
+                                                context,
+                                                PlaceController
+                                                    .to.place[index].menu
+                                                    .toString(),
+                                                PlaceController
+                                                    .to.place[index].carriage
+                                                    .toString(),
+                                                PlaceController
+                                                    .to.place[index].bed
+                                                    .toString(),
+                                                PlaceController
+                                                    .to.place[index].tableware
+                                                    .toString(),
+                                                PlaceController
+                                                    .to.place[index].nursingroom
+                                                    .toString(),
+                                                PlaceController
+                                                    .to.place[index].meetingroom
+                                                    .toString(),
+                                                PlaceController
+                                                    .to.place[index].diapers
+                                                    .toString(),
+                                                PlaceController
+                                                    .to.place[index].playroom
+                                                    .toString(),
+                                                PlaceController
+                                                    .to.place[index].chair
+                                                    .toString())
                                           ],
                                         ),
                                       )
@@ -319,37 +304,36 @@ class PlaceList extends GetView<PlaceController> {
                         ),
                       ),
                     ),
-                    // Container(
-                    //   margin: EdgeInsets.only(left: 30.w, top: 25.h),
-
-                    //   //         color:Colors.yellow,
-                    //   child: IconButton(
-                    //     padding: EdgeInsets.all(0),
-                    //     constraints: BoxConstraints(
-                    //       maxWidth: 70.w,
-                    //       maxHeight: 70.h,
-                    //     ),
-                    //     // icon: Image.asset(
-                    //     //   snapshot.data[index].bookmark == 0
-                    //     //       ? "./assets/listPage/star_grey.png"
-                    //     //       : "./assets/listPage/star_color.png",
-                    //     //   height: 60.h,
-                    //     // ),
-                    //     onPressed: () async {
-                    //       // setState(() {
-                    //       //   print(snapshot.data[index].id);
-                    //       //   place_id = snapshot.data[index].id;
-                    //       // });
-                    //       // if (snapshot.data[index].bookmark == 0) {
-                    //       //   bookMark.bookmarkCreate(userId, place_id);
-                    //       //   snapshot.data[index].bookmark = 1;
-                    //       // } else {
-                    //       //   bookMark.bookmarkDelete(userId, place_id);
-                    //       //   snapshot.data[index].bookmark = 0;
-                    //       // }
-                    //     },
-                    //   ),
-                    // ),
+                    Container(
+                      margin: EdgeInsets.only(left: 30.w, top: 25.h),
+                      child: IconButton(
+                        padding: EdgeInsets.all(0),
+                        constraints: BoxConstraints(
+                          maxWidth: 70.w,
+                          maxHeight: 70.h,
+                        ),
+                        icon: Image.asset(
+                          PlaceController.to.place[index].bookmark == 0
+                              ? "./assets/listPage/star_grey.png"
+                              : "./assets/listPage/star_color.png",
+                          height: 60.h,
+                        ),
+                        onPressed: () async {
+                          if (PlaceController.to.place[index].bookmark == 0) {
+                            await bookmarkCreate(UserController.to.userId.value,
+                                PlaceController.to.place[index].id);
+                            print("bookmark : 0");
+                            PlaceController.to.setPlaceBookmark(index, 1);
+                          } else {
+                            await bookmarkDelete(UserController.to.userId.value,
+                                PlaceController.to.place[index].id);
+                            print("bookmark : 1");
+                            PlaceController.to.setPlaceBookmark(index, 0);
+                          }
+                          setState(() {});
+                        },
+                      ),
+                    ),
                   ],
                 )),
           );

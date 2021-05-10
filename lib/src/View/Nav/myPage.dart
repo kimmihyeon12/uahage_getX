@@ -1,21 +1,26 @@
-import 'dart:convert';
-
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:uahage/src/Controller/login.controller.dart';
 import 'package:uahage/src/Static/Widget/progress.dart';
-import 'package:uahage/src/Static/url.dart';
 import 'package:uahage/src/Static/Font/font.dart';
-import 'package:uahage/src/API/user.dart';
+import 'package:uahage/src/Service/user.dart';
+import 'package:uahage/src/View/Nav/userMotify.dart';
 
-class MyPage extends GetView<LoginCotroller> {
+class MyPage extends StatefulWidget {
+  @override
+  _MyPageState createState() => _MyPageState();
+}
+
+class _MyPageState extends State<MyPage> {
   user User = new user();
+  bool isIdValid = false;
+  Map userdata;
+
+  void userSelect() async {
+    userdata = await User.select();
+  }
 
   var boy_image = [
     './assets/register/boy_grey.png',
@@ -26,11 +31,10 @@ class MyPage extends GetView<LoginCotroller> {
     './assets/register/girl_pink.png'
   ];
 
+  @override
   Widget build(BuildContext context) {
-    User.select();
+    userSelect();
     ScreenUtil.init(context, width: 1500, height: 2667);
-    FocusScopeNode currentFocus = FocusScope.of(context);
-
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -52,17 +56,13 @@ class MyPage extends GetView<LoginCotroller> {
                         backgroundImage:
                             AssetImage("./assets/myPage/avatar.png"),
                         child: (() {
-                          // your code here
-
-                          if (controller.imageLink.value != "" &&
-                              controller.imageLink.value != null) {
-                            //print("2 $imageLink");
+                          if ('${userdata["profile_url"]}' != "") {
                             return Container(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                    image: NetworkImage(
-                                        controller.imageLink.value),
+                                    image:
+                                        NetworkImage(userdata["profile_url"]),
                                     fit: BoxFit.cover),
                               ),
                             );
@@ -104,16 +104,21 @@ class MyPage extends GetView<LoginCotroller> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      child: controller.nicknames.value == ''
+                      child: userdata["nickname"] == ''
                           ? boldfont("우아하게", 70, Color(0xff3a3939))
-                          : boldfont(controller.nicknames.value, 70,
-                              Color(0xff3a3939)),
+                          : boldfont(
+                              userdata["nickname"], 70, Color(0xff3a3939)),
                     ),
                     Container(
                       child: InkWell(
                         onTap: () async {
-                          Get.toNamed("/userMotify");
-                          User.select();
+                          final result = Get.toNamed("/userModify");
+                          print('result $result');
+                          if (result == true) {
+                            print(result);
+                            setState(() {});
+                            userSelect();
+                          }
                         },
                         child: Image.asset(
                           "./assets/myPage/button1_pink.png",
@@ -130,26 +135,17 @@ class MyPage extends GetView<LoginCotroller> {
               Container(
                 margin: EdgeInsets.fromLTRB(99.w, 35.h, 0, 0),
                 child: Row(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // 아이성별
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 24.h, 56.w, 0),
-                      child: Text("아이성별",
-                          style: TextStyle(
-                              color: const Color(0xffff7292),
-                              fontFamily: "NotoSansCJKkr_Medium",
-                              fontSize: 57.sp),
-                          textAlign: TextAlign.left),
-                    ),
+                    normalfont("아이성별", 58, Color.fromARGB(255, 255, 114, 148)),
                     Container(
                       height: 362.h,
                       width: 262.w,
                       child: InkWell(
-                        child: Image.asset(controller.boy.value == true
-                            ? boy_image[0]
-                            : boy_image[1]),
+                        child: Image.asset(userdata['baby_gender'] != "F"
+                            ? girl_image[0]
+                            : girl_image[1]),
                       ),
                     ),
                     Container(
@@ -157,7 +153,7 @@ class MyPage extends GetView<LoginCotroller> {
                       width: 262.w,
                       margin: EdgeInsets.only(left: 98.w),
                       child: InkWell(
-                        child: Image.asset(controller.girl.value == true
+                        child: Image.asset(userdata['baby_gender'] != "M"
                             ? boy_image[0]
                             : boy_image[1]),
                       ),
@@ -172,13 +168,7 @@ class MyPage extends GetView<LoginCotroller> {
                 child: Row(
                   children: [
                     // 아이생일
-                    Text("아이생일",
-                        style: TextStyle(
-                          fontSize: 57.sp,
-                          color: const Color(0xffff7292),
-                          fontFamily: "NotoSansCJKkr_Medium",
-                        ),
-                        textAlign: TextAlign.left),
+                    normalfont("아이생일", 58, Color.fromARGB(255, 255, 114, 148)),
                     Expanded(
                       flex: 1,
                       child: Container(
@@ -206,15 +196,13 @@ class MyPage extends GetView<LoginCotroller> {
                                     borderSide:
                                         BorderSide(color: Color(0xffff7292)),
                                   ),
-                                  hintText:
-                                      "${controller.birthdays.value}" == ''
-                                          ? "생년월일을 선택해주세요"
-                                          : "${controller.birthdays.value}",
+                                  hintText: userdata["baby_birthday"] == ''
+                                      ? "생년월일을 선택해주세요"
+                                      : userdata["baby_birthday"],
                                   hintStyle: TextStyle(
-                                      color:
-                                          "${controller.birthdays.value}" == ''
-                                              ? Color(0xffd4d4d4)
-                                              : Color(0xffff7292),
+                                      color: userdata["baby_birthday"] == ''
+                                          ? Color(0xffd4d4d4)
+                                          : Color(0xffff7292),
                                       fontFamily: "NotoSansCJKkr_Medium",
                                       fontSize: 57.0.sp),
                                 ),
@@ -234,14 +222,9 @@ class MyPage extends GetView<LoginCotroller> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // 보호자 연령대
-                    Text("보호자\n연령대",
-                        style: TextStyle(
-                          color: const Color(0xffff7292),
-                          fontWeight: FontWeight.w500,
-                          fontFamily: "NotoSansCJKkr_Medium",
-                          fontSize: 57.sp,
-                        ),
-                        textAlign: TextAlign.right),
+                    normalfont(
+                        "보호자\n연령대", 58, Color.fromARGB(255, 255, 114, 148)),
+
                     Container(
                       child: Column(
                         children: [
@@ -250,7 +233,7 @@ class MyPage extends GetView<LoginCotroller> {
                               Padding(
                                 padding: EdgeInsets.only(left: 59.w),
                                 child: Image.asset(
-                                  controller.ageImage[0] == true
+                                  userdata["age"] == 10
                                       ? './assets/register/10_pink.png'
                                       : './assets/register/10_grey.png',
                                   height: 194.h,
@@ -260,7 +243,7 @@ class MyPage extends GetView<LoginCotroller> {
                               Padding(
                                 padding: EdgeInsets.only(left: 55.w),
                                 child: Image.asset(
-                                  controller.ageImage[1] == true
+                                  userdata["age"] == 20
                                       ? './assets/register/20_pink.png'
                                       : './assets/register/20_grey.png',
                                   height: 194.h,
@@ -270,7 +253,7 @@ class MyPage extends GetView<LoginCotroller> {
                               Padding(
                                 padding: EdgeInsets.only(left: 55.w),
                                 child: Image.asset(
-                                  controller.ageImage[2] == true
+                                  userdata["age"] == 30
                                       ? './assets/register/30_pink.png'
                                       : './assets/register/30_grey.png',
                                   height: 194.h,
@@ -284,7 +267,7 @@ class MyPage extends GetView<LoginCotroller> {
                               Padding(
                                 padding: EdgeInsets.only(left: 59.w, top: 45.h),
                                 child: Image.asset(
-                                  controller.ageImage[3] == true
+                                  userdata["age"] == 40
                                       ? './assets/register/40_pink.png'
                                       : './assets/register/40_grey.png',
                                   height: 194.h,
@@ -294,7 +277,7 @@ class MyPage extends GetView<LoginCotroller> {
                               Padding(
                                 padding: EdgeInsets.only(left: 55.w, top: 45.h),
                                 child: Image.asset(
-                                  controller.ageImage[4] == true
+                                  userdata["age"] == 50
                                       ? './assets/register/50_pink.png'
                                       : './assets/register/50_grey.png',
                                   height: 194.h,
@@ -304,7 +287,7 @@ class MyPage extends GetView<LoginCotroller> {
                               Padding(
                                 padding: EdgeInsets.only(left: 55.w, top: 45.h),
                                 child: Image.asset(
-                                  controller.ageImage[5] == true
+                                  userdata["age"] == 60
                                       ? './assets/register/others_pink.png'
                                       : './assets/register/others_grey.png',
                                   height: 194.h,
@@ -338,14 +321,8 @@ class MyPage extends GetView<LoginCotroller> {
                                   BorderRadius.all(Radius.circular(20.0)),
                             ),
                             title: // 로그아웃 하시겠습니까?
-                                Text("로그아웃 하시겠습니까?",
-                                    style: TextStyle(
-                                        color: const Color(0xff4d4d4d),
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: "NotoSansCJKkr_Medium",
-                                        fontStyle: FontStyle.normal,
-                                        fontSize: 55.sp),
-                                    textAlign: TextAlign.left),
+                                normalfont("로그아웃 하시겠습니까?", 58,
+                                    Color.fromARGB(255, 255, 114, 148)),
                             actions: [
                               FlatButton(
                                 onPressed: () {
@@ -357,8 +334,6 @@ class MyPage extends GetView<LoginCotroller> {
                                 onPressed: () async {
                                   SharedPreferences prefs =
                                       await SharedPreferences.getInstance();
-                                  // await prefs.remove("uahageUserEmail");
-                                  // await prefs.remove("uahageLoginOption");
                                   await prefs.clear();
                                   Navigator.pop(context);
                                   Get.offAllNamed('/login');
@@ -401,19 +376,19 @@ class MyPage extends GetView<LoginCotroller> {
                                   Navigator.pop(context);
                                   SharedPreferences prefs =
                                       await SharedPreferences.getInstance();
-                                  // await prefs.clear();
 
                                   //delete data in the database
                                   showDialog(
                                     context: context,
                                     builder: (_) => FutureBuilder(
-                                      future: User.delete(),
+                                      future:
+                                          User.delete(userdata["profile_url"]),
                                       builder: (context, snapshot) {
                                         if (snapshot.hasData) {
                                           WidgetsBinding.instance
                                               .addPostFrameCallback((_) async {
                                             await prefs.clear();
-                                            controller.initsetting();
+
                                             Get.offNamed("/withdrawal");
                                           });
                                         } else if (snapshot.hasError) {

@@ -1,23 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/screenutil.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
-import 'package:uahage/src/Controller/image.controller.dart';
 import 'package:uahage/src/Controller/location.controller.dart';
 import 'package:uahage/src/Static/Widget/popup.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../Static/url.dart';
-import 'package:get/get.dart';
+import 'package:uahage/src/Static/Widget/progress.dart';
+import 'package:uahage/src/Static/url.dart';
 
-class ListMap extends GetView<LocationController> {
-  int placeCode = Get.arguments;
-  List<int> grey_image = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+import 'package:webview_flutter/webview_flutter.dart';
+
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'dart:async';
+
+class ListMap extends StatefulWidget {
+  int placeCode;
+  ListMap({this.placeCode});
+  @override
+  _ListMapState createState() => _ListMapState();
+}
+
+class _ListMapState extends State<ListMap> {
   String url = URL;
   WebViewController webview;
+  final key = UniqueKey();
+  List<int> grey_image = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+
   Future searchCategory() async {
-    ImageController.to.setUrl(
-        "/maps/show-place?lat=${controller.lat.value}&lon=${controller.lon.value}&type=filter&menu=${grey_image[0]}&bed=${grey_image[1]}&tableware=${grey_image[2]}&meetingroom=${grey_image[3]}&diapers=${grey_image[4]}&playroom=${grey_image[5]}&carriage=${grey_image[6]}&nursingroom=${grey_image[7]}&chair=${grey_image[8]}");
-    await webview.loadUrl(url + ImageController.to.url.value);
+    await webview.loadUrl(url +
+        "/maps/show-place?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=filter&menu=${grey_image[0]}&bed=${grey_image[1]}&tableware=${grey_image[2]}&meetingroom=${grey_image[3]}&diapers=${grey_image[4]}&playroom=${grey_image[5]}&carriage=${grey_image[6]}&nursingroom=${grey_image[7]}&chair=${grey_image[8]}");
   }
 
   @override
@@ -30,28 +38,62 @@ class ListMap extends GetView<LocationController> {
             key: key,
             onWebViewCreated: (WebViewController webViewController) async {
               webview = webViewController;
-              ImageController.to.setUrl(
-                  '/maps/show-place?lat=${controller.lat.value}&lon=${controller.lon.value}&type=allsearch&place_code=$placeCode');
-              await webview.loadUrl(url + ImageController.to.url.value);
-              print(url + ImageController.to.url.value);
+              await webview.loadUrl(url +
+                  '/maps/show-place?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=allsearch&place_code=${1}');
             },
             javascriptMode: JavascriptMode.unrestricted,
             javascriptChannels: Set.from([
               JavascriptChannel(
                   name: 'Print',
-                  onMessageReceived: (JavascriptMessage message) async {})
+                  onMessageReceived: (JavascriptMessage message) async {
+                    var messages = message.message;
+                    /*   Message = messages.split("|");
+                    var bookmark =
+                        await bookMark.bookmarkSelect(userId, Message[0]);
+                    var JsonMessage = {
+                      "id": Message[0],
+                      "name": Message[1],
+                      "address": Message[2],
+                      "phone": Message[3],
+                      "carriage": Message[4],
+                      "bed": Message[5],
+                      "tableware": Message[6],
+                      "nursingroom": Message[7],
+                      "meetingroom": Message[8],
+                      "diapers": Message[9],
+                      "playroom": Message[10],
+                      "chair": Message[11],
+                      "menu": Message[12],
+                      "examination": Message[13],
+                      "fare": Message[14],
+                      "bookmark": bookmark.toString()
+                    };
+
+                    await showpopup.showPopUpbottomMenu(
+                        context,
+                        2667.h,
+                        1501.w,
+                        JsonMessage,
+                        index,
+                        userId,
+                        loginOption,
+                        "search",
+                        "restaurant");*/
+                  }),
             ]),
           ),
-          placeCode == 1
+          widget.placeCode == 1
               ? GestureDetector(
                   onTap: () async {
-                    pop popup = new pop();
-                    bool result = await popup.popup(context);
-                    if (result) {
-                      grey_image = ImageController.to.filter_image;
+                    setState(() {
+                      grey_image = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+                    });
+
+                    List okButton = await popup(context, grey_image);
+                    if (okButton != null) {
+                      grey_image = okButton;
                       await searchCategory();
                     }
-                    ImageController.to.initFilterImage();
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -66,7 +108,7 @@ class ListMap extends GetView<LocationController> {
                         ),
                       ],
                     ),
-                    margin: EdgeInsets.fromLTRB(51.w, 50.h, 51.w, 0),
+                    margin: EdgeInsets.fromLTRB(51.w, 100.h, 51.w, 0),
                     height: 196.h,
                     child: Row(
                       // crossAxisAlignment: CrossAxisAlignment.center,
@@ -106,7 +148,7 @@ class ListMap extends GetView<LocationController> {
                     ),
                   ),
                 )
-              : Container(),
+              : Container()
         ]),
       ),
     );

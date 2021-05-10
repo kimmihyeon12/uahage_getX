@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:uahage/src/Static/Widget/appbar.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 
-class announce extends StatelessWidget {
+class Announce extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, width: 1500, height: 2667);

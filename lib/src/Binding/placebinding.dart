@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-
 import 'package:uahage/src/Controller/place.controller.dart';
 
 class PlaceBinding implements Bindings {

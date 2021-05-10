@@ -1,94 +1,123 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:uahage/src/Controller/navigator.controller.dart';
-import 'package:get/get.dart';
-import 'package:uahage/src/View/Nav/home.dart';
-
+import 'package:uahage/src/View/Nav/search.dart';
 import 'package:uahage/src/View/Nav/star.dart';
-import 'package:uahage/src/View/Nav/myPage.dart';
+import 'package:uahage/src/View/Nav/Home.dart';
+import 'myPage.dart';
 
-import 'search.dart';
+class Navigation extends StatefulWidget {
+  @override
+  _NavigationState createState() => _NavigationState();
+}
 
-class navigation extends GetView<NavigatorController> {
+class _NavigationState extends State<Navigation> {
+  int _selectedTabIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, width: 1500, height: 2667);
-    return Scaffold(
-      body: Obx(
-        () => IndexedStack(index: controller.currentIndex.value, children: [
-          Home(),
-          Search(),
-          Star(),
-          MyPage(),
-        ]),
-      ),
-      bottomNavigationBar: Obx(
-        () => BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          currentIndex: controller.currentIndex.value,
-          onTap: (value) {
-            controller.changePageIndex(value);
-          },
-          items: [
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                "assets/NavigationbarPage/home_grey.png",
-                width: 79.w,
-                height: 144.h,
-              ),
-              label: "",
-              activeIcon: Image.asset(
-                "assets/NavigationbarPage/home_pink.png",
-                width: 79.w,
-                height: 144.h,
-              ),
-              // title: Text("home"),
-            ),
-            BottomNavigationBarItem(
-              label: "",
-              icon: Image.asset(
-                "assets/NavigationbarPage/search_grey.png",
-                width: 79.w,
-                height: 139.h,
-              ),
-              activeIcon: Image.asset(
-                "assets/NavigationbarPage/search_pink.png",
-                width: 79.w,
-                height: 139.h,
-              ),
-              // title: Text("search"),
-            ),
-            BottomNavigationBarItem(
-              label: "",
-              icon: Image.asset(
-                "assets/NavigationbarPage/star_grey.png",
-                width: 162.w,
-                height: 147.h,
-              ),
-              activeIcon: Image.asset(
-                "assets/NavigationbarPage/star_pink.png",
-                width: 162.w,
-                height: 147.h,
-              ),
-              // title: Text("star"),
-            ),
-            BottomNavigationBarItem(
-              label: "",
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
 
-              icon: Image.asset(
-                "assets/NavigationbarPage/mypage_grey.png",
-                width: 132.w,
+    return WillPopScope(
+      onWillPop: () {
+        if (_selectedTabIndex >= 1) {
+          setState(() {
+            _selectedTabIndex = 0;
+          });
+        } else
+          SystemNavigator.pop();
+        // Navigator.pop(context, true);
+      },
+      child: SafeArea(
+          child: Scaffold(
+              body: Stack(
+                children: [
+                  IndexedStack(
+                    index: _selectedTabIndex,
+                    children: <Widget>[
+                      Home(),
+                      Search(),
+                      Star(),
+                      MyPage(),
+                    ],
+                  ),
+                ],
               ),
-              activeIcon: Image.asset(
-                "assets/NavigationbarPage/mypage_pink.png",
-                width: 132.w,
-                height: 141.h,
-              ),
-              // title: Text("mypage"),
-            ),
-          ],
-        ),
-      ),
+              bottomNavigationBar: BottomNavigationBar(
+                currentIndex: _selectedTabIndex,
+                showSelectedLabels: false, // <-- HERE
+                showUnselectedLabels: false,
+                elevation: 15,
+                backgroundColor: Colors.white,
+                onTap: (value) {
+                  setState(() {
+                    _selectedTabIndex = value;
+                  });
+                },
+                type: BottomNavigationBarType.fixed,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Image.asset(
+                      "assets/NavigationbarPage/home_grey.png",
+                      width: 79.w,
+                      height: 144.h,
+                    ),
+                    label: "home",
+                    activeIcon: Image.asset(
+                      "assets/NavigationbarPage/home_pink.png",
+                      width: 79.w,
+                      height: 144.h,
+                    ),
+                    // title: Text("home"),
+                  ),
+                  BottomNavigationBarItem(
+                    label: "",
+                    icon: Image.asset(
+                      "assets/NavigationbarPage/search_grey.png",
+                      width: 79.w,
+                      height: 139.h,
+                    ),
+                    activeIcon: Image.asset(
+                      "assets/NavigationbarPage/search_pink.png",
+                      width: 79.w,
+                      height: 139.h,
+                    ),
+                    // title: Text("search"),
+                  ),
+                  BottomNavigationBarItem(
+                    label: "",
+                    icon: Image.asset(
+                      "assets/NavigationbarPage/star_grey.png",
+                      width: 162.w,
+                      height: 147.h,
+                    ),
+                    activeIcon: Image.asset(
+                      "assets/NavigationbarPage/star_pink.png",
+                      width: 162.w,
+                      height: 147.h,
+                    ),
+                    // title: Text("star"),
+                  ),
+                  BottomNavigationBarItem(
+                    label: "",
+
+                    icon: Image.asset(
+                      "assets/NavigationbarPage/mypage_grey.png",
+                      width: 132.w,
+                    ),
+                    activeIcon: Image.asset(
+                      "assets/NavigationbarPage/mypage_pink.png",
+                      width: 132.w,
+                      height: 141.h,
+                    ),
+                    // title: Text("mypage"),
+                  ),
+                ],
+              ))),
     );
   }
 }

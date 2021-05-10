@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class withdrawal extends StatefulWidget {
+class Withdrawal extends StatefulWidget {
   @override
-  _withdrawalState createState() => _withdrawalState();
+  _WithdrawalState createState() => _WithdrawalState();
 }
 
-class _withdrawalState extends State<withdrawal> {
+class _WithdrawalState extends State<Withdrawal> {
   @override
   void initState() {
     super.initState();

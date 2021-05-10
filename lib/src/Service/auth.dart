@@ -1,19 +1,19 @@
+import 'package:uahage/src/Controller/user.controller.dart';
 import 'package:uahage/src/Static/url.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
-import 'package:uahage/src/Controller/login.controller.dart';
 
-class Auth extends GetView<LoginCotroller> {
+class Auth extends GetView<UserController> {
   String url = URL;
 
-  Future signIn(Email, loginOption) async {
+  Future signIn() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     Map<String, dynamic> userData = {
-      "email": "'$Email$loginOption'",
+      "email": "'${controller.email.value}${controller.option.value}'",
     };
     var response = await http.post(
       url + "/api/auth/signin",
@@ -39,23 +39,21 @@ class Auth extends GetView<LoginCotroller> {
   }
 
   //REGISTER
-  Future signUp(String type) async {
+  Future signUp(String type, nickName, gender, birthday, age) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     Map<String, dynamic> userData = type == "withNickname"
         ? {
-            "email":
-                "'${controller.emails.value}${controller.loginOption.value}'",
-            "nickname": "'${controller.nicknames.value}'",
-            "gender": "'${controller.genders.value}'",
-            "birthday": "'${controller.birthdays.value}'",
-            "age": controller.ages.value,
+            "email": "'${controller.email.value}${controller.option.value}'",
+            "nickname": "'${nickName}'",
+            "gender": "'${gender}'",
+            "birthday": "'${birthday}'",
+            "age": age,
             "URL": null,
             "rf_token": null
           }
         : {
-            "email":
-                "'${controller.emails.value}${controller.loginOption.value}'",
+            "email": "'${controller.email.value}${controller.option.value}'",
             "nickname": null,
             "gender": null,
             "birthday": null,
@@ -74,8 +72,6 @@ class Auth extends GetView<LoginCotroller> {
       );
 
       if (response.statusCode == 200) {
-        controller.errorstate(false);
-
         var data = jsonDecode(response.body);
         String token = data['data']['token'];
         String userId = data['data']['id'].toString();
@@ -89,7 +85,7 @@ class Auth extends GetView<LoginCotroller> {
 
         return data["message"];
       } else {
-        controller.errorstate(true);
+        //  controller.errorstate(true);
         return Future.error(jsonDecode(response.body)["message"]);
       }
     } catch (error) {

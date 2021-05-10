@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:uahage/src/Controller/location.controller.dart';
+import 'package:uahage/src/Controller/user.controller.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:uahage/src/Model/kidsCafeHelper.dart';
@@ -9,8 +10,7 @@ import 'package:uahage/src/Model/experienceCenter.dart';
 import 'package:uahage/src/Model/restaurantHelper.dart';
 import 'package:uahage/src/Model/examinationInstitutionHelper.dart';
 import 'package:uahage/src/Controller/place.controller.dart';
-import '../Controller/login.controller.dart';
-import '../Static/url.dart';
+import 'package:uahage/src/Static/url.dart';
 
 class Place extends GetView<PlaceController> {
   Future<List<dynamic>> getPlaceList(placeCode) async {
@@ -18,7 +18,7 @@ class Place extends GetView<PlaceController> {
     var pageNumber = controller.placePageNumber();
 
     final response = await http.get(url +
-        '/api/places?place_code=$placeCode&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&pageNumber=$pageNumber&user_id=${LoginCotroller.to.userId}');
+        '/api/places?place_code=$placeCode&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&pageNumber=$pageNumber&user_id=${UserController.to.userId.value}');
     List responseJson = json.decode(response.body)["data"]["rows"];
     if (json.decode(response.body)["message"] == false) {
     } else {
@@ -33,14 +33,16 @@ class Place extends GetView<PlaceController> {
         } else if (placeCode == 6) {
           currentData = Experiencecenter.fromJson(data);
         }
-        controller.setPlace(currentData);
-        controller.setPlacePaceNumber();
+
+        await controller.setPlace(currentData);
+        await controller.setPlacePaceNumber();
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    Get.put(PlaceController());
     return Container();
   }
 }

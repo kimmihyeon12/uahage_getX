@@ -1,50 +1,34 @@
 import 'package:get/get.dart';
-import 'package:uahage/src/Controller/login.controller.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:uahage/src/Controller/user.controller.dart';
 import 'package:uahage/src/Static/url.dart';
 import 'package:http/http.dart' as http;
 
-import '../Controller/login.controller.dart';
-
-class user extends GetView<LoginCotroller> {
+class user extends GetView<UserController> {
   String url = URL;
   //ALL SELECT
   select() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-
     try {
-      print('userId ${controller.userId.value}');
-      print('token ${controller.tokens.value}');
       var response = await http.get(
           url + "/api/users/${controller.userId.value}",
-          headers: <String, String>{"Authorization": controller.tokens.value});
+          headers: <String, String>{"Authorization": controller.token.value});
 
       if (jsonDecode(response.body)['message'] == 'finded successfully') {
         var data = jsonDecode(response.body)['data']["result"][0];
-        print(data);
 
-        //setting nickname
-        controller.setnickname(data["nickname"]);
-
-        // setting baby_birthday
-        controller.birthdays(data["baby_birthday"]);
-
-        // setting baby_gender
-        if (data['baby_gender'].toString() == "F") {
-          controller.setGenderColor('M');
-        } else if (data['baby_gender'].toString() == "M") {
-          controller.setGenderColor('F');
-        }
-
-        // setting age
-        controller.setAgeColor(data["parent_age"]);
-
-        // setting image
-        controller.setimage(data["profile_url"]);
+        return {
+          "nickname": data["nickname"] == null ? "" : data["nickname"],
+          "baby_birthday":
+              data["baby_birthday"] == null ? "" : data["baby_birthday"],
+          "baby_gender": data["baby_gender"] == null ? "" : data["baby_gender"],
+          "age": data["parent_age"] == null ? "" : data["parent_age"],
+          "profile_url": data["profile_url"] == null ? "" : data["profile_url"],
+        };
       }
     } catch (err) {
       print(err);
@@ -57,22 +41,22 @@ class user extends GetView<LoginCotroller> {
   }
 
   //DELETE
-  delete() async {
-    if (controller.imageLink.value != "") {
+  delete(imageLink) async {
+    if (imageLink != "") {
       try {
         await http.post(
           url + "/api/profile/deleteImage",
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
-          body: jsonEncode({"fileName": controller.imageLink.value}),
+          body: jsonEncode({"fileName": imageLink}),
         );
       } catch (err) {}
     }
 
     try {
       var res = await http.delete(url + "/api/users/${controller.userId.value}",
-          headers: <String, String>{"Authorization": controller.tokens.value});
+          headers: <String, String>{"Authorization": controller.token.value});
       var data = jsonDecode(res.body);
       if (res.statusCode == 200) {
         return data["message"];
@@ -85,23 +69,22 @@ class user extends GetView<LoginCotroller> {
   }
 
   //UPDATE
-  update() async {
+  Future updataUser(nickName, gender, birthday, age) async {
     try {
       Map<String, dynamic> userData = {
-        "email": "'${controller.emails.value}${controller.loginOption.value}'",
-        "nickname": "'${controller.nicknames.value}'",
-        "gender": "'${controller.genders.value}'",
-        "birthday": "'${controller.birthdays.value}'",
-        "age": controller.ages.value,
-        "URL": null,
-        "rf_token": null
+        "email": "'${controller.email.value}${controller.option.value}'",
+        "nickname": "'${nickName}'",
+        "gender": "'${gender}'",
+        "birthday": "'${birthday}'",
+        "age": age,
+        "rf_token": UserController.to.token.value,
       };
       print(userData);
       var response = await http.put(
-        url + "/api/users/${controller.userId.value}",
+        url + "/api/users/${UserController.to.userId.value}",
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          "Authorization": controller.tokens.value
+          "Authorization": UserController.to.token.value
         },
         body: jsonEncode(userData),
       );
@@ -117,26 +100,23 @@ class user extends GetView<LoginCotroller> {
   //CHECK THE EMAIL
   Future checkEmail() async {
     var response = await http.get(url +
-        "/api/users/find-by-option?option=email&optionData='${controller.emails.value}${controller.loginOption.value}'");
+        "/api/users/find-by-option?option=email&optionData='${controller.email.value}${controller.option.value}'");
     return jsonDecode(response.body)["isdata"] == 0 ? true : false;
   }
 
   //CHECK THE NICKNAME
 
-  Future checkNickName() async {
+  Future checkNickName(nickName) async {
     try {
       var response = await http.get(
         url +
-            "/api/users/find-by-option?option=nickname&optionData='${controller.nicknames.value}'",
+            "/api/users/find-by-option?option=nickname&optionData='${nickName}'",
       );
       print("isdata nickname" + jsonDecode(response.body)["isdata"].toString());
       if (jsonDecode(response.body)["isdata"] == 0) {
-        controller.idValidstate(true);
-
-        return "사용 가능한 닉네임입니다.";
+        return {"idValid": true, "value": "사용 가능한 닉네임입니다."};
       } else {
-        controller.idValidstate(false);
-        return "이미 사용중인 닉네임입니다.";
+        return {"idValid": false, "value": "이미 사용중인 닉네임입니다."};
       }
     } catch (err) {
       print(err);
