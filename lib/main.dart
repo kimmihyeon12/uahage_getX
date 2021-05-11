@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:uahage/src/Binding/bookmarkbinding.dart';
 
 import 'package:uahage/src/Binding/placebinding.dart';
 import 'package:uahage/src/Binding/user.binding.dart';
@@ -8,6 +9,7 @@ import 'package:uahage/src/View/Auth/login.dart';
 import 'package:uahage/src/View/Loading/loading.dart';
 import 'package:uahage/src/View/Nav/navigator.dart';
 import 'package:uahage/src/View/Nav/HomeSub/list.dart';
+import 'package:uahage/src/View/Nav/HomeSub/listsub.dart';
 import 'package:uahage/src/View/Auth/register.dart';
 import 'package:uahage/src/View/Auth/announce.dart';
 import 'package:uahage/src/View/Auth/agreement.dart';
@@ -51,8 +53,14 @@ class MyApp extends StatelessWidget {
         GetPage(
             name: "/navigator",
             page: () => Navigation(),
-            bindings: [UserBinding(), LocationBinding()]),
-        GetPage(name: "/home", page: () => Home()),
+            bindings: [UserBinding(), LocationBinding(), BookmarkBinding()]),
+        GetPage(name: "/home", page: () => Home(), bindings: [
+          PlaceBinding(),
+        ]),
+        GetPage(name: "/list", page: () => PlaceList(), bindings: [
+          PlaceBinding(),
+        ]),
+        GetPage(name: "/listsub", page: () => ListSub(), bindings: []),
         GetPage(
           name: "/search",
           page: () => Search(),
@@ -63,9 +71,6 @@ class MyApp extends StatelessWidget {
             name: "/userModify",
             page: () => UserModify(),
             binding: UserBinding()),
-        GetPage(name: "/list", page: () => PlaceList(), bindings: [
-          PlaceBinding(),
-        ]),
       ],
     );
   }

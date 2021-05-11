@@ -22,7 +22,6 @@ class SnsLogin extends GetView<UserController> {
       var isAlreadyRegistered = await users.checkEmail();
       if (!isAlreadyRegistered) {
         await auth.signIn();
-
         Get.toNamed("/navigator");
       } else {
         Get.toNamed("/register");

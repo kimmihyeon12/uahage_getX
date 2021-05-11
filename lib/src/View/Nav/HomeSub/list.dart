@@ -1,37 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
 import 'package:uahage/src/Controller/place.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
 import 'package:uahage/src/Service/bookmark.dart';
+
 import 'package:uahage/src/Service/places.dart';
 import 'package:uahage/src/Static/Widget/icon.dart';
-
+import 'package:uahage/src/View/Nav/HomeSub/listMap.dart';
 import '../../../Static/url.dart';
-import 'listMap.dart';
+import 'package:uahage/src/Static/Widget/appbar.dart';
 
-class PlaceList extends StatefulWidget {
-  @override
-  _PlaceListState createState() => _PlaceListState();
-}
-
-class _PlaceListState extends State<PlaceList> {
+class PlaceList extends GetView<PlaceController> {
   String url = URL;
+  Bookmark bookmark = new Bookmark();
   int placeCode = Get.arguments;
   ScrollController scrollController = ScrollController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  int indexcount = 0;
 
   getList() async {
     Place place = new Place();
     await place.getPlaceList(placeCode);
-  }
-
-  @override
-  void initState() {
-    PlaceController.to.placeInit();
-    getList();
-    super.initState();
   }
 
   var restaurantListImage = [
@@ -56,6 +46,9 @@ class _PlaceListState extends State<PlaceList> {
 
   Widget build(BuildContext context) {
     Get.put(PlaceController());
+
+    controller.placeInit();
+    getList();
     scrollController.addListener(() {
       double maxScroll = scrollController.position.maxScrollExtent;
       double currentScroll = scrollController.position.pixels;
@@ -63,14 +56,16 @@ class _PlaceListState extends State<PlaceList> {
         getList();
       }
     });
+
     ScreenUtil.init(context, width: 1500, height: 2667);
 
     return SafeArea(
-      child: Scaffold(
-          key: _scaffoldKey,
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            title: new Text(
+      child: Obx(
+        () => Scaffold(
+            key: _scaffoldKey,
+            backgroundColor: Colors.white,
+            appBar: appBar(
+              context,
               (() {
                 if (placeCode == 1) {
                   return "식당·카페";
@@ -82,62 +77,49 @@ class _PlaceListState extends State<PlaceList> {
                   return "체험관";
                 }
               }()),
-              style: TextStyle(
-                  fontSize: 62.sp,
-                  fontFamily: 'NotoSansCJKkr_Medium',
-                  color: Color.fromRGBO(255, 114, 148, 1.0)),
             ),
-            centerTitle: true,
-            backgroundColor: Colors.white,
-            leading: IconButton(
-                icon: Icon(Icons.arrow_back_ios, color: Color(0xffff7292)),
-                onPressed: () {
-                  Get.back();
-                }),
-          ),
-          body: Stack(
-            children: [
-              IndexedStack(index: indexcount, children: <Widget>[
-                ListViews(),
-                ListMap(placeCode: placeCode),
-              ]),
-              Container(
-                margin: EdgeInsets.only(left: 1100.w, top: 2200.w),
-                child: indexcount == 1
-                    ? GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            indexcount = 0;
-                          });
-                        },
-                        child: Image.asset(
-                          './assets/on.png',
-                          width: 284.w,
-                          height: 133.h,
+            body: Stack(
+              children: [
+                IndexedStack(
+                    index: controller.indexCount.value,
+                    children: <Widget>[
+                      ListViews(),
+                      ListMap(placeCode: placeCode),
+                    ]),
+                Container(
+                  margin: EdgeInsets.only(left: 1100.w, top: 2200.w),
+                  child: controller.indexCount.value == 1
+                      ? GestureDetector(
+                          onTap: () {
+                            controller.changeindexCount(0);
+                          },
+                          child: Image.asset(
+                            './assets/on.png',
+                            width: 284.w,
+                            height: 133.h,
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () {
+                            controller.changeindexCount(1);
+                          },
+                          child: Image.asset(
+                            './assets/off.png',
+                            width: 284.w,
+                            height: 133.h,
+                          ),
                         ),
-                      )
-                    : GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            indexcount = 1;
-                          });
-                        },
-                        child: Image.asset(
-                          './assets/off.png',
-                          width: 284.w,
-                          height: 133.h,
-                        ),
-                      ),
-              ),
-            ],
-          )),
+                ),
+              ],
+            )),
+      ),
     );
   }
 
   ListViews() {
     return ListView.builder(
         controller: scrollController,
-        itemCount: PlaceController.to.place.length,
+        itemCount: controller.place.length,
         shrinkWrap: true,
         itemBuilder: (context, index) {
           return Card(
@@ -154,28 +136,14 @@ class _PlaceListState extends State<PlaceList> {
                     InkWell(
                       highlightColor: Colors.white,
                       onTap: () async {
-                        // var result = await Navigator.push(
-                        //     context,
-                        //     PageTransition(
-                        //       type: PageTransitionType.rightToLeft,
-                        //       child: SubListPage(
-                        //         index: index,
-                        //         data: snapshot.data[index],
-                        //         userId: userId,
-                        //         tableType: tableType,
-                        //       ),
-                        //       duration: Duration(milliseconds: 250),
-                        //       reverseDuration:
-                        //           Duration(milliseconds: 100),
-                        //     ));
-                        // setState(() {
-                        //   snapshot.data[index].bookmark =
-                        //       int.parse(result);
-                        // });
+                        await Get.toNamed("/listsub", arguments: {
+                          "data": controller.place[index],
+                          "placeCode": placeCode,
+                          "index": index,
+                        });
                       },
                       child: Container(
                         width: 1280.w,
-                        //     color:Colors.pink,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -235,7 +203,7 @@ class _PlaceListState extends State<PlaceList> {
                                       width: 700.w,
                                       height: 82.h,
                                       child: Text(
-                                        PlaceController.to.place[index].name,
+                                        controller.place[index].name,
                                         style: TextStyle(
                                           fontSize: 56.sp,
                                           fontFamily: 'NotoSansCJKkr_Medium',
@@ -248,8 +216,9 @@ class _PlaceListState extends State<PlaceList> {
                                   height: 135.h,
                                   width: 650.w,
                                   child: Text(
-                                    PlaceController.to.place[index].address,
+                                    controller.place[index].address,
                                     style: TextStyle(
+                                      // fontFamily: 'NatoSans',
                                       color: Colors.grey,
                                       fontSize: 56.sp,
                                       fontFamily: 'NotoSansCJKkr_Medium',
@@ -304,34 +273,35 @@ class _PlaceListState extends State<PlaceList> {
                         ),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(left: 30.w, top: 25.h),
-                      child: IconButton(
-                        padding: EdgeInsets.all(0),
-                        constraints: BoxConstraints(
-                          maxWidth: 70.w,
-                          maxHeight: 70.h,
+                    Obx(
+                      () => Container(
+                        margin: EdgeInsets.only(left: 8.w, top: 25.h),
+                        child: InkWell(
+                          child: Container(
+                            padding: EdgeInsets.only(
+                                left: 30.w, right: 30.w, bottom: 10.h),
+                            child: Image.asset(
+                              controller.place[index].bookmark == 0
+                                  ? "./assets/listPage/love_grey.png"
+                                  : "./assets/listPage/love_color.png",
+                              height: 55.h,
+                            ),
+                          ),
+                          onTap: () async {
+                            if (controller.place[index].bookmark == 0) {
+                              await bookmark.bookmarkCreate(
+                                  UserController.to.userId.value,
+                                  controller.place[index].id);
+                              controller.setPlaceBookmark(index, 1);
+                              print(controller.place[index].bookmark);
+                            } else {
+                              await bookmark.bookmarkDelete(
+                                  UserController.to.userId.value,
+                                  controller.place[index].id);
+                              controller.setPlaceBookmark(index, 0);
+                            }
+                          },
                         ),
-                        icon: Image.asset(
-                          PlaceController.to.place[index].bookmark == 0
-                              ? "./assets/listPage/star_grey.png"
-                              : "./assets/listPage/star_color.png",
-                          height: 60.h,
-                        ),
-                        onPressed: () async {
-                          if (PlaceController.to.place[index].bookmark == 0) {
-                            await bookmarkCreate(UserController.to.userId.value,
-                                PlaceController.to.place[index].id);
-                            print("bookmark : 0");
-                            PlaceController.to.setPlaceBookmark(index, 1);
-                          } else {
-                            await bookmarkDelete(UserController.to.userId.value,
-                                PlaceController.to.place[index].id);
-                            print("bookmark : 1");
-                            PlaceController.to.setPlaceBookmark(index, 0);
-                          }
-                          setState(() {});
-                        },
                       ),
                     ),
                   ],

@@ -1,36 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 
-// back => back button 여부
-// text => appbar에 들어갈 text
-// backgroudcolor => appbar 전체 컬러
-// fontcolor => appbar font 컬러
-appBar(context, back, text, backgroundcolor, fontcolor, result) {
-  if (back = true)
-    return PreferredSize(
-      preferredSize: Size.fromHeight(180.h),
-      child: AppBar(
-        backgroundColor: backgroundcolor,
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: fontcolor),
-          onPressed: () {
-            Navigator.pop(context, result);
-          },
-        ),
-        title: normalfont(text, 67.0, fontcolor),
-      ),
-    );
-  else
-    return PreferredSize(
-      preferredSize: Size.fromHeight(180.h),
-      child: AppBar(
-        backgroundColor: backgroundcolor,
-        centerTitle: true,
-        title: normalfont(text, 67.0, fontcolor),
-      ),
-    );
+appBar(context, text) {
+  return AppBar(
+    title: new Text(
+      text,
+      style: TextStyle(
+          fontSize: 62.sp,
+          fontFamily: 'NotoSansCJKkr_Medium',
+          color: Color.fromRGBO(255, 114, 148, 1.0)),
+    ),
+    centerTitle: true,
+    backgroundColor: Colors.white,
+    leading: IconButton(
+        icon: Icon(Icons.arrow_back_ios, color: Color(0xffff7292)),
+        onPressed: () {
+          Get.back();
+        }),
+  );
 }
 
 imageAppbar(context, text) {

@@ -47,9 +47,8 @@ class _ListMapState extends State<ListMap> {
                   name: 'Print',
                   onMessageReceived: (JavascriptMessage message) async {
                     var messages = message.message;
-                    /*   Message = messages.split("|");
-                    var bookmark =
-                        await bookMark.bookmarkSelect(userId, Message[0]);
+                    print(messages);
+                    var Message = messages.split("|");
                     var JsonMessage = {
                       "id": Message[0],
                       "name": Message[1],
@@ -66,19 +65,12 @@ class _ListMapState extends State<ListMap> {
                       "menu": Message[12],
                       "examination": Message[13],
                       "fare": Message[14],
-                      "bookmark": bookmark.toString()
                     };
-
-                    await showpopup.showPopUpbottomMenu(
-                        context,
-                        2667.h,
-                        1501.w,
-                        JsonMessage,
-                        index,
-                        userId,
-                        loginOption,
-                        "search",
-                        "restaurant");*/
+                    await placepopup(
+                      context,
+                      JsonMessage,
+                      "",
+                    );
                   }),
             ]),
           ),
