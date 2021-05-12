@@ -5,6 +5,18 @@ import 'package:uahage/src/Binding/bookmarkbinding.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
 import 'package:uahage/src/Service/bookmark.dart';
 
+class pop extends StatefulWidget {
+  @override
+  _popState createState() => _popState();
+}
+
+class _popState extends State<pop> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
 Future<Object> popup(context, grey_image) {
   return showGeneralDialog(
       context: context,
@@ -117,9 +129,10 @@ Future<Object> popup(context, grey_image) {
       transitionDuration: const Duration(milliseconds: 150));
 }
 
-Future<Object> placepopup(context, Message, type) {
+Future<Object> placepopup(context, Message, type) async {
   Bookmark bookmark = new Bookmark();
-  print(bookmark.bookmarkSelect(UserController.to.userId.value, Message['id']));
+  var mark = await bookmark.bookmarkSelect(
+      UserController.to.userId.value, Message['id']);
   return showGeneralDialog(
       context: context,
       pageBuilder: (BuildContext buildContext, Animation<double> animation,
@@ -244,44 +257,32 @@ Future<Object> placepopup(context, Message, type) {
                                               right: 30.w,
                                               bottom: 10.h),
                                           child: Image.asset(
-                                            !bookmark.bookmarkSelect(
-                                                    UserController
-                                                        .to.userId.value,
-                                                    Message['id'])
+                                            mark == 0
                                                 ? "./assets/listPage/love_grey.png"
                                                 : "./assets/listPage/love_color.png",
-                                            height: 55.h,
+                                            height: 60.h,
                                           ),
                                         ),
-                                        onTap: () async {},
+                                        onTap: () async {
+                                          print(mark);
+                                          if (mark == 0) {
+                                            bookmark.bookmarkCreate(
+                                                UserController.to.userId.value,
+                                                Message["id"]);
+                                            setState(() {
+                                              mark = 1;
+                                            });
+                                          } else {
+                                            bookmark.bookmarkDelete(
+                                                UserController.to.userId.value,
+                                                Message["id"]);
+                                            setState(() {
+                                              mark = 0;
+                                            });
+                                          }
+                                        },
                                       ),
                                     ),
-                                    /* IconButton(
-                                      padding: EdgeInsets.all(0),
-                                      icon: Image.asset(
-                                          star_color == "0"
-                                              ? "./assets/listPage/star_grey.png"
-                                              : "./assets/listPage/star_color.png",
-                                          height: 60.h),
-                                      onPressed: loginOption == "login"
-                                          ? () {
-                                              show_toast.showToast(
-                                                  context, "로그인해주세요!");
-                                            }
-                                          : () async {
-                                              setState(() {
-                                                if (star_color == "0") {
-                                                  star_color = "1";
-                                                  bookMark.bookmarkCreate(
-                                                      userId, place_id);
-                                                } else {
-                                                  star_color = "0";
-                                                  bookMark.bookmarkDelete(
-                                                      userId, place_id);
-                                                }
-                                              });
-                                            },
-                                    ),*/
                                   ],
                                 ),
                               ),

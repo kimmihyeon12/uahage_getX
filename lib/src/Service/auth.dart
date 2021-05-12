@@ -44,16 +44,16 @@ class Auth extends GetView<UserController> {
 
     Map<String, dynamic> userData = type == "withNickname"
         ? {
-            "email": "'${controller.email.value}${controller.option.value}'",
-            "nickname": "'${nickName}'",
-            "gender": "'${gender}'",
-            "birthday": "'${birthday}'",
+            "email": "${controller.email.value}${controller.option.value}",
+            "nickname": "${nickName}",
+            "gender": "${gender}",
+            "birthday": "${birthday}",
             "age": age,
             "URL": null,
             "rf_token": null
           }
         : {
-            "email": "'${controller.email.value}${controller.option.value}'",
+            "email": "${controller.email.value}${controller.option.value}",
             "nickname": null,
             "gender": null,
             "birthday": null,

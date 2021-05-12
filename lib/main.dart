@@ -58,6 +58,7 @@ class MyApp extends StatelessWidget {
           PlaceBinding(),
         ]),
         GetPage(name: "/list", page: () => PlaceList(), bindings: [
+          UserBinding(),
           PlaceBinding(),
         ]),
         GetPage(name: "/listsub", page: () => ListSub(), bindings: []),

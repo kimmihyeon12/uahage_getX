@@ -293,7 +293,6 @@ class PlaceList extends GetView<PlaceController> {
                                   UserController.to.userId.value,
                                   controller.place[index].id);
                               controller.setPlaceBookmark(index, 1);
-                              print(controller.place[index].bookmark);
                             } else {
                               await bookmark.bookmarkDelete(
                                   UserController.to.userId.value,

@@ -72,10 +72,10 @@ class user extends GetView<UserController> {
   Future updataUser(nickName, gender, birthday, age) async {
     try {
       Map<String, dynamic> userData = {
-        "email": "'${controller.email.value}${controller.option.value}'",
-        "nickname": "'${nickName}'",
-        "gender": "'${gender}'",
-        "birthday": "'${birthday}'",
+        "email": "${controller.email.value}${controller.option.value}",
+        "nickname": "${nickName}",
+        "gender": "${gender}",
+        "birthday": "${birthday}",
         "age": age,
         "rf_token": UserController.to.token.value,
       };
@@ -100,7 +100,7 @@ class user extends GetView<UserController> {
   //CHECK THE EMAIL
   Future checkEmail() async {
     var response = await http.get(url +
-        "/api/users/find-by-option?option=email&optionData='${controller.email.value}${controller.option.value}'");
+        "/api/users/find-by-option?option=email&optionData=${controller.email.value}${controller.option.value}");
     return jsonDecode(response.body)["isdata"] == 0 ? true : false;
   }
 
@@ -110,7 +110,7 @@ class user extends GetView<UserController> {
     try {
       var response = await http.get(
         url +
-            "/api/users/find-by-option?option=nickname&optionData='${nickName}'",
+            "/api/users/find-by-option?option=nickname&optionData=${nickName}",
       );
       print("isdata nickname" + jsonDecode(response.body)["isdata"].toString());
       if (jsonDecode(response.body)["isdata"] == 0) {

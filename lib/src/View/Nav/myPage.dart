@@ -81,14 +81,14 @@ class _MyPageState extends State<MyPage> {
                       ),
                     ),
                     Positioned(
-                      right: 0,
-                      bottom: 0,
+                      right: -5,
+                      bottom: -5,
                       child: Container(
                         child: InkWell(
                           child: Image.asset(
                             "./assets/myPage/camera.png",
-                            height: 109.h,
-                            width: 110.w,
+                            height: 150.h,
+                            width: 150.w,
                           ),
                         ),
                       ),
@@ -112,12 +112,17 @@ class _MyPageState extends State<MyPage> {
                     Container(
                       child: InkWell(
                         onTap: () async {
-                          final result = Get.toNamed("/userModify");
-                          print('result $result');
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => UserModify(
+                                      userdata: userdata,
+                                    )),
+                          );
+
                           if (result == true) {
-                            print(result);
+                            await userSelect();
                             setState(() {});
-                            userSelect();
                           }
                         },
                         child: Image.asset(
@@ -321,8 +326,7 @@ class _MyPageState extends State<MyPage> {
                                   BorderRadius.all(Radius.circular(20.0)),
                             ),
                             title: // 로그아웃 하시겠습니까?
-                                normalfont("로그아웃 하시겠습니까?", 58,
-                                    Color.fromARGB(255, 255, 114, 148)),
+                                normalfont("로그아웃 하시겠습니까?", 58, Colors.black),
                             actions: [
                               FlatButton(
                                 onPressed: () {

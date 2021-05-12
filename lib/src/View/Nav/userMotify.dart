@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,13 +16,26 @@ import 'package:uahage/src/Static/Widget/dialog.dart';
 import 'package:uahage/src/Static/Widget/toast.dart';
 import 'package:uahage/src/Static/Widget/yearpicker.dart';
 import 'package:uahage/src/Static/url.dart';
+import 'package:uahage/src/Service/user.dart';
 
 class UserModify extends StatefulWidget {
+  final userdata;
+  const UserModify({
+    Key key,
+    this.userdata,
+  }) : super(key: key);
   @override
   _UserModifyState createState() => _UserModifyState();
 }
 
 class _UserModifyState extends State<UserModify> {
+  Map userdata;
+  @override
+  void initState() {
+    super.initState();
+    userdata = widget.userdata;
+  }
+
   TextEditingController yController = TextEditingController();
   user User = new user();
   var ageImage = [false, false, false, false, false, false];
@@ -38,13 +52,8 @@ class _UserModifyState extends State<UserModify> {
   String _uploadedFileURL = "";
   File _image;
   String imageLink = "";
-  String nickName = "";
+
   dynamic recievedImage;
-  String gender = "";
-  bool boy = true;
-  bool girl = true;
-  String birthday = "";
-  int age = 0;
 
   String url = URL;
 
@@ -87,7 +96,7 @@ class _UserModifyState extends State<UserModify> {
                       await deleteFile();
                       setState(() {
                         _image = null;
-                        imageLink = "";
+                        userdata["profile_url"] = "";
                       });
                       Navigator.of(context).pop();
                     },
@@ -110,7 +119,7 @@ class _UserModifyState extends State<UserModify> {
         body: jsonEncode({"fileName": imageLink}),
       );
       setState(() {
-        recievedImage = null;
+        userdata["profile_url"] = "";
       });
     } catch (err) {}
   }
@@ -120,7 +129,6 @@ class _UserModifyState extends State<UserModify> {
         .getImage(source: ImageSource.camera, imageQuality: 20);
 
     setState(() {
-      recievedImage = null;
       _image = File(image.path);
     });
   }
@@ -130,13 +138,12 @@ class _UserModifyState extends State<UserModify> {
         .getImage(source: ImageSource.gallery, imageQuality: 20);
 
     setState(() {
-      recievedImage = null;
       _image = File(image.path);
     });
   }
 
   uploadFile(File file) async {
-    if (imageLink != "") {
+    if (userdata["profile_url"] != "") {
       try {
         await http.post(
           url + "/api/s3/images-delete",
@@ -144,7 +151,7 @@ class _UserModifyState extends State<UserModify> {
             'Content-Type': 'application/json; charset=UTF-8',
             "Authorization": UserController.to.token.value
           },
-          body: jsonEncode({"fileName": imageLink}),
+          body: jsonEncode({"fileName": userdata["profile_url"]}),
         );
       } catch (err) {
         print(err);
@@ -165,10 +172,10 @@ class _UserModifyState extends State<UserModify> {
             data: formData);
         setState(() {
           _uploadedFileURL = response.data["location"];
-          imageLink = _uploadedFileURL;
+          userdata["profile_url"] = _uploadedFileURL;
         });
-        print("Printing after upload imagelink " + _uploadedFileURL);
-        await _saveURL(_uploadedFileURL);
+        print("Printing after upload imagelink " + userdata["profile_url"]);
+        await _saveURL(userdata["profile_url"]);
       } catch (err) {
         print(err);
       }
@@ -192,6 +199,7 @@ class _UserModifyState extends State<UserModify> {
 
   @override
   Widget build(BuildContext context) {
+    print(userdata);
     ScreenUtil.init(context, width: 1500, height: 2667);
     FocusScopeNode currentFocus = FocusScope.of(context);
 
@@ -241,35 +249,18 @@ class _UserModifyState extends State<UserModify> {
                           backgroundImage:
                               AssetImage("./assets/myPage/avatar.png"),
                           child: (() {
-                            print("here " + imageLink);
-                            // your code here
-                            if (recievedImage != null) {
-                              if (recievedImage is String) {
-                                setState(() {
-                                  imageLink = recievedImage;
-                                });
-
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                        image: NetworkImage(
-                                            recievedImage), //imageURL
-                                        fit: BoxFit.cover),
-                                  ),
-                                );
-                              } else
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                        image:
-                                            FileImage(recievedImage), //imageURL
-                                        fit: BoxFit.cover),
-                                  ),
-                                );
+                            if (userdata["profile_url"] != "" &&
+                                _image == null) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                          userdata["profile_url"]), //imageURL
+                                      fit: BoxFit.cover),
+                                ),
+                              );
                             } else if (_image != null) {
-                              print("1");
                               return Container(
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
@@ -278,18 +269,7 @@ class _UserModifyState extends State<UserModify> {
                                       fit: BoxFit.cover),
                                 ),
                               );
-                            } else if (imageLink != "" && imageLink != null) {
-                              print("2");
-                              return Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      image: NetworkImage(imageLink),
-                                      fit: BoxFit.cover),
-                                ),
-                              );
                             } else {
-                              print("3");
                               return Container(
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
@@ -304,19 +284,19 @@ class _UserModifyState extends State<UserModify> {
                         ),
                       ),
                       Positioned(
-                        right: 0,
-                        bottom: 0,
+                        right: -5,
+                        bottom: -5,
                         child: Container(
                           // margin: EdgeInsets.fromLTRB(
-                          //     330 .w, 341 .h, 0, 0),
+                          //     330 .w, 341 .h, 0, 0),  userSelect();
                           child: InkWell(
                             onTap: () {
                               _showPicker(context);
                             },
                             child: Image.asset(
                               "./assets/myPage/camera.png",
-                              height: 109.h,
-                              width: 110.w,
+                              height: 150.h,
+                              width: 150.w,
                             ),
                           ),
                         ),
@@ -353,7 +333,7 @@ class _UserModifyState extends State<UserModify> {
                                   onChanged: (txt) {
                                     txt.length <= 10
                                         ? setState(() {
-                                            nickName = txt;
+                                            userdata["nickname"] = txt;
                                           })
                                         : null;
                                   },
@@ -374,7 +354,9 @@ class _UserModifyState extends State<UserModify> {
                                       borderSide:
                                           BorderSide(color: Color(0xffff7292)),
                                     ),
-                                    hintText: '닉네임을 입력하세요',
+                                    hintText: userdata["nickname"] == ''
+                                        ? "닉네임을 입력하세요"
+                                        : userdata["nickname"],
                                     hintStyle: TextStyle(
                                         color: const Color(0xffcacaca),
                                         fontFamily: "NotoSansCJKkr_Medium",
@@ -388,13 +370,13 @@ class _UserModifyState extends State<UserModify> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(8.0)),
-                                    color: nickName == ""
+                                    color: userdata["nickname"] == ""
                                         ? Color(0xffcacaca)
                                         : Color(0xffff7292),
-                                    onPressed: nickName != ""
+                                    onPressed: userdata["nickname"] != ""
                                         ? () async {
                                             var data = await User.checkNickName(
-                                                nickName);
+                                                userdata["nickname"]);
                                             setState(() {
                                               isIdValid = data['idValid'];
                                             });
@@ -421,62 +403,45 @@ class _UserModifyState extends State<UserModify> {
                 Container(
                   margin: EdgeInsets.fromLTRB(99.w, 35.h, 0, 0),
                   child: Row(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // 아이성별
+                      normalfont(
+                          "아이성별", 58, Color.fromARGB(255, 255, 114, 148)),
                       Container(
-                        margin: EdgeInsets.fromLTRB(0, 24.h, 56.w, 0),
-                        child: Text("아이성별",
-                            style: TextStyle(
-                                color: const Color(0xffff7292),
-                                fontFamily: "NotoSansCJKkr_Medium",
-                                fontSize: 57.sp),
-                            textAlign: TextAlign.left),
+                        height: 362.h,
+                        width: 262.w,
+                        child: InkWell(
+                          child: Image.asset(userdata['baby_gender'] != "F"
+                              ? girl_image[0]
+                              : girl_image[1]),
+                          onTap: () {
+                            setState(() {
+                              print('baby gender F');
+                              userdata['baby_gender'] = "F";
+                            });
+                          },
+                        ),
                       ),
-
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            gender = "M";
-                            boy = false;
-                            girl = true;
-                          });
-                        },
-                        child: Column(children: <Widget>[
-                          Container(
-                            height: 362.h,
-                            width: 262.w,
-                            child:
-                                Image.asset(boy ? boy_image[0] : boy_image[1]),
-                          ),
-                          Padding(padding: EdgeInsets.only(bottom: 11)),
-                        ]),
-                      ),
-                      Padding(padding: EdgeInsets.only(left: 98.w)),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            gender = "F";
-                            boy = true;
-                            girl = false;
-                          });
-                        },
-                        child: Column(children: <Widget>[
-                          Container(
-                            height: 362.h,
-                            width: 262.w,
-                            child: Image.asset(
-                                girl ? girl_image[0] : girl_image[1]),
-                          ),
-                          Padding(padding: EdgeInsets.only(bottom: 11)),
-                        ]),
+                      Container(
+                        height: 362.h,
+                        width: 262.w,
+                        margin: EdgeInsets.only(left: 98.w),
+                        child: InkWell(
+                          child: Image.asset(userdata['baby_gender'] != "M"
+                              ? boy_image[0]
+                              : boy_image[1]),
+                          onTap: () {
+                            setState(() {
+                              print('baby gender M');
+                              userdata['baby_gender'] = "M";
+                            });
+                          },
+                        ),
                       ),
                     ],
                   ),
                 ),
-
-                // Birthday
 
                 Container(
                   margin: EdgeInsets.fromLTRB(99.w, 5.h, 0, 0),
@@ -500,7 +465,7 @@ class _UserModifyState extends State<UserModify> {
                                 onTap: () async {
                                   var result = await yearPicker(context);
                                   setState(() {
-                                    birthday = result;
+                                    userdata["baby_birthday"] = result;
                                   });
                                 },
                                 child: AbsorbPointer(
@@ -525,16 +490,15 @@ class _UserModifyState extends State<UserModify> {
                                         borderSide: BorderSide(
                                             color: Color(0xffff7292)),
                                       ),
-                                      hintText: birthday == ""
-                                          ? '생년월일을 선택해주세요'
-                                          : birthday,
+                                      hintText: userdata["baby_birthday"] == ''
+                                          ? "생년월일을 선택해주세요"
+                                          : userdata["baby_birthday"],
                                       hintStyle: TextStyle(
-                                          color: birthday == ''
+                                          color: userdata["baby_birthday"] == ''
                                               ? Color(0xffd4d4d4)
                                               : Color(0xffff7292),
-                                          fontWeight: FontWeight.w500,
                                           fontFamily: "NotoSansCJKkr_Medium",
-                                          fontSize: 58.0.sp),
+                                          fontSize: 57.0.sp),
                                     ),
                                   ),
                                 ),
@@ -545,7 +509,7 @@ class _UserModifyState extends State<UserModify> {
                                   onPressed: () async {
                                     var result = await yearPicker(context);
                                     setState(() {
-                                      birthday = result;
+                                      userdata["baby_birthday"] = result;
                                     });
                                   },
                                   icon: Image.asset(
@@ -574,7 +538,7 @@ class _UserModifyState extends State<UserModify> {
                       Padding(padding: EdgeInsets.only(left: 62.w)),
                       InkWell(
                         child: Image.asset(
-                          ageImage[0]
+                          userdata["age"] == 10
                               ? './assets/register/10_pink.png'
                               : './assets/register/10_grey.png',
                           height: 196.h,
@@ -587,7 +551,7 @@ class _UserModifyState extends State<UserModify> {
                       Padding(padding: EdgeInsets.only(left: 55.w)),
                       InkWell(
                         child: Image.asset(
-                          ageImage[1]
+                          userdata["age"] == 20
                               ? './assets/register/20_pink.png'
                               : './assets/register/20_grey.png',
                           height: 196.h,
@@ -600,7 +564,7 @@ class _UserModifyState extends State<UserModify> {
                       Padding(padding: EdgeInsets.only(left: 55.w)),
                       InkWell(
                         child: Image.asset(
-                          ageImage[2]
+                          userdata["age"] == 30
                               ? './assets/register/30_pink.png'
                               : './assets/register/30_grey.png',
                           height: 196.h,
@@ -621,7 +585,7 @@ class _UserModifyState extends State<UserModify> {
                       Padding(padding: EdgeInsets.only(left: 62.w)),
                       InkWell(
                         child: Image.asset(
-                          ageImage[3]
+                          userdata["age"] == 40
                               ? './assets/register/40_pink.png'
                               : './assets/register/40_grey.png',
                           height: 196.h,
@@ -634,7 +598,7 @@ class _UserModifyState extends State<UserModify> {
                       Padding(padding: EdgeInsets.only(left: 55.w)),
                       InkWell(
                         child: Image.asset(
-                          ageImage[4]
+                          userdata["age"] == 50
                               ? './assets/register/50_pink.png'
                               : './assets/register/50_grey.png',
                           height: 196.h,
@@ -647,7 +611,7 @@ class _UserModifyState extends State<UserModify> {
                       Padding(padding: EdgeInsets.only(left: 55.w)),
                       InkWell(
                         child: Image.asset(
-                          ageImage[5]
+                          userdata["age"] == 60
                               ? './assets/register/others_pink.png'
                               : './assets/register/others_grey.png',
                           height: 196.h,
@@ -675,20 +639,18 @@ class _UserModifyState extends State<UserModify> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0)),
                         color: isIdValid &&
-                                age != 0 &&
-                                gender != "" &&
-                                birthday != "" &&
-                                nickName != ""
+                                userdata["age"] != 0 &&
+                                userdata['baby_gender'] != "" &&
+                                userdata["baby_birthday"] != ""
                             ? Color(0xffff7292)
                             : Color(0xffcacaca),
                         onPressed: isIdValid &&
-                                age != 0 &&
-                                gender != "" &&
-                                birthday != "" &&
-                                nickName != ""
+                                userdata["age"] != 0 &&
+                                userdata['baby_gender'] != "" &&
+                                userdata["baby_birthday"] != ""
                             ? () async {
                                 await uploadFile(_image);
-                                if (imageLink == "") {
+                                if (userdata["profile_url"] == "") {
                                   print("imageLink");
                                   await deleteFile();
                                   await _saveURL("");
@@ -698,13 +660,16 @@ class _UserModifyState extends State<UserModify> {
                                   context: context,
                                   builder: (context) => FutureBuilder(
                                     future: User.updataUser(
-                                        nickName, gender, birthday, age),
+                                        userdata["nickname"],
+                                        userdata['baby_gender'],
+                                        userdata["baby_birthday"],
+                                        userdata["age"]),
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {
                                         WidgetsBinding.instance
                                             .addPostFrameCallback((_) {
                                           print("확인");
-                                          Navigator.pop(context);
+                                          Navigator.pop(context, true);
                                           Navigator.pop(context, true);
                                         });
                                       } else if (snapshot.hasError) {
@@ -755,14 +720,8 @@ class _UserModifyState extends State<UserModify> {
   }
 
   setAgeColor(int value) {
-    age = value;
-    for (int i = 0; i < ageImage.length; i++) {
-      setState(() {
-        if ((value / 10 - 1) == i) {
-          ageImage[i] = true;
-        } else
-          ageImage[i] = false;
-      });
-    }
+    setState(() {
+      userdata["age"] = value;
+    });
   }
 }

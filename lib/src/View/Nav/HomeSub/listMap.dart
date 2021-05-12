@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:uahage/src/Controller/location.controller.dart';
+import 'package:uahage/src/Controller/user.controller.dart';
+import 'package:uahage/src/Service/bookmark.dart';
 import 'package:uahage/src/Static/Widget/popup.dart';
 import 'package:uahage/src/Static/Widget/progress.dart';
 import 'package:uahage/src/Static/url.dart';
@@ -22,6 +24,7 @@ class _ListMapState extends State<ListMap> {
   WebViewController webview;
   final key = UniqueKey();
   List<int> grey_image = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+  Bookmark bookmark = new Bookmark();
 
   Future searchCategory() async {
     await webview.loadUrl(url +
@@ -39,7 +42,7 @@ class _ListMapState extends State<ListMap> {
             onWebViewCreated: (WebViewController webViewController) async {
               webview = webViewController;
               await webview.loadUrl(url +
-                  '/maps/show-place?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=allsearch&place_code=${1}');
+                  '/maps/show-place?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=allsearch&place_code=${widget.placeCode}');
             },
             javascriptMode: JavascriptMode.unrestricted,
             javascriptChannels: Set.from([
@@ -66,11 +69,9 @@ class _ListMapState extends State<ListMap> {
                       "examination": Message[13],
                       "fare": Message[14],
                     };
-                    await placepopup(
-                      context,
-                      JsonMessage,
-                      "",
-                    );
+                    var mark = await bookmark.bookmarkSelect(
+                        UserController.to.userId.value, JsonMessage['id']);
+                    await placepopup(context, JsonMessage, "");
                   }),
             ]),
           ),

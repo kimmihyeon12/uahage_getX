@@ -31,7 +31,8 @@ class Bookmark extends GetView<BookmarkController> {
     String url = URL;
     var response = await http
         .get(url + "/api/bookmarks?user_id=$userId&place_id=$place_id");
-    return json.decode(response.body)["data"]["rowCount"] == 1 ? true : false;
+
+    return json.decode(response.body)["data"]["rowCount"];
   }
 
   bookmarkSelectAll(userId) async {

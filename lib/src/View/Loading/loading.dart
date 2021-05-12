@@ -13,9 +13,9 @@ class Loading extends GetView<UserController> {
     await location.setCurrentLocation();
     await 1.delay();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('userId') != null) {
-      controller.setUserid(prefs.getString('userId'));
-      controller.setToken(prefs.getString('token'));
+    if (prefs.getString('uahageUserId') != null) {
+      controller.setUserid(prefs.getString('uahageUserId'));
+      controller.setToken(prefs.getString('uahageUserToken'));
       Get.offNamed("/navigator");
     } else {
       Get.offNamed("/login");
