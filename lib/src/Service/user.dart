@@ -17,18 +17,23 @@ class user extends GetView<UserController> {
       var response = await http.get(
           url + "/api/users/${controller.userId.value}",
           headers: <String, String>{"Authorization": controller.token.value});
+      if (response.statusCode == 200) {
+        if (jsonDecode(response.body)['message'] == 'finded successfully') {
+          var data = jsonDecode(response.body)['data']["result"][0];
 
-      if (jsonDecode(response.body)['message'] == 'finded successfully') {
-        var data = jsonDecode(response.body)['data']["result"][0];
-
-        return {
-          "nickname": data["nickname"] == null ? "" : data["nickname"],
-          "baby_birthday":
-              data["baby_birthday"] == null ? "" : data["baby_birthday"],
-          "baby_gender": data["baby_gender"] == null ? "" : data["baby_gender"],
-          "age": data["parent_age"] == null ? "" : data["parent_age"],
-          "profile_url": data["profile_url"] == null ? "" : data["profile_url"],
-        };
+          return {
+            "nickname": data["nickname"] == null ? "" : data["nickname"],
+            "baby_birthday":
+                data["baby_birthday"] == null ? "" : data["baby_birthday"],
+            "baby_gender":
+                data["baby_gender"] == null ? "" : data["baby_gender"],
+            "age": data["parent_age"] == null ? "" : data["parent_age"],
+            "profile_url":
+                data["profile_url"] == null ? "" : data["profile_url"],
+          };
+        }
+      } else {
+        return false;
       }
     } catch (err) {
       print(err);
