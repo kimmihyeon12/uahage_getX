@@ -15,6 +15,7 @@ import 'package:uahage/src/Static/Widget/yearpicker.dart';
 import 'package:uahage/src/Static/Widget/progress.dart';
 import 'package:uahage/src/Service/auth.dart';
 import 'package:uahage/src/Service/user.dart';
+import 'package:uahage/src/Service/users.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -24,9 +25,7 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   String url = URL;
 
-  Auth auth = new Auth();
-  user User = new user();
-
+  Users users = new Users();
   //user
   bool isIdValid = false;
   String birthday = "";
@@ -124,8 +123,8 @@ class _RegisterState extends State<Register> {
                                     ),
                                     onPressed: nickName != ""
                                         ? () async {
-                                            var data = await User.checkNickName(
-                                                nickName);
+                                            var data = await users
+                                                .checkNickName(nickName);
                                             setState(() {
                                               isIdValid = data['idValid'];
                                             });
@@ -411,7 +410,7 @@ class _RegisterState extends State<Register> {
                             barrierDismissible: false,
                             context: context,
                             builder: (context) => FutureBuilder(
-                              future: auth.signUp("withNickname", nickName,
+                              future: users.insert("withNickname", nickName,
                                   gender, birthday, age),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
@@ -458,7 +457,7 @@ class _RegisterState extends State<Register> {
                       context: context,
                       builder: (context) => FutureBuilder(
                         future:
-                            auth.signUp("", nickName, gender, birthday, age),
+                            users.insert("", nickName, gender, birthday, age),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             WidgetsBinding.instance

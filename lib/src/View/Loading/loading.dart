@@ -4,22 +4,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
 import 'package:uahage/src/Service/location.dart';
-import '../../Service/auth.dart';
 
 class Loading extends GetView<UserController> {
-  Auth auths = new Auth();
   Location location = new Location();
   lodingTime() async {
     await location.setCurrentLocation();
     await 1.delay();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('uahageUserId') != null) {
-      controller.setUserid(prefs.getString('uahageUserId'));
-      controller.setToken(prefs.getString('uahageUserToken'));
-      Get.offNamed("/navigator");
-    } else {
-      Get.offNamed("/login");
-    }
+    Get.offNamed("/login");
+    // if (prefs.getString('uahageUserId') != null) {
+    //   controller.setUserid(prefs.getString('uahageUserId'));
+    //   controller.setToken(prefs.getString('uahageUserToken'));
+    //   Get.offNamed("/navigator");
+    // } else {
+    //   Get.offNamed("/login");
+    // }
   }
 
   @override

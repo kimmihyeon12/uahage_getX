@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:uahage/src/Service/users.dart';
 import 'package:uahage/src/Static/Widget/progress.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 import 'package:uahage/src/Service/user.dart';
@@ -14,12 +15,13 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
-  user User = new user();
+  Users users = new Users();
   bool isIdValid = false;
   Map userdata;
 
   void userSelect() async {
-    userdata = await User.select();
+    userdata = await users.select();
+    print(userdata);
   }
 
   var boy_image = [
@@ -56,13 +58,12 @@ class _MyPageState extends State<MyPage> {
                         backgroundImage:
                             AssetImage("./assets/myPage/avatar.png"),
                         child: (() {
-                          if ('${userdata["profile_url"]}' != "") {
+                          if ('${userdata["image_path"]}' != "") {
                             return Container(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                    image:
-                                        NetworkImage(userdata["profile_url"]),
+                                    image: NetworkImage(userdata["image_path"]),
                                     fit: BoxFit.cover),
                               ),
                             );
@@ -144,7 +145,9 @@ class _MyPageState extends State<MyPage> {
                   children: [
                     // 아이성별
                     normalfont("아이성별", 58, Color.fromARGB(255, 255, 114, 148)),
+
                     Container(
+                      margin: EdgeInsets.fromLTRB(99.w, 0.h, 0, 0),
                       height: 362.h,
                       width: 262.w,
                       child: InkWell(
@@ -386,7 +389,7 @@ class _MyPageState extends State<MyPage> {
                                     context: context,
                                     builder: (_) => FutureBuilder(
                                       future:
-                                          User.delete(userdata["profile_url"]),
+                                          users.delete(userdata["profile_url"]),
                                       builder: (context, snapshot) {
                                         if (snapshot.hasData) {
                                           WidgetsBinding.instance

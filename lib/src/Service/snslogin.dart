@@ -4,11 +4,11 @@ import 'package:uahage/src/Controller/user.controller.dart';
 import 'package:uahage/src/Service/auth.dart';
 import 'package:kakao_flutter_sdk/all.dart';
 import 'package:uahage/src/Service/user.dart';
+import 'package:uahage/src/Service/users.dart';
 
 class SnsLogin extends GetView<UserController> {
-  Auth auth = new Auth();
-  user users = new user();
-
+  // user users = new user();
+  Users users = new Users();
   kakaoGetEmail() async {
     final User user = await UserApi.instance.me();
     controller.setEmail(user.kakaoAccount.email);
@@ -17,13 +17,14 @@ class SnsLogin extends GetView<UserController> {
   issueAccessToken(String authCode) async {
     try {
       var token = await AuthApi.instance.issueAccessToken(authCode);
-      // print(token);
+      controller.setKakaoToken(token.accessToken);
+      print(token.accessToken);
       AccessTokenStore.instance.toStore(token);
       await kakaoGetEmail();
       var isAlreadyRegistered = await users.checkEmail();
 
       if (!isAlreadyRegistered) {
-        await auth.signIn();
+        await users.insert(null, null, null, null, null);
         Get.toNamed("/navigator");
       } else {
         Get.toNamed("/register");

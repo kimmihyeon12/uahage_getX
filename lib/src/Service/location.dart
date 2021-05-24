@@ -29,6 +29,7 @@ class Location extends GetView<LocationController> {
     _longitude = longitude;
 
     controller.setLocation(_latitude, _longitude);
+    print("lat ${_latitude} lon ${_longitude}");
 
     return true;
   }

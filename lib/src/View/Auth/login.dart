@@ -68,7 +68,7 @@ class Login extends GetView<UserController> {
                 height: 195.h,
                 child: InkWell(
                   onTap: () async {
-                    controller.option("kakao");
+                    controller.setOption("KAKAO");
                     Get.toNamed("/agreement");
                   },
                   child: Image.asset(
@@ -85,7 +85,7 @@ class Login extends GetView<UserController> {
                 height: 195.h,
                 child: InkWell(
                   onTap: () {
-                    controller.option("naver");
+                    controller.setOption("NAVER");
                     Get.toNamed("/agreement");
                   },
                   child: Image.asset("./assets/secondPage/naver.png"),

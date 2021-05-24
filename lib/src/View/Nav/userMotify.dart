@@ -96,7 +96,7 @@ class _UserModifyState extends State<UserModify> {
                       await deleteFile();
                       setState(() {
                         _image = null;
-                        userdata["profile_url"] = "";
+                        userdata["image_path"] = "";
                       });
                       Navigator.of(context).pop();
                     },
@@ -119,7 +119,7 @@ class _UserModifyState extends State<UserModify> {
         body: jsonEncode({"fileName": imageLink}),
       );
       setState(() {
-        userdata["profile_url"] = "";
+        userdata["image_path"] = "";
       });
     } catch (err) {}
   }
@@ -143,7 +143,7 @@ class _UserModifyState extends State<UserModify> {
   }
 
   uploadFile(File file) async {
-    if (userdata["profile_url"] != "") {
+    if (userdata["image_path"] != "") {
       try {
         await http.post(
           url + "/api/s3/images-delete",
@@ -151,7 +151,7 @@ class _UserModifyState extends State<UserModify> {
             'Content-Type': 'application/json; charset=UTF-8',
             "Authorization": UserController.to.token.value
           },
-          body: jsonEncode({"fileName": userdata["profile_url"]}),
+          body: jsonEncode({"fileName": userdata["image_path"]}),
         );
       } catch (err) {
         print(err);
@@ -172,10 +172,10 @@ class _UserModifyState extends State<UserModify> {
             data: formData);
         setState(() {
           _uploadedFileURL = response.data["location"];
-          userdata["profile_url"] = _uploadedFileURL;
+          userdata["image_path"] = _uploadedFileURL;
         });
-        print("Printing after upload imagelink " + userdata["profile_url"]);
-        await _saveURL(userdata["profile_url"]);
+        print("Printing after upload imagelink " + userdata["image_path"]);
+        await _saveURL(userdata["image_path"]);
       } catch (err) {
         print(err);
       }
@@ -192,7 +192,7 @@ class _UserModifyState extends State<UserModify> {
           'Content-Type': 'application/json; charset=UTF-8',
           "Authorization": UserController.to.token.value
         },
-        body: jsonEncode({"profile_url": _uploadedFileURL}),
+        body: jsonEncode({"image_path": _uploadedFileURL}),
       );
     } catch (error) {}
   }
@@ -249,14 +249,14 @@ class _UserModifyState extends State<UserModify> {
                           backgroundImage:
                               AssetImage("./assets/myPage/avatar.png"),
                           child: (() {
-                            if (userdata["profile_url"] != "" &&
+                            if (userdata["image_path"] != "" &&
                                 _image == null) {
                               return Container(
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
                                       image: NetworkImage(
-                                          userdata["profile_url"]), //imageURL
+                                          userdata["image_path"]), //imageURL
                                       fit: BoxFit.cover),
                                 ),
                               );

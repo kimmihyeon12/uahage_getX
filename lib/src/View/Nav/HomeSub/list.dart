@@ -203,7 +203,7 @@ class PlaceList extends GetView<PlaceController> {
                                       width: 700.w,
                                       height: 82.h,
                                       child: Text(
-                                        controller.place[index].name,
+                                        '${controller.place[index].name}',
                                         style: TextStyle(
                                           fontSize: 56.sp,
                                           fontFamily: 'NotoSansCJKkr_Medium',
@@ -235,34 +235,25 @@ class PlaceList extends GetView<PlaceController> {
                                         child: Row(
                                           children: [
                                             icon(
-                                                context,
-                                                PlaceController
-                                                    .to.place[index].menu
-                                                    .toString(),
-                                                PlaceController
-                                                    .to.place[index].carriage
-                                                    .toString(),
-                                                PlaceController
-                                                    .to.place[index].bed
-                                                    .toString(),
-                                                PlaceController
-                                                    .to.place[index].tableware
-                                                    .toString(),
-                                                PlaceController
-                                                    .to.place[index].nursingroom
-                                                    .toString(),
-                                                PlaceController
-                                                    .to.place[index].meetingroom
-                                                    .toString(),
-                                                PlaceController
-                                                    .to.place[index].diapers
-                                                    .toString(),
-                                                PlaceController
-                                                    .to.place[index].playroom
-                                                    .toString(),
-                                                PlaceController
-                                                    .to.place[index].chair
-                                                    .toString())
+                                              context,
+                                              controller.place[index].baby_menu,
+                                              controller.place[index].stroller,
+                                              controller.place[index].baby_bed,
+                                              controller
+                                                  .place[index].baby_tableware,
+                                              controller
+                                                  .place[index].nursing_room,
+                                              controller
+                                                  .place[index].meeting_room,
+                                              controller
+                                                  .place[index].diaper_change,
+                                              controller.place[index].play_room,
+                                              controller
+                                                  .place[index].baby_chair,
+                                              // PlaceController
+                                              //     .to.place[index].parking
+                                              //     .toString())
+                                            ),
                                           ],
                                         ),
                                       )
@@ -273,36 +264,36 @@ class PlaceList extends GetView<PlaceController> {
                         ),
                       ),
                     ),
-                    Obx(
-                      () => Container(
-                        margin: EdgeInsets.only(left: 8.w, top: 25.h),
-                        child: InkWell(
-                          child: Container(
-                            padding: EdgeInsets.only(
-                                left: 30.w, right: 30.w, bottom: 10.h),
-                            child: Image.asset(
-                              controller.place[index].bookmark == 0
-                                  ? "./assets/listPage/love_grey.png"
-                                  : "./assets/listPage/love_color.png",
-                              height: 55.h,
-                            ),
-                          ),
-                          onTap: () async {
-                            if (controller.place[index].bookmark == 0) {
-                              await bookmark.bookmarkCreate(
-                                  UserController.to.userId.value,
-                                  controller.place[index].id);
-                              controller.setPlaceBookmark(index, 1);
-                            } else {
-                              await bookmark.bookmarkDelete(
-                                  UserController.to.userId.value,
-                                  controller.place[index].id);
-                              controller.setPlaceBookmark(index, 0);
-                            }
-                          },
-                        ),
-                      ),
-                    ),
+                    // Obx(
+                    //   () => Container(
+                    //     margin: EdgeInsets.only(left: 8.w, top: 25.h),
+                    //     child: InkWell(
+                    //       child: Container(
+                    //         padding: EdgeInsets.only(
+                    //             left: 30.w, right: 30.w, bottom: 10.h),
+                    //         child: Image.asset(
+                    //           controller.place[index].bookmark == 0
+                    //               ? "./assets/listPage/love_grey.png"
+                    //               : "./assets/listPage/love_color.png",
+                    //           height: 55.h,
+                    //         ),
+                    //       ),
+                    //       onTap: () async {
+                    //         if (controller.place[index].bookmark == 0) {
+                    //           await bookmark.bookmarkCreate(
+                    //               UserController.to.userId.value,
+                    //               controller.place[index].id);
+                    //           controller.setPlaceBookmark(index, 1);
+                    //         } else {
+                    //           await bookmark.bookmarkDelete(
+                    //               UserController.to.userId.value,
+                    //               controller.place[index].id);
+                    //           controller.setPlaceBookmark(index, 0);
+                    //         }
+                    //       },
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 )),
           );

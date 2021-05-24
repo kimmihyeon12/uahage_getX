@@ -1,12 +1,11 @@
 class Experiencecenter {
   Experiencecenter(
-      {this.id, this.name, this.address, this.phone, this.fare, this.bookmark});
+      {this.id, this.name, this.address, this.phone, this.admission_fee});
   int id;
   String name;
   String address;
   String phone;
-  String fare;
-  int bookmark;
+  String admission_fee;
 
   factory Experiencecenter.fromJson(Map<String, dynamic> json) =>
       Experiencecenter(
@@ -14,6 +13,5 @@ class Experiencecenter {
           name: json["name"],
           address: json["address"],
           phone: json["phone"],
-          fare: json["fare"],
-          bookmark: json["bookmark"]);
+          admission_fee: json["admission_fee"]);
 }

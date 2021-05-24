@@ -3,12 +3,16 @@ import 'package:get/get.dart';
 class UserController extends GetxService {
   static UserController get to => Get.find();
   final userId = ''.obs;
-  final token = ''.obs;
+  final kakaotoken = ''.obs;
   final email = ''.obs;
   final option = ''.obs;
-
+  final token = ''.obs;
   void setUserid(String userid) {
     userId(userid);
+  }
+
+  void setKakaoToken(String value) {
+    kakaotoken(value);
   }
 
   void setToken(String value) {

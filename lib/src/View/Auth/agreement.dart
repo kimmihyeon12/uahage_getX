@@ -270,7 +270,7 @@ class _AgreementState extends State<Agreement> {
                       dialog(context, "이용약관에 동의하셔야 합니다.");
                     } else {
                       switch (UserController.to.option.value) {
-                        case "kakao":
+                        case "KAKAO":
                           if (kakaoinstalled == null)
                             awaitdialog(login.loginWithTalk(), context, 200.h,
                                 200.w, 80.w, 100.w, 62.5.sp);
