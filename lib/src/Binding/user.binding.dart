@@ -5,6 +5,6 @@ class UserBinding implements Bindings {
   @override
   void dependencies() {
     // TODO: implement dependencies
-    Get.put(UserController);
+    Get.put<UserController>(UserController());
   }
 }

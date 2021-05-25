@@ -3,7 +3,8 @@ import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:uahage/src/Controller/place.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
-import 'package:uahage/src/Service/bookmark.dart';
+
+import 'package:uahage/src/Service/places.restaurant.bookmarks.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 import 'package:uahage/src/Static/Widget/appbar.dart';
 import 'package:uahage/src/Static/Widget/toast.dart';
@@ -160,19 +161,19 @@ class ListSub extends GetView<PlaceController> {
                                           : "./assets/listPage/love_color.png",
                                       height: 60.h),
                                   onPressed: () async {
-                                    if (controller.place[index].bookmark == 0) {
-                                      await bookmark.bookmarkCreate(
-                                          UserController.to.userId.value,
-                                          data.id);
-                                      print("bookmark : ${data.id}");
-                                      controller.setPlaceBookmark(index, 1);
-                                    } else {
-                                      await bookmark.bookmarkDelete(
-                                          UserController.to.userId.value,
-                                          data.id);
-                                      print("bookmark : ${data.id}");
-                                      controller.setPlaceBookmark(index, 0);
-                                    }
+                                    // if (controller.place[index].bookmark == 0) {
+                                    //   await bookmark.bookmarkCreate(
+                                    //       UserController.to.userId.value,
+                                    //       data.id);
+                                    //   print("bookmark : ${data.id}");
+                                    //   controller.setPlaceBookmark(index, 1);
+                                    // } else {
+                                    //   await bookmark.bookmarkDelete(
+                                    //       UserController.to.userId.value,
+                                    //       data.id);
+                                    //   print("bookmark : ${data.id}");
+                                    //   controller.setPlaceBookmark(index, 0);
+                                    // }
                                   },
                                 ),
                               ),

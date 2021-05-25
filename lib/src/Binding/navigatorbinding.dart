@@ -7,6 +7,6 @@ class NavigationBiding implements Bindings {
   @override
   void dependencies() {
     // TODO: implement dependencies
-    Get.put(NavigatorController());
+    Get.put<NavigatorController>(NavigatorController());
   }
 }

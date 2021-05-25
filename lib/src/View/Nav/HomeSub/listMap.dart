@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:uahage/src/Controller/location.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
-import 'package:uahage/src/Service/bookmark.dart';
+
+import 'package:uahage/src/Service/places.dart';
+import 'package:uahage/src/Service/places.restaurant.bookmarks.dart';
 import 'package:uahage/src/Static/Widget/popup.dart';
 import 'package:uahage/src/Static/Widget/progress.dart';
 import 'package:uahage/src/Static/url.dart';
@@ -25,10 +27,22 @@ class _ListMapState extends State<ListMap> {
   final key = UniqueKey();
   List<int> grey_image = [0, 0, 0, 0, 0, 0, 0, 0, 0];
   Bookmark bookmark = new Bookmark();
-
+  String placeName;
+  int placeCode;
+  String test = "";
   Future searchCategory() async {
+    // for(int i=0; i<8; i++){
+
+    // }
     await webview.loadUrl(url +
-        "/maps/show-place?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=filter&menu=${grey_image[0]}&bed=${grey_image[1]}&tableware=${grey_image[2]}&meetingroom=${grey_image[3]}&diapers=${grey_image[4]}&playroom=${grey_image[5]}&carriage=${grey_image[6]}&nursingroom=${grey_image[7]}&chair=${grey_image[8]}");
+        "/maps/show-place?userId=${UserController.to.userId.value}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=filter&babyMenu=${grey_image[0]}&babyBed=${grey_image[1]}&babyTableware=${grey_image[2]}&meetingRoom=${grey_image[3]}&diaperChange=${grey_image[4]}&playRoom=${grey_image[5]}&stroller=${grey_image[6]}&nursingRoom=${grey_image[7]}&babyChair=${grey_image[8]}");
+  }
+
+  initState() {
+    // 부모의 initState호출
+    super.initState();
+    placeCode = widget.placeCode;
+    placeName = Place.getPlaceName(placeCode);
   }
 
   @override
@@ -41,8 +55,13 @@ class _ListMapState extends State<ListMap> {
             key: key,
             onWebViewCreated: (WebViewController webViewController) async {
               webview = webViewController;
-              await webview.loadUrl(url +
-                  '/maps/show-place?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=allsearch&place_code=${widget.placeCode}');
+              if (placeCode == 1) {
+                await webview.loadUrl(url +
+                    '/maps/show-place?type=filter&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&babyBed=&babyChair=&babyMenu=&babyTableware=&stroller=&diaperChange=&meetingRoom=&nursingRoom=&playRoom=&parking=&isBookmarke=');
+              } else {
+                await webview.loadUrl(url +
+                    '/maps/show-place?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=allsearch&placeName=${placeName}');
+              }
             },
             javascriptMode: JavascriptMode.unrestricted,
             javascriptChannels: Set.from([
@@ -69,9 +88,9 @@ class _ListMapState extends State<ListMap> {
                       "examination": Message[13],
                       "fare": Message[14],
                     };
-                    var mark = await bookmark.bookmarkSelect(
-                        UserController.to.userId.value, JsonMessage['id']);
-                    await placepopup(context, JsonMessage, "");
+                    // var mark = await bookmark.bookmarkSelect(
+                    //     UserController.to.userId.value, JsonMessage['id']);
+                    // await placepopup(context, JsonMessage, "");
                   }),
             ]),
           ),

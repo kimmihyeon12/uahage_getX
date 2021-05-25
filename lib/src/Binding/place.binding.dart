@@ -5,6 +5,6 @@ class PlaceBinding implements Bindings {
   @override
   void dependencies() {
     // TODO: implement dependencies
-    Get.put(PlaceController);
+    Get.put<PlaceController>(PlaceController());
   }
 }

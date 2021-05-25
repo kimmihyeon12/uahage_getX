@@ -11,20 +11,19 @@ class Loading extends GetView<UserController> {
     await location.setCurrentLocation();
     await 1.delay();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    Get.offNamed("/login");
-    // if (prefs.getString('uahageUserId') != null) {
-    //   controller.setUserid(prefs.getString('uahageUserId'));
-    //   controller.setToken(prefs.getString('uahageUserToken'));
-    //   Get.offNamed("/navigator");
-    // } else {
-    //   Get.offNamed("/login");
-    // }
+    //  Get.offNamed("/login");
+    if (prefs.getString('uahageUserId') != null) {
+      controller.setUserid(prefs.getString('uahageUserId'));
+      controller.setToken(prefs.getString('uahageUserToken'));
+      Get.offNamed("/navigator");
+    } else {
+      Get.offNamed("/login");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     lodingTime();
-    Get.put(UserController());
     ScreenUtil.init(context, width: 1500, height: 2667);
     return Scaffold(
         backgroundColor: Color(0xfffff1f0),

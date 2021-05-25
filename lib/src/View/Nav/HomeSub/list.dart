@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 import 'package:uahage/src/Controller/place.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
-import 'package:uahage/src/Service/bookmark.dart';
+import 'package:uahage/src/Service/places.restaurant.bookmarks.dart';
 
 import 'package:uahage/src/Service/places.dart';
 import 'package:uahage/src/Static/Widget/icon.dart';
@@ -45,8 +45,6 @@ class PlaceList extends GetView<PlaceController> {
   ];
 
   Widget build(BuildContext context) {
-    Get.put(PlaceController());
-
     controller.placeInit();
     getList();
     scrollController.addListener(() {
@@ -264,36 +262,39 @@ class PlaceList extends GetView<PlaceController> {
                         ),
                       ),
                     ),
-                    // Obx(
-                    //   () => Container(
-                    //     margin: EdgeInsets.only(left: 8.w, top: 25.h),
-                    //     child: InkWell(
-                    //       child: Container(
-                    //         padding: EdgeInsets.only(
-                    //             left: 30.w, right: 30.w, bottom: 10.h),
-                    //         child: Image.asset(
-                    //           controller.place[index].bookmark == 0
-                    //               ? "./assets/listPage/love_grey.png"
-                    //               : "./assets/listPage/love_color.png",
-                    //           height: 55.h,
-                    //         ),
-                    //       ),
-                    //       onTap: () async {
-                    //         if (controller.place[index].bookmark == 0) {
-                    //           await bookmark.bookmarkCreate(
-                    //               UserController.to.userId.value,
-                    //               controller.place[index].id);
-                    //           controller.setPlaceBookmark(index, 1);
-                    //         } else {
-                    //           await bookmark.bookmarkDelete(
-                    //               UserController.to.userId.value,
-                    //               controller.place[index].id);
-                    //           controller.setPlaceBookmark(index, 0);
-                    //         }
-                    //       },
-                    //     ),
-                    //   ),
-                    // ),
+                    placeCode == 1
+                        ? Obx(
+                            () => Container(
+                              margin: EdgeInsets.only(left: 8.w, top: 25.h),
+                              child: InkWell(
+                                child: Container(
+                                  padding: EdgeInsets.only(
+                                      left: 30.w, right: 30.w, bottom: 10.h),
+                                  child: Image.asset(
+                                    controller.place[index].bookmark == 0
+                                        ? "./assets/listPage/love_grey.png"
+                                        : "./assets/listPage/love_color.png",
+                                    height: 55.h,
+                                  ),
+                                ),
+                                onTap: () async {
+                                  if (controller.place[index].bookmark == 0) {
+                                    await bookmark.bookmarkToogle(
+                                        UserController.to.userId.value,
+                                        controller.place[index].id);
+
+                                    controller.setPlaceBookmark(index, 1);
+                                  } else {
+                                    await bookmark.bookmarkToogle(
+                                        UserController.to.userId.value,
+                                        controller.place[index].id);
+                                    controller.setPlaceBookmark(index, 0);
+                                  }
+                                },
+                              ),
+                            ),
+                          )
+                        : Container()
                   ],
                 )),
           );

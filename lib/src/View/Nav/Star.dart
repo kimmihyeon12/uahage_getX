@@ -6,9 +6,11 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:uahage/src/Controller/bookmark.controller.dart';
+import 'package:uahage/src/Controller/place.restaurant.bookmark.controller.dart';
+import 'package:uahage/src/Controller/place.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
-import 'package:uahage/src/Service/bookmark.dart';
+
+import 'package:uahage/src/Service/places.restaurant.bookmarks.dart';
 import 'package:uahage/src/Static/Widget/appbar.dart';
 import 'package:uahage/src/Static/Widget/icon.dart';
 
@@ -21,6 +23,7 @@ class Star extends GetView<BookmarkController> {
   ];
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
   Bookmark bookmark = new Bookmark();
+  ScrollController scrollController = ScrollController();
   bookselect() async {
     Bookmark bookmark = new Bookmark();
     await bookmark.bookmarkSelectAll(UserController.to.userId.value);
@@ -28,15 +31,25 @@ class Star extends GetView<BookmarkController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.lazyPut(() => BookmarkController());
-    controller.starListInit();
+    Get.put(BookmarkController());
+
+    controller.placeBookmarkInit();
     bookselect();
+    scrollController.addListener(() {
+      double maxScroll = scrollController.position.maxScrollExtent;
+      double currentScroll = scrollController.position.pixels;
+      if (currentScroll == maxScroll) {
+        bookselect();
+      }
+    });
+
+    print('data length ${controller.placeBookmark.length}');
     ScreenUtil.init(context, width: 1501, height: 2667);
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: imageAppbar(context, "즐겨찾기"),
         body: Obx(() => (() {
-              if (controller.starList.length == 0) {
+              if (controller.placeBookmark.length == 0) {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -53,9 +66,10 @@ class Star extends GetView<BookmarkController> {
                   ],
                 );
               } else {
+                print("gg");
                 return ListView.builder(
                     key: listKey,
-                    itemCount: controller.starList.length,
+                    itemCount: controller.placeBookmark.length,
                     itemBuilder: (context, index) {
                       return Dismissible(
                         key: UniqueKey(),
@@ -95,14 +109,14 @@ class Star extends GetView<BookmarkController> {
                                 children: [
                                   InkWell(
                                     highlightColor: Colors.white,
-                                    onTap: () async {
-                                      await Get.toNamed("/listsub", arguments: {
-                                        "data": controller.starList[index],
-                                        "placeCode": controller
-                                            .starList[index].place_code,
-                                        "index": index,
-                                      });
-                                    },
+                                    // onTap: () async {
+                                    //   await Get.toNamed("/listsub", arguments: {
+                                    //     "data": controller.starList[index],
+                                    //     "placeCode": controller
+                                    //         .starList[index].place_code,
+                                    //     "index": index,
+                                    //   });
+                                    // },
                                     child: Container(
                                       width: 1280.w,
                                       //     color:Colors.pink,
@@ -159,7 +173,8 @@ class Star extends GetView<BookmarkController> {
                                                     height: 82.h,
                                                     child: Text(
                                                       controller
-                                                          .starList[index].name,
+                                                          .placeBookmark[index]
+                                                          .name,
                                                       style: TextStyle(
                                                         fontSize: 56.sp,
                                                         fontFamily:
@@ -174,7 +189,8 @@ class Star extends GetView<BookmarkController> {
                                                 width: 650.w,
                                                 child: Text(
                                                   controller
-                                                      .starList[index].address,
+                                                      .placeBookmark[index]
+                                                      .address,
                                                   style: TextStyle(
                                                     // fontFamily: 'NatoSans',
                                                     color: Colors.grey,
@@ -185,98 +201,85 @@ class Star extends GetView<BookmarkController> {
                                                   ),
                                                 ),
                                               ),
-                                              controller.starList[index]
-                                                          .place_code ==
-                                                      1
-                                                  ? Container(
-                                                      margin: EdgeInsets.only(
-                                                          top: 15.h),
-                                                      height: 120.h,
-                                                      width: 650.w,
-                                                      alignment:
-                                                          Alignment.bottomRight,
-                                                      child: Row(
-                                                        children: [
-                                                          icon(
-                                                              context,
-                                                              controller
-                                                                  .starList[
-                                                                      index]
-                                                                  .menu
-                                                                  .toString(),
-                                                              controller
-                                                                  .starList[
-                                                                      index]
-                                                                  .carriage
-                                                                  .toString(),
-                                                              controller
-                                                                  .starList[
-                                                                      index]
-                                                                  .bed
-                                                                  .toString(),
-                                                              controller
-                                                                  .starList[
-                                                                      index]
-                                                                  .tableware
-                                                                  .toString(),
-                                                              controller
-                                                                  .starList[
-                                                                      index]
-                                                                  .nursingroom
-                                                                  .toString(),
-                                                              controller
-                                                                  .starList[
-                                                                      index]
-                                                                  .meetingroom
-                                                                  .toString(),
-                                                              controller
-                                                                  .starList[
-                                                                      index]
-                                                                  .diapers
-                                                                  .toString(),
-                                                              controller
-                                                                  .starList[
-                                                                      index]
-                                                                  .playroom
-                                                                  .toString(),
-                                                              controller
-                                                                  .starList[
-                                                                      index]
-                                                                  .chair
-                                                                  .toString())
-                                                        ],
-                                                      ),
-                                                    )
-                                                  : Container()
+                                              Container(
+                                                margin:
+                                                    EdgeInsets.only(top: 15.h),
+                                                height: 120.h,
+                                                width: 650.w,
+                                                alignment:
+                                                    Alignment.bottomRight,
+                                                child: Row(
+                                                  children: [
+                                                    icon(
+                                                      context,
+                                                      controller
+                                                          .placeBookmark[index]
+                                                          .baby_menu,
+                                                      controller
+                                                          .placeBookmark[index]
+                                                          .stroller,
+                                                      controller
+                                                          .placeBookmark[index]
+                                                          .baby_bed,
+                                                      controller
+                                                          .placeBookmark[index]
+                                                          .baby_tableware,
+                                                      controller
+                                                          .placeBookmark[index]
+                                                          .nursing_room,
+                                                      controller
+                                                          .placeBookmark[index]
+                                                          .meeting_room,
+                                                      controller
+                                                          .placeBookmark[index]
+                                                          .diaper_change,
+                                                      controller
+                                                          .placeBookmark[index]
+                                                          .play_room,
+                                                      controller
+                                                          .placeBookmark[index]
+                                                          .baby_chair,
+                                                      // PlaceController
+                                                      //     .to.place[index].parking
+                                                      //     .toString())
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
                                             ],
                                           ),
                                         ],
                                       ),
                                     ),
                                   ),
-                                  Container(
-                                    margin:
-                                        EdgeInsets.only(left: 30.w, top: 25.h),
-                                    child: IconButton(
-                                      padding: EdgeInsets.all(0),
-                                      constraints: BoxConstraints(
-                                        maxWidth: 70.w,
-                                        maxHeight: 70.h,
+                                  Obx(
+                                    () => Container(
+                                      margin:
+                                          EdgeInsets.only(left: 8.w, top: 25.h),
+                                      child: InkWell(
+                                        child: Container(
+                                          padding: EdgeInsets.only(
+                                              left: 30.w,
+                                              right: 30.w,
+                                              bottom: 10.h),
+                                          child: Image.asset(
+                                            controller.placeBookmark[index]
+                                                        .bookmark ==
+                                                    0
+                                                ? "./assets/listPage/love_grey.png"
+                                                : "./assets/listPage/love_color.png",
+                                            height: 55.h,
+                                          ),
+                                        ),
+                                        onTap: () async {
+                                          await bookmark.bookmarkToogle(
+                                              UserController.to.userId.value,
+                                              controller
+                                                  .placeBookmark[index].id);
+                                          controller
+                                              .starPlaceBookmarkrefresh(index);
+                                        },
                                       ),
-                                      icon: Image.asset(
-                                        false
-                                            ? "./assets/listPage/love_grey.png"
-                                            : "./assets/listPage/love_color.png",
-                                        height: 60.h,
-                                      ),
-                                      onPressed: () async {
-                                        print('star click');
-                                        await bookmark.bookmarkDelete(
-                                            UserController.to.userId.value,
-                                            controller.starList[index].id);
-
-                                        controller.starListrefresh(index);
-                                      },
                                     ),
                                   ),
                                 ],

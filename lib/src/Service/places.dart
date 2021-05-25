@@ -13,21 +13,26 @@ import 'package:uahage/src/Static/url.dart';
 import 'package:uahage/src/Model/hospitals.dart';
 
 class Place extends GetView<PlaceController> {
+  static getPlaceName(placeCode) {
+    if (placeCode == 1) {
+      return "restaurants";
+    } else if (placeCode == 2) {
+      return "hospitals";
+    } else if (placeCode == 3) {
+      return "day-care-centers";
+    } else if (placeCode == 5) {
+      return "kid-cafes";
+    } else if (placeCode == 6) {
+      return "experience-centers";
+    }
+  }
+
   Future<List<dynamic>> getPlaceList(placeCode) async {
     String url = URL;
     String placeName;
     var pageNumber = controller.placePageNumber();
-    if (placeCode == 1) {
-      placeName = "restaurants";
-    } else if (placeCode == 2) {
-      placeName = "hospitals";
-    } else if (placeCode == 3) {
-      placeName = "day-care-centers";
-    } else if (placeCode == 5) {
-      placeName = "kid-cafes";
-    } else if (placeCode == 6) {
-      placeName = "experience-centers";
-    }
+    placeName = await getPlaceName(placeCode);
+
     var response;
     if (placeName == "restaurants") {
       response = await http.get(url +
@@ -58,7 +63,6 @@ class Place extends GetView<PlaceController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(PlaceController());
     return Container();
   }
 }

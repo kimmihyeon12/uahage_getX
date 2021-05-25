@@ -9,7 +9,6 @@ class Login extends GetView<UserController> {
   @override
   Widget build(context) {
     ScreenUtil.init(context, width: 1501, height: 2667);
-    Get.put(UserController());
     return Scaffold(
       body: Stack(
         children: [

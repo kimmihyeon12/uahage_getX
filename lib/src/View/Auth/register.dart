@@ -13,7 +13,7 @@ import 'package:uahage/src/Static/Widget/dialog.dart';
 import 'package:uahage/src/Static/url.dart';
 import 'package:uahage/src/Static/Widget/yearpicker.dart';
 import 'package:uahage/src/Static/Widget/progress.dart';
-import 'package:uahage/src/Service/auth.dart';
+ 
 import 'package:uahage/src/Service/user.dart';
 import 'package:uahage/src/Service/users.dart';
 

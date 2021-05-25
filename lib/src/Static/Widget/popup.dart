@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:uahage/src/Binding/bookmarkbinding.dart';
+import 'package:uahage/src/Binding/place.restaurant.bookmark.binding.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
-import 'package:uahage/src/Service/bookmark.dart';
+
+import 'package:uahage/src/Service/places.restaurant.bookmarks.dart';
 
 class pop extends StatefulWidget {
   @override
@@ -131,8 +132,9 @@ Future<Object> popup(context, grey_image) {
 
 Future<Object> placepopup(context, Message, type) async {
   Bookmark bookmark = new Bookmark();
-  var mark = await bookmark.bookmarkSelect(
-      UserController.to.userId.value, Message['id']);
+  var mark;
+  //  await bookmark.bookmarkSelect(
+  //     UserController.to.userId.value, Message['id']);
   return showGeneralDialog(
       context: context,
       pageBuilder: (BuildContext buildContext, Animation<double> animation,
@@ -265,21 +267,21 @@ Future<Object> placepopup(context, Message, type) async {
                                         ),
                                         onTap: () async {
                                           print(mark);
-                                          if (mark == 0) {
-                                            bookmark.bookmarkCreate(
-                                                UserController.to.userId.value,
-                                                Message["id"]);
-                                            setState(() {
-                                              mark = 1;
-                                            });
-                                          } else {
-                                            bookmark.bookmarkDelete(
-                                                UserController.to.userId.value,
-                                                Message["id"]);
-                                            setState(() {
-                                              mark = 0;
-                                            });
-                                          }
+                                          // if (mark == 0) {
+                                          //   bookmark.bookmarkCreate(
+                                          //       UserController.to.userId.value,
+                                          //       Message["id"]);
+                                          //   setState(() {
+                                          //     mark = 1;
+                                          //   });
+                                          // } else {
+                                          //   bookmark.bookmarkDelete(
+                                          //       UserController.to.userId.value,
+                                          //       Message["id"]);
+                                          //   setState(() {
+                                          //     mark = 0;
+                                          //   });
+                                          // }
                                         },
                                       ),
                                     ),

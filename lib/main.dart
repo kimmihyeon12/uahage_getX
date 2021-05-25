@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:uahage/src/Binding/bookmarkbinding.dart';
+import 'package:uahage/src/Binding/place.restaurant.bookmark.binding.dart';
 
-import 'package:uahage/src/Binding/placebinding.dart';
+import 'package:uahage/src/Binding/place.binding.dart';
 import 'package:uahage/src/Binding/user.binding.dart';
+import 'package:uahage/src/Controller/location.controller.dart';
+import 'package:uahage/src/Controller/user.controller.dart';
 import 'package:uahage/src/View/Auth/login.dart';
 import 'package:uahage/src/View/Loading/loading.dart';
 import 'package:uahage/src/View/Nav/navigator.dart';
@@ -29,20 +31,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      //    initialBinding: NavigationBiding(),
+      initialBinding: BindingsBuilder(
+          () => {Get.put(UserController()), Get.put(LocationController())}),
       getPages: [
         GetPage(
-            name: "/",
-            page: () => Loading(),
-            bindings: [LocationBinding(), UserBinding()]),
-        GetPage(name: "/login", page: () => Login(), binding: UserBinding()),
-        GetPage(
-            name: "/agreement",
-            page: () => Agreement(),
-            binding: UserBinding()),
+          name: "/",
+          page: () => Loading(),
+        ),
+        GetPage(name: "/login", page: () => Login()),
+        GetPage(name: "/agreement", page: () => Agreement()),
         GetPage(name: "/announce", page: () => Announce()),
-        GetPage(
-            name: "/register", page: () => Register(), binding: UserBinding()),
+        GetPage(name: "/register", page: () => Register()),
 
         GetPage(
           name: "/withdrawal",
@@ -51,14 +50,13 @@ class MyApp extends StatelessWidget {
 
         //NAV
         GetPage(
-            name: "/navigator",
-            page: () => Navigation(),
-            bindings: [UserBinding(), LocationBinding(), BookmarkBinding()]),
+          name: "/navigator",
+          page: () => Navigation(),
+        ),
         GetPage(name: "/home", page: () => Home(), bindings: [
           PlaceBinding(),
         ]),
         GetPage(name: "/list", page: () => PlaceList(), bindings: [
-          UserBinding(),
           PlaceBinding(),
         ]),
         GetPage(name: "/listsub", page: () => ListSub(), bindings: []),
@@ -69,9 +67,9 @@ class MyApp extends StatelessWidget {
         GetPage(name: "/star", page: () => Star()),
         GetPage(name: "/mypage", page: () => MyPage()),
         GetPage(
-            name: "/userModify",
-            page: () => UserModify(),
-            binding: UserBinding()),
+          name: "/userModify",
+          page: () => UserModify(),
+        ),
       ],
     );
   }

@@ -6,6 +6,7 @@ class LocationBinding implements Bindings {
   @override
   void dependencies() {
     // TODO: implement dependencies
-    Get.put(LocationController());
+
+    Get.put<LocationController>(LocationController());
   }
 }

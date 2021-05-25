@@ -13,7 +13,8 @@ class Restaurant {
       this.baby_tableware,
       this.meeting_room,
       this.nursing_room,
-      this.bookmark});
+      this.bookmark,
+      this.parking});
 
   int id;
   String name;
@@ -28,6 +29,7 @@ class Restaurant {
   bool diaper_change;
   bool play_room;
   bool baby_chair;
+  bool parking;
   int bookmark;
 
   factory Restaurant.fromJson(Map<String, dynamic> json) {
@@ -45,6 +47,7 @@ class Restaurant {
         stroller: json["stroller"],
         nursing_room: json["nursing_room"],
         baby_chair: json["baby_chair"],
+        parking: json["parking"],
         bookmark: json["bookmark"]);
   }
 }

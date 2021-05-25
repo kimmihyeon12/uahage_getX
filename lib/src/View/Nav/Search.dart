@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:get/get.dart';
 
 import 'package:uahage/src/Controller/location.controller.dart';
+import 'package:uahage/src/Controller/user.controller.dart';
 
 import 'package:uahage/src/Static/url.dart';
 import 'dart:async';
@@ -19,11 +20,11 @@ class _SearchState extends State<Search> {
   String url = URL;
   WebViewController webview;
   final key = UniqueKey();
-  List<int> grey_image = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+  List<int> greyImage = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
   Future searchCategory() async {
     await webview.loadUrl(url +
-        "/maps/show-place?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=filter&menu=${grey_image[0]}&bed=${grey_image[1]}&tableware=${grey_image[2]}&meetingroom=${grey_image[3]}&diapers=${grey_image[4]}&playroom=${grey_image[5]}&carriage=${grey_image[6]}&nursingroom=${grey_image[7]}&chair=${grey_image[8]}");
+        "/maps/show-place?userId=${UserController.to.userId.value}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=filter&babyMenu=${greyImage[0]}&babyBed=${greyImage[1]}&babyTableware=${greyImage[2]}&meetingRoom=${greyImage[3]}&diaperChange=${greyImage[4]}&playRoom=${greyImage[5]}&stroller=${greyImage[6]}&nursingRoom=${greyImage[7]}&babyChair=${greyImage[8]}");
   }
 
   @override
@@ -82,12 +83,12 @@ class _SearchState extends State<Search> {
           GestureDetector(
             onTap: () async {
               setState(() {
-                grey_image = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+                greyImage = [0, 0, 0, 0, 0, 0, 0, 0, 0];
               });
 
-              List okButton = await popup(context, grey_image);
+              List okButton = await popup(context, greyImage);
               if (okButton != null) {
-                grey_image = okButton;
+                greyImage = okButton;
                 await searchCategory();
               }
             },

@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:uahage/src/Controller/bookmark.controller.dart';
+import 'package:uahage/src/Controller/place.restaurant.bookmark.controller.dart';
 
 class BookmarkBinding implements Bindings {
   @override
