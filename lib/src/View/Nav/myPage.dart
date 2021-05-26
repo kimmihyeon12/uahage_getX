@@ -81,19 +81,6 @@ class _MyPageState extends State<MyPage> {
                         }()),
                       ),
                     ),
-                    Positioned(
-                      right: -5,
-                      bottom: -5,
-                      child: Container(
-                        child: InkWell(
-                          child: Image.asset(
-                            "./assets/myPage/camera.png",
-                            height: 150.h,
-                            width: 150.w,
-                          ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -241,7 +228,7 @@ class _MyPageState extends State<MyPage> {
                               Padding(
                                 padding: EdgeInsets.only(left: 59.w),
                                 child: Image.asset(
-                                  userdata["age"] == 10
+                                  userdata["age_group_type"] == 1
                                       ? './assets/register/10_pink.png'
                                       : './assets/register/10_grey.png',
                                   height: 194.h,
@@ -251,7 +238,7 @@ class _MyPageState extends State<MyPage> {
                               Padding(
                                 padding: EdgeInsets.only(left: 55.w),
                                 child: Image.asset(
-                                  userdata["age"] == 20
+                                  userdata["age_group_type"] == 2
                                       ? './assets/register/20_pink.png'
                                       : './assets/register/20_grey.png',
                                   height: 194.h,
@@ -261,7 +248,7 @@ class _MyPageState extends State<MyPage> {
                               Padding(
                                 padding: EdgeInsets.only(left: 55.w),
                                 child: Image.asset(
-                                  userdata["age"] == 30
+                                  userdata["age_group_type"] == 3
                                       ? './assets/register/30_pink.png'
                                       : './assets/register/30_grey.png',
                                   height: 194.h,
@@ -275,7 +262,7 @@ class _MyPageState extends State<MyPage> {
                               Padding(
                                 padding: EdgeInsets.only(left: 59.w, top: 45.h),
                                 child: Image.asset(
-                                  userdata["age"] == 40
+                                  userdata["age_group_type"] == 4
                                       ? './assets/register/40_pink.png'
                                       : './assets/register/40_grey.png',
                                   height: 194.h,
@@ -285,7 +272,7 @@ class _MyPageState extends State<MyPage> {
                               Padding(
                                 padding: EdgeInsets.only(left: 55.w, top: 45.h),
                                 child: Image.asset(
-                                  userdata["age"] == 50
+                                  userdata["age_group_type"] == 5
                                       ? './assets/register/50_pink.png'
                                       : './assets/register/50_grey.png',
                                   height: 194.h,
@@ -295,7 +282,7 @@ class _MyPageState extends State<MyPage> {
                               Padding(
                                 padding: EdgeInsets.only(left: 55.w, top: 45.h),
                                 child: Image.asset(
-                                  userdata["age"] == 60
+                                  userdata["age_group_type"] == 6
                                       ? './assets/register/others_pink.png'
                                       : './assets/register/others_grey.png',
                                   height: 194.h,

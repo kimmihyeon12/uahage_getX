@@ -133,7 +133,7 @@ class _HomeState extends State<Home> {
                             onPressed: searchkey != ""
                                 ? () {
                                     FocusScope.of(context).unfocus();
-                                    Get.to(searchbar());
+                                    // Get.to(searchbar());
                                   }
                                 : () {
                                     toast(context, "주소를 입력해주세요!");

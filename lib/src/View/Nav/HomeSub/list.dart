@@ -78,12 +78,20 @@ class PlaceList extends GetView<PlaceController> {
             ),
             body: Stack(
               children: [
-                IndexedStack(
+                /*   (() {
+                  if (controller.indexCount.value == 0) {
+                    return ListViews();
+                  } else {
+                    return ListMap(placeCode: placeCode);
+                  }
+                }()),*/
+
+                /*  IndexedStack(
                     index: controller.indexCount.value,
                     children: <Widget>[
                       ListViews(),
                       ListMap(placeCode: placeCode),
-                    ]),
+                    ]),*/
                 Container(
                   margin: EdgeInsets.only(left: 1100.w, top: 2200.w),
                   child: controller.indexCount.value == 1
@@ -134,7 +142,7 @@ class PlaceList extends GetView<PlaceController> {
                     InkWell(
                       highlightColor: Colors.white,
                       onTap: () async {
-                        await Get.toNamed("/listsub", arguments: {
+                        Get.toNamed("/listsub", arguments: {
                           "data": controller.place[index],
                           "placeCode": placeCode,
                           "index": index,
@@ -284,11 +292,17 @@ class PlaceList extends GetView<PlaceController> {
                                         controller.place[index].id);
 
                                     controller.setPlaceBookmark(index, 1);
+                                    //  bookmark.bookmarkSelectAll(
+                                    //   UserController.to.userId);
+
+                                    //   getPlaceList(placeCode)
                                   } else {
                                     await bookmark.bookmarkToogle(
                                         UserController.to.userId.value,
                                         controller.place[index].id);
                                     controller.setPlaceBookmark(index, 0);
+                                    //  bookmark.bookmarkSelectAll(
+                                    //       UserController.to.userId);
                                   }
                                 },
                               ),

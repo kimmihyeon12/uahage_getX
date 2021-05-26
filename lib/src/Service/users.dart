@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -28,7 +29,8 @@ class Users extends GetView<UserController> {
           "baby_birthday":
               data["baby_birthday"] == null ? "" : data["baby_birthday"],
           "baby_gender": data["baby_gender"] == null ? "" : data["baby_gender"],
-          "age": data["age_group_type"] == null ? "" : data["age_group_type"],
+          "age_group_type":
+              data["age_group_type"] == null ? "" : data["age_group_type"],
           "image_path": data["image_path"] == null ? "" : data["image_path"],
         };
       }
@@ -38,17 +40,18 @@ class Users extends GetView<UserController> {
   }
 
   //INSERT
-  Future insert(String type, nickName, gender, birthday, age) async {
+  Future insert(
+      String type, nickname, babyGender, babyBirthday, ageGroupType) async {
     print('회원가입 및 로그인');
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     Map<String, dynamic> userData = type == "withNickname"
         ? {
             "providerName": "KAKAO",
-            "nickname": "${nickName}",
-            "babyGender": "${gender}",
-            "babyBirthday": "${birthday}",
-            "ageGroupType": age,
+            "nickname": "${nickname}",
+            "babyGender": "${babyGender}",
+            "babyBirthday": "${babyBirthday}",
+            "ageGroupType": ageGroupType,
           }
         : {
             "providerName": "KAKAO",
@@ -122,28 +125,31 @@ class Users extends GetView<UserController> {
   }
 
   //UPDATE
-  Future updataUser(nickName, gender, birthday, age) async {
+  Future update(formdata) async {
     try {
-      Map<String, dynamic> userData = {
-        "email": "${controller.email.value}${controller.option.value}",
+      /*  Map<String, dynamic> userData = {
+        "image": image,
+        "imgInit": "y",
         "nickname": "${nickName}",
-        "gender": "${gender}",
-        "birthday": "${birthday}",
-        "age": age,
-        "rf_token": UserController.to.token.value,
-      };
-      print(userData);
-      var response = await http.put(
-        url + "/api/users/${UserController.to.userId.value}",
-        headers: <String, String>{
+        "ageGroupType": age,
+        "babyGender": "${gender}",
+        "babyBirthday": "${birthday}",
+      };*/
+      print(formdata);
+      var dio = new Dio();
+      var response = await dio.put(
+          url + "/api/users/${UserController.to.userId.value}",
+          data: formdata
+          /* headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           "Authorization": UserController.to.token.value
         },
-        body: jsonEncode(userData),
-      );
-      return response.statusCode == 200
+        body: jsonEncode(userData),*/
+          );
+      /*return response.statusCode == 200
           ? jsonDecode(response.body)["message"]
-          : Future.error(jsonDecode(response.body)["error"]);
+          : Future.error(jsonDecode(response.body)["error"]);*/
+      return response.statusCode == 200 ? "성공" : "실패";
     } catch (err) {
       return Future.error(err);
     }

@@ -1,22 +1,16 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:io';
-
 import 'package:image_picker/image_picker.dart';
-
 import 'package:uahage/src/Controller/user.controller.dart';
-import 'package:uahage/src/Service/user.dart';
+import 'package:uahage/src/Service/users.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 import 'package:uahage/src/Static/Widget/dialog.dart';
 import 'package:uahage/src/Static/Widget/toast.dart';
 import 'package:uahage/src/Static/Widget/yearpicker.dart';
 import 'package:uahage/src/Static/url.dart';
-import 'package:uahage/src/Service/user.dart';
 
 class UserModify extends StatefulWidget {
   final userdata;
@@ -37,7 +31,7 @@ class _UserModifyState extends State<UserModify> {
   }
 
   TextEditingController yController = TextEditingController();
-  user User = new user();
+
   var ageImage = [false, false, false, false, false, false];
 
   bool isIdValid = false;
@@ -51,8 +45,9 @@ class _UserModifyState extends State<UserModify> {
   ];
   String _uploadedFileURL = "";
   File _image;
+  bool isImage = false;
   String imageLink = "";
-
+  Users users = new Users();
   dynamic recievedImage;
 
   String url = URL;
@@ -93,7 +88,6 @@ class _UserModifyState extends State<UserModify> {
                     ),
                     title: new Text('삭제'),
                     onTap: () async {
-                      await deleteFile();
                       setState(() {
                         _image = null;
                         userdata["image_path"] = "";
@@ -106,22 +100,6 @@ class _UserModifyState extends State<UserModify> {
             ),
           );
         });
-  }
-
-  Future deleteFile() async {
-    try {
-      await http.post(
-        url + "/api/s3/images-delete",
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          "Authorization": UserController.to.token.value
-        },
-        body: jsonEncode({"fileName": imageLink}),
-      );
-      setState(() {
-        userdata["image_path"] = "";
-      });
-    } catch (err) {}
   }
 
   Future _imgFromCamera() async {
@@ -142,59 +120,28 @@ class _UserModifyState extends State<UserModify> {
     });
   }
 
-  uploadFile(File file) async {
-    if (userdata["image_path"] != "") {
-      try {
-        await http.post(
-          url + "/api/s3/images-delete",
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            "Authorization": UserController.to.token.value
-          },
-          body: jsonEncode({"fileName": userdata["image_path"]}),
-        );
-      } catch (err) {
-        print(err);
-      }
-    }
-
-    try {
-      String fileName = file.path.split('/').last;
-      FormData formData = FormData.fromMap({
-        "profileImage":
-            await MultipartFile.fromFile(file.path, filename: fileName),
+  Future _formData() async {
+    File file = _image;
+    String fileName;
+    if (userdata["image_path"] == "") {
+      setState(() {
+        isImage = true;
       });
-      Dio dio = new Dio();
-      var response;
-      try {
-        response = await dio.post(
-            url + '/api/s3/images/${UserController.to.userId.value}',
-            data: formData);
-        setState(() {
-          _uploadedFileURL = response.data["location"];
-          userdata["image_path"] = _uploadedFileURL;
-        });
-        print("Printing after upload imagelink " + userdata["image_path"]);
-        await _saveURL(userdata["image_path"]);
-      } catch (err) {
-        print(err);
-      }
-    } catch (err) {
-      print(err);
     }
-  }
 
-  _saveURL(_uploadedFileURL) async {
-    try {
-      await http.patch(
-        url + "/api/users/${UserController.to.userId.value}",
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          "Authorization": UserController.to.token.value
-        },
-        body: jsonEncode({"image_path": _uploadedFileURL}),
-      );
-    } catch (error) {}
+    FormData formData = FormData.fromMap({
+      "image": _image == null
+          ? null
+          : await MultipartFile.fromFile(file.path,
+              filename: file.path.split('/').last),
+      "imgInit": isImage ? "Y" : "N",
+      "nickname": "${userdata["nickname"]}",
+      "ageGroupType": userdata["age_group_type"],
+      "babyGender": "${userdata['baby_gender']}",
+      "babyBirthday": "${userdata["baby_birthday"]}",
+    });
+    print(formData);
+    return formData;
   }
 
   @override
@@ -331,11 +278,10 @@ class _UserModifyState extends State<UserModify> {
                                   cursorColor: Color(0xffff7292),
                                   maxLength: 10,
                                   onChanged: (txt) {
-                                    txt.length <= 10
-                                        ? setState(() {
-                                            userdata["nickname"] = txt;
-                                          })
-                                        : null;
+                                    setState(() {
+                                      userdata["nickname"] = txt;
+                                      print(userdata["nickname"]);
+                                    });
                                   },
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
@@ -375,8 +321,9 @@ class _UserModifyState extends State<UserModify> {
                                         : Color(0xffff7292),
                                     onPressed: userdata["nickname"] != ""
                                         ? () async {
-                                            var data = await User.checkNickName(
-                                                userdata["nickname"]);
+                                            var data =
+                                                await users.checkNickName(
+                                                    userdata["nickname"]);
                                             setState(() {
                                               isIdValid = data['idValid'];
                                             });
@@ -538,7 +485,7 @@ class _UserModifyState extends State<UserModify> {
                       Padding(padding: EdgeInsets.only(left: 62.w)),
                       InkWell(
                         child: Image.asset(
-                          userdata["age"] == 10
+                          userdata["age_group_type"] == 1
                               ? './assets/register/10_pink.png'
                               : './assets/register/10_grey.png',
                           height: 196.h,
@@ -551,7 +498,7 @@ class _UserModifyState extends State<UserModify> {
                       Padding(padding: EdgeInsets.only(left: 55.w)),
                       InkWell(
                         child: Image.asset(
-                          userdata["age"] == 20
+                          userdata["age_group_type"] == 2
                               ? './assets/register/20_pink.png'
                               : './assets/register/20_grey.png',
                           height: 196.h,
@@ -564,7 +511,7 @@ class _UserModifyState extends State<UserModify> {
                       Padding(padding: EdgeInsets.only(left: 55.w)),
                       InkWell(
                         child: Image.asset(
-                          userdata["age"] == 30
+                          userdata["age_group_type"] == 3
                               ? './assets/register/30_pink.png'
                               : './assets/register/30_grey.png',
                           height: 196.h,
@@ -585,7 +532,7 @@ class _UserModifyState extends State<UserModify> {
                       Padding(padding: EdgeInsets.only(left: 62.w)),
                       InkWell(
                         child: Image.asset(
-                          userdata["age"] == 40
+                          userdata["age_group_type"] == 4
                               ? './assets/register/40_pink.png'
                               : './assets/register/40_grey.png',
                           height: 196.h,
@@ -598,7 +545,7 @@ class _UserModifyState extends State<UserModify> {
                       Padding(padding: EdgeInsets.only(left: 55.w)),
                       InkWell(
                         child: Image.asset(
-                          userdata["age"] == 50
+                          userdata["age_group_type"] == 5
                               ? './assets/register/50_pink.png'
                               : './assets/register/50_grey.png',
                           height: 196.h,
@@ -611,7 +558,7 @@ class _UserModifyState extends State<UserModify> {
                       Padding(padding: EdgeInsets.only(left: 55.w)),
                       InkWell(
                         child: Image.asset(
-                          userdata["age"] == 60
+                          userdata["age_group_type"] == 6
                               ? './assets/register/others_pink.png'
                               : './assets/register/others_grey.png',
                           height: 196.h,
@@ -639,31 +586,22 @@ class _UserModifyState extends State<UserModify> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0)),
                         color: isIdValid &&
-                                userdata["age"] != 0 &&
+                                userdata["age_group_type"] != 0 &&
                                 userdata['baby_gender'] != "" &&
                                 userdata["baby_birthday"] != ""
                             ? Color(0xffff7292)
                             : Color(0xffcacaca),
                         onPressed: isIdValid &&
-                                userdata["age"] != 0 &&
+                                userdata["age_group_type"] != 0 &&
                                 userdata['baby_gender'] != "" &&
                                 userdata["baby_birthday"] != ""
                             ? () async {
-                                await uploadFile(_image);
-                                if (userdata["profile_url"] == "") {
-                                  print("imageLink");
-                                  await deleteFile();
-                                  await _saveURL("");
-                                }
+                                var formdata = await _formData();
                                 showDialog(
                                   barrierDismissible: false,
                                   context: context,
                                   builder: (context) => FutureBuilder(
-                                    future: User.updataUser(
-                                        userdata["nickname"],
-                                        userdata['baby_gender'],
-                                        userdata["baby_birthday"],
-                                        userdata["age"]),
+                                    future: users.update(formdata),
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {
                                         WidgetsBinding.instance

@@ -3,6 +3,7 @@ import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:uahage/src/Controller/place.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
+import 'package:uahage/src/Service/places.dart';
 
 import 'package:uahage/src/Service/places.restaurant.bookmarks.dart';
 import 'package:uahage/src/Static/Font/font.dart';
@@ -150,33 +151,38 @@ class ListSub extends GetView<PlaceController> {
                                   left: 20.w,
                                 ),
                               ),
-                              Obx(
-                                () => IconButton(
-                                  padding: EdgeInsets.all(0),
-                                  constraints: BoxConstraints(
-                                      maxWidth: 170.w, maxHeight: 170.h),
-                                  icon: Image.asset(
-                                      controller.place[index].bookmark == 0
-                                          ? "./assets/listPage/love_grey.png"
-                                          : "./assets/listPage/love_color.png",
-                                      height: 60.h),
-                                  onPressed: () async {
-                                    // if (controller.place[index].bookmark == 0) {
-                                    //   await bookmark.bookmarkCreate(
-                                    //       UserController.to.userId.value,
-                                    //       data.id);
-                                    //   print("bookmark : ${data.id}");
-                                    //   controller.setPlaceBookmark(index, 1);
-                                    // } else {
-                                    //   await bookmark.bookmarkDelete(
-                                    //       UserController.to.userId.value,
-                                    //       data.id);
-                                    //   print("bookmark : ${data.id}");
-                                    //   controller.setPlaceBookmark(index, 0);
-                                    // }
-                                  },
-                                ),
-                              ),
+                              (() {
+                                if (placeCode == 1) {
+                                  return Obx(
+                                    () => IconButton(
+                                      padding: EdgeInsets.all(0),
+                                      constraints: BoxConstraints(
+                                          maxWidth: 170.w, maxHeight: 170.h),
+                                      icon: Image.asset(
+                                          controller.place[index].bookmark == 0
+                                              ? "./assets/listPage/love_grey.png"
+                                              : "./assets/listPage/love_color.png",
+                                          height: 60.h),
+                                      onPressed: () async {
+                                        // if (controller.place[index].bookmark == 0) {
+                                        //   await bookmark.bookmarkCreate(
+                                        //       UserController.to.userId.value,
+                                        //       data.id);
+                                        //   print("bookmark : ${data.id}");
+                                        //   controller.setPlaceBookmark(index, 1);
+                                        // } else {
+                                        //   await bookmark.bookmarkDelete(
+                                        //       UserController.to.userId.value,
+                                        //       data.id);
+                                        //   print("bookmark : ${data.id}");
+                                        //   controller.setPlaceBookmark(index, 0);
+                                        // }
+                                      },
+                                    ),
+                                  );
+                                } else
+                                  return Container();
+                              }())
                             ],
                           ),
                         ],
@@ -293,7 +299,7 @@ class ListSub extends GetView<PlaceController> {
                                   children: [
                                     Padding(
                                         padding: EdgeInsets.only(left: 67.w)),
-                                    data.menu == "1"
+                                    data.baby_menu == true
                                         ? Image.asset(
                                             imagecolor[0],
                                             width: 218.w,
@@ -306,7 +312,7 @@ class ListSub extends GetView<PlaceController> {
                                           ),
                                     Padding(
                                         padding: EdgeInsets.only(left: 59.w)),
-                                    data.bed == "1"
+                                    data.baby_bed == true
                                         ? Image.asset(
                                             imagecolor[1],
                                             width: 218.w,
@@ -319,7 +325,7 @@ class ListSub extends GetView<PlaceController> {
                                           ),
                                     Padding(
                                         padding: EdgeInsets.only(left: 59.w)),
-                                    data.tableware == "1"
+                                    data.baby_tableware == true
                                         ? Image.asset(
                                             imagecolor[2],
                                             width: 218.w,
@@ -332,7 +338,7 @@ class ListSub extends GetView<PlaceController> {
                                           ),
                                     Padding(
                                         padding: EdgeInsets.only(left: 59.w)),
-                                    data.meetingroom == "1"
+                                    data.meeting_room == true
                                         ? Image.asset(
                                             imagecolor[3],
                                             width: 218.w,
@@ -345,7 +351,7 @@ class ListSub extends GetView<PlaceController> {
                                           ),
                                     Padding(
                                         padding: EdgeInsets.only(left: 59.w)),
-                                    data.diapers == "1"
+                                    data.diaper_change == true
                                         ? Image.asset(
                                             imagecolor[4],
                                             width: 231.w,
@@ -363,7 +369,7 @@ class ListSub extends GetView<PlaceController> {
                               Row(
                                 children: [
                                   Padding(padding: EdgeInsets.only(left: 67.w)),
-                                  data.playroom == "1"
+                                  data.play_room == true
                                       ? Image.asset(
                                           imagecolor[5],
                                           width: 218.w,
@@ -375,7 +381,7 @@ class ListSub extends GetView<PlaceController> {
                                           height: 292.h,
                                         ),
                                   Padding(padding: EdgeInsets.only(left: 59.w)),
-                                  data.carriage == "1"
+                                  data.stroller == true
                                       ? Image.asset(
                                           imagecolor[6],
                                           width: 218.w,
@@ -387,7 +393,7 @@ class ListSub extends GetView<PlaceController> {
                                           height: 292.h,
                                         ),
                                   Padding(padding: EdgeInsets.only(left: 59.w)),
-                                  data.nursingroom == "1"
+                                  data.nursing_room == true
                                       ? Image.asset(
                                           imagecolor[7],
                                           width: 218.w,
@@ -399,7 +405,7 @@ class ListSub extends GetView<PlaceController> {
                                           height: 292.h,
                                         ),
                                   Padding(padding: EdgeInsets.only(left: 59.w)),
-                                  data.chair == "1"
+                                  data.baby_chair == true
                                       ? Image.asset(
                                           imagecolor[8],
                                           width: 218.w,
@@ -429,8 +435,8 @@ class ListSub extends GetView<PlaceController> {
                             children: [
                               normalfont("검진항복", 58, Color(0xff4d4d4d)),
                               Padding(padding: EdgeInsets.only(top: 10.h)),
-                              normalfont(
-                                  "${data.examination}", 58, Color(0xff808080)),
+                              normalfont("${data.examination_items}", 58,
+                                  Color(0xff808080)),
                               Padding(padding: EdgeInsets.only(top: 50.h)),
                             ],
                           ),
@@ -449,7 +455,8 @@ class ListSub extends GetView<PlaceController> {
                             children: [
                               normalfont("관람 / 체험료", 58, Color(0xff4d4d4d)),
                               Padding(padding: EdgeInsets.only(top: 10.h)),
-                              normalfont("${data.fare}", 58, Color(0xff808080)),
+                              normalfont("${data.admission_fee}", 58,
+                                  Color(0xff808080)),
                               Padding(padding: EdgeInsets.only(top: 50.h)),
                             ],
                           ),

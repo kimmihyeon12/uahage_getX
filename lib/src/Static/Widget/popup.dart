@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:uahage/src/Binding/place.restaurant.bookmark.binding.dart';
+import 'package:uahage/src/Controller/place.restaurant.bookmark.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
 
 import 'package:uahage/src/Service/places.restaurant.bookmarks.dart';
@@ -131,10 +132,8 @@ Future<Object> popup(context, grey_image) {
 }
 
 Future<Object> placepopup(context, Message, type) async {
+  int mark = Message["mark"];
   Bookmark bookmark = new Bookmark();
-  var mark;
-  //  await bookmark.bookmarkSelect(
-  //     UserController.to.userId.value, Message['id']);
   return showGeneralDialog(
       context: context,
       pageBuilder: (BuildContext buildContext, Animation<double> animation,
@@ -266,22 +265,25 @@ Future<Object> placepopup(context, Message, type) async {
                                           ),
                                         ),
                                         onTap: () async {
-                                          print(mark);
-                                          // if (mark == 0) {
-                                          //   bookmark.bookmarkCreate(
-                                          //       UserController.to.userId.value,
-                                          //       Message["id"]);
-                                          //   setState(() {
-                                          //     mark = 1;
-                                          //   });
-                                          // } else {
-                                          //   bookmark.bookmarkDelete(
-                                          //       UserController.to.userId.value,
-                                          //       Message["id"]);
-                                          //   setState(() {
-                                          //     mark = 0;
-                                          //   });
-                                          // }
+                                          if (mark == 0) {
+                                            await bookmark.bookmarkToogle(
+                                                UserController.to.userId.value,
+                                                Message["id"]);
+
+                                            setState(() {
+                                              mark = 1;
+                                            });
+                                          } else {
+                                            await bookmark.bookmarkToogle(
+                                                UserController.to.userId.value,
+                                                Message["id"]);
+                                            BookmarkController.to
+                                                .starPlaceBookmarkrefresh(
+                                                    Message["index"]);
+                                            setState(() {
+                                              mark = 0;
+                                            });
+                                          }
                                         },
                                       ),
                                     ),

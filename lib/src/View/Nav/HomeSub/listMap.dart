@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:uahage/src/Controller/location.controller.dart';
+import 'package:uahage/src/Controller/place.controller.dart';
+import 'package:uahage/src/Controller/place.restaurant.bookmark.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
 
 import 'package:uahage/src/Service/places.dart';
@@ -47,6 +50,7 @@ class _ListMapState extends State<ListMap> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(PlaceController());
     ScreenUtil.init(context, width: 1500, height: 2667);
     return Scaffold(
       body: SafeArea(
@@ -76,21 +80,31 @@ class _ListMapState extends State<ListMap> {
                       "name": Message[1],
                       "address": Message[2],
                       "phone": Message[3],
-                      "carriage": Message[4],
-                      "bed": Message[5],
-                      "tableware": Message[6],
-                      "nursingroom": Message[7],
-                      "meetingroom": Message[8],
-                      "diapers": Message[9],
-                      "playroom": Message[10],
-                      "chair": Message[11],
-                      "menu": Message[12],
-                      "examination": Message[13],
-                      "fare": Message[14],
+                      "stroller": Message[4],
+                      "baby_bed": Message[5],
+                      "baby_tableware": Message[6],
+                      "nursing_room": Message[7],
+                      "meeting_room": Message[8],
+                      "diaper_change": Message[9],
+                      "play_room": Message[10],
+                      "baby_chair": Message[11],
+                      "parking": Message[12],
+                      "mark": 0,
+                      "index": 0,
                     };
-                    // var mark = await bookmark.bookmarkSelect(
-                    //     UserController.to.userId.value, JsonMessage['id']);
-                    // await placepopup(context, JsonMessage, "");
+                    BookmarkController.to.placeBookmarkInit();
+                    await bookmark.bookmarkSelectAll(UserController.to.userId);
+                    for (int i = 0;
+                        i < BookmarkController.to.placeBookmark.length;
+                        i++) {
+                      if (BookmarkController.to.placeBookmark[i].id
+                              .toString() ==
+                          Message[0].toString()) {
+                        JsonMessage["mark"] = 1;
+                        JsonMessage["index"] = i;
+                      }
+                    }
+                    await placepopup(context, JsonMessage, "");
                   }),
             ]),
           ),
