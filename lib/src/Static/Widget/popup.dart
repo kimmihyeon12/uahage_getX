@@ -4,6 +4,10 @@ import 'package:get/get.dart';
 import 'package:uahage/src/Binding/place.restaurant.bookmark.binding.dart';
 import 'package:uahage/src/Controller/place.restaurant.bookmark.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
+import 'package:uahage/src/Model/experienceCenter.dart';
+import 'package:uahage/src/Model/hospitals.dart';
+import 'package:uahage/src/Model/kidCafe.dart';
+import 'package:uahage/src/Model/restaurant.dart';
 
 import 'package:uahage/src/Service/places.restaurant.bookmarks.dart';
 
@@ -131,8 +135,12 @@ Future<Object> popup(context, grey_image) {
       transitionDuration: const Duration(milliseconds: 150));
 }
 
-Future<Object> placepopup(context, Message, type) async {
-  int mark = Message["mark"];
+Future<Object> placepopup(context, Message, type, placeCode) async {
+  int mark;
+  if (placeCode == 1) {
+    mark = Message["bookmark"];
+  }
+
   Bookmark bookmark = new Bookmark();
   return showGeneralDialog(
       context: context,
@@ -168,45 +176,27 @@ Future<Object> placepopup(context, Message, type) async {
                     ),
                     child: InkWell(
                       onTap: () async {
-                        /*final btm = BottomButton(
-                            id1: Message["id"],
-                            storeName: Message["name"],
-                            address1: Message["address"],
-                            phone1: Message["phone"],
-                            carriage1: Message["carriage"],
-                            bed1: Message["bed"],
-                            tableware1: Message["tableware"],
-                            nursingroom1: Message["nursingroom"],
-                            meetingroom1: Message["meetingroom"],
-                            diapers1: Message["diapers"],
-                            chair1: Message["chair"],
-                            menu1: Message["menu"],
-                            playroom1: Message["playroom"],
-                            Examination_item1: Message["examination"],
-                            fare1: Message["fare"],
-                            bookmark1: Message["bookmark"]);
-
-                        final result = await Navigator.push(
-                            context,
-                            PageTransition(
-                              type: PageTransitionType.rightToLeft,
-                              child: SubListPage(
-                                index: index + 1,
-                                data: btm,
-                                userId: userId,
-                                loginOption: loginOption,
-                                tableType: tableType,
-                              ),
-                              duration: Duration(milliseconds: 100),
-                              reverseDuration: Duration(milliseconds: 100),
-                            ));
-                        result
-                            ? setState(() {
-                                star_color = true;
-                              })
-                            : setState(() {
-                                star_color = false;
-                              });*/
+                        var message;
+                        if (placeCode == 1) {
+                          message = Restaurant.fromJson(Message);
+                          message.bookmark = mark;
+                        } else if (placeCode == 2) {
+                          message = Hospitals.fromJson(Message);
+                        } else if (placeCode == 4) {
+                          message = KidCafe.fromJson(Message);
+                        } else if (placeCode == 5) {
+                          message = Experiencecenter.fromJson(Message);
+                        }
+                        print(message);
+                        var result = await Get.toNamed("/listsub", arguments: {
+                          "data": message,
+                          "placeCode": placeCode,
+                          "index": 1,
+                        });
+                        setState(() {
+                          mark = result;
+                        });
+                        print("result $result");
                       },
                       child: Row(
                         children: [
@@ -248,45 +238,53 @@ Future<Object> placepopup(context, Message, type) async {
                                           ),
                                           textAlign: TextAlign.left),
                                     ),
-                                    Container(
-                                      margin:
-                                          EdgeInsets.only(left: 8.w, top: 25.h),
-                                      child: InkWell(
-                                        child: Container(
-                                          padding: EdgeInsets.only(
-                                              left: 30.w,
-                                              right: 30.w,
-                                              bottom: 10.h),
-                                          child: Image.asset(
-                                            mark == 0
-                                                ? "./assets/listPage/love_grey.png"
-                                                : "./assets/listPage/love_color.png",
-                                            height: 60.h,
-                                          ),
-                                        ),
-                                        onTap: () async {
-                                          if (mark == 0) {
-                                            await bookmark.bookmarkToogle(
-                                                UserController.to.userId.value,
-                                                Message["id"]);
+                                    (() {
+                                      if (placeCode == 1) {
+                                        return Container(
+                                          margin: EdgeInsets.only(
+                                              left: 8.w, top: 25.h),
+                                          child: InkWell(
+                                            child: Container(
+                                              padding: EdgeInsets.only(
+                                                  left: 30.w,
+                                                  right: 30.w,
+                                                  bottom: 10.h),
+                                              child: Image.asset(
+                                                mark == 0 || mark == null
+                                                    ? "./assets/listPage/love_grey.png"
+                                                    : "./assets/listPage/love_color.png",
+                                                height: 80.h,
+                                              ),
+                                            ),
+                                            onTap: () async {
+                                              if (mark == 0 || mark == null) {
+                                                await bookmark.bookmarkToogle(
+                                                    UserController
+                                                        .to.userId.value,
+                                                    Message["id"]);
 
-                                            setState(() {
-                                              mark = 1;
-                                            });
-                                          } else {
-                                            await bookmark.bookmarkToogle(
-                                                UserController.to.userId.value,
-                                                Message["id"]);
-                                            BookmarkController.to
-                                                .starPlaceBookmarkrefresh(
-                                                    Message["index"]);
-                                            setState(() {
-                                              mark = 0;
-                                            });
-                                          }
-                                        },
-                                      ),
-                                    ),
+                                                setState(() {
+                                                  mark = 1;
+                                                });
+                                              } else {
+                                                await bookmark.bookmarkToogle(
+                                                    UserController
+                                                        .to.userId.value,
+                                                    Message["id"]);
+                                                BookmarkController.to
+                                                    .starPlaceBookmarkrefresh(
+                                                        Message["index"]);
+                                                setState(() {
+                                                  mark = 0;
+                                                });
+                                              }
+                                            },
+                                          ),
+                                        );
+                                      } else {
+                                        return Container();
+                                      }
+                                    }())
                                   ],
                                 ),
                               ),

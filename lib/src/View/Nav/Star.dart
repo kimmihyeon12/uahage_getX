@@ -31,8 +31,7 @@ class Star extends GetView<BookmarkController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(BookmarkController());
-
+    ScreenUtil.init(context, width: 1500, height: 2667);
     controller.placeBookmarkInit();
     bookselect();
     scrollController.addListener(() {
@@ -43,8 +42,6 @@ class Star extends GetView<BookmarkController> {
       }
     });
 
-    print('data length ${controller.placeBookmark.length}');
-    ScreenUtil.init(context, width: 1501, height: 2667);
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: imageAppbar(context, "즐겨찾기"),
@@ -66,7 +63,6 @@ class Star extends GetView<BookmarkController> {
                   ],
                 );
               } else {
-                print("gg");
                 return ListView.builder(
                     key: listKey,
                     itemCount: controller.placeBookmark.length,
@@ -89,13 +85,13 @@ class Star extends GetView<BookmarkController> {
                             ],
                           ),
                         ),
-                        onDismissed: (direction) async {
-                          //  var data = snapshot.data[index];
-                          //     await click_star(data.address);
-                          // setState(() {
-                          //  snapshot.data.removeAt(index);
-                          // });
-                        },
+                        // onDismissed: (direction) async {
+                        //   //  var data = snapshot.data[index];
+                        //   //     await click_star(data.address);
+                        //   // setState(() {
+                        //   //  snapshot.data.removeAt(index);
+                        //   // });
+                        // },
                         child: Card(
                           elevation: 0.3,
                           child: Container(
@@ -109,14 +105,13 @@ class Star extends GetView<BookmarkController> {
                                 children: [
                                   InkWell(
                                     highlightColor: Colors.white,
-                                    // onTap: () async {
-                                    //   await Get.toNamed("/listsub", arguments: {
-                                    //     "data": controller.starList[index],
-                                    //     "placeCode": controller
-                                    //         .starList[index].place_code,
-                                    //     "index": index,
-                                    //   });
-                                    // },
+                                    onTap: () async {
+                                      await Get.toNamed("/listsub", arguments: {
+                                        "data": controller.placeBookmark[index],
+                                        "placeCode": 1,
+                                        "index": index,
+                                      });
+                                    },
                                     child: Container(
                                       width: 1280.w,
                                       //     color:Colors.pink,
@@ -276,8 +271,16 @@ class Star extends GetView<BookmarkController> {
                                               UserController.to.userId.value,
                                               controller
                                                   .placeBookmark[index].id);
-                                          controller
-                                              .starPlaceBookmarkrefresh(index);
+                                          controller.placeBookmark[index]
+                                                      .bookmark ==
+                                                  0
+                                              ? controller.setPlaceBookmarkOne(
+                                                  index, 1)
+                                              : controller.setPlaceBookmarkOne(
+                                                  index, 0);
+
+                                          // controller
+                                          //     .starPlaceBookmarkrefresh(index);
                                         },
                                       ),
                                     ),

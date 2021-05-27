@@ -73,38 +73,65 @@ class _ListMapState extends State<ListMap> {
                   name: 'Print',
                   onMessageReceived: (JavascriptMessage message) async {
                     var messages = message.message;
-                    print(messages);
                     var Message = messages.split("|");
-                    var JsonMessage = {
-                      "id": Message[0],
-                      "name": Message[1],
-                      "address": Message[2],
-                      "phone": Message[3],
-                      "stroller": Message[4],
-                      "baby_bed": Message[5],
-                      "baby_tableware": Message[6],
-                      "nursing_room": Message[7],
-                      "meeting_room": Message[8],
-                      "diaper_change": Message[9],
-                      "play_room": Message[10],
-                      "baby_chair": Message[11],
-                      "parking": Message[12],
-                      "mark": 0,
-                      "index": 0,
-                    };
-                    BookmarkController.to.placeBookmarkInit();
-                    await bookmark.bookmarkSelectAll(UserController.to.userId);
-                    for (int i = 0;
-                        i < BookmarkController.to.placeBookmark.length;
-                        i++) {
-                      if (BookmarkController.to.placeBookmark[i].id
-                              .toString() ==
-                          Message[0].toString()) {
-                        JsonMessage["mark"] = 1;
-                        JsonMessage["index"] = i;
+                    var JsonMessage;
+                    if (placeCode == 1) {
+                      JsonMessage = {
+                        "id": int.parse(Message[0]),
+                        "name": Message[1],
+                        "address": Message[2],
+                        "phone": Message[3],
+                        "stroller": Message[4] == "true" ? true : false,
+                        "baby_bed": Message[5] == "true" ? true : false,
+                        "baby_tableware": Message[6] == "true" ? true : false,
+                        "nursing_room": Message[7] == "true" ? true : false,
+                        "meeting_room": Message[8] == "true" ? true : false,
+                        "diaper_change": Message[9] == "true" ? true : false,
+                        "play_room": Message[10] == "true" ? true : false,
+                        "baby_chair": Message[11] == "true" ? true : false,
+                        "baby_menu": Message[12] == "true" ? true : false,
+                        "parking": Message[13] == "true" ? true : false,
+                        "bookmark": 0,
+                      };
+                      BookmarkController.to.placeBookmarkInit();
+                      await bookmark
+                          .bookmarkSelectAll(UserController.to.userId);
+                      for (int i = 0;
+                          i < BookmarkController.to.placeBookmark.length;
+                          i++) {
+                        if (BookmarkController.to.placeBookmark[i].id
+                                .toString() ==
+                            Message[0].toString()) {
+                          JsonMessage["bookmark"] = 1;
+                        }
                       }
+                    } else if (placeCode == 2) {
+                      JsonMessage = {
+                        "id": int.parse(Message[0]),
+                        "name": Message[1],
+                        "address": Message[2],
+                        "phone": Message[3],
+                        "examination_items": Message[14],
+                      };
+                    } else if (placeCode == 5) {
+                      JsonMessage = {
+                        "id": int.parse(Message[0]),
+                        "name": Message[1],
+                        "address": Message[2],
+                        "phone": Message[3],
+                        "admission_fee": Message[15],
+                      };
+                    } else if (placeCode == 6) {
+                      JsonMessage = {
+                        "id": int.parse(Message[0]),
+                        "name": Message[1],
+                        "address": Message[2],
+                        "phone": Message[3],
+                        "admission_fee": Message[15],
+                      };
                     }
-                    await placepopup(context, JsonMessage, "");
+                    print(JsonMessage);
+                    await placepopup(context, JsonMessage, "", placeCode);
                   }),
             ]),
           ),

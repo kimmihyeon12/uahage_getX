@@ -34,7 +34,7 @@ class _HomeState extends State<Home> {
   }
 
   int index = 1;
-  var searchkey = "";
+  String keyword = "";
   @override
   Widget build(BuildContext context) {
     FocusScopeNode currentFocus = FocusScope.of(context);
@@ -101,7 +101,7 @@ class _HomeState extends State<Home> {
                     child: TextField(
                       onChanged: (txt) {
                         setState(() {
-                          searchkey = txt;
+                          keyword = txt;
                         });
                       },
                       cursorColor: Color(0xffff7292),
@@ -130,10 +130,12 @@ class _HomeState extends State<Home> {
                             fontFamily: 'NotoSansCJKkr_Medium',
                             letterSpacing: -1.0),
                         suffixIcon: IconButton(
-                            onPressed: searchkey != ""
+                            onPressed: keyword != ""
                                 ? () {
                                     FocusScope.of(context).unfocus();
-                                    // Get.to(searchbar());
+                                    print("searchbar");
+                                    Get.toNamed("/searchbar",
+                                        arguments: keyword);
                                   }
                                 : () {
                                     toast(context, "주소를 입력해주세요!");

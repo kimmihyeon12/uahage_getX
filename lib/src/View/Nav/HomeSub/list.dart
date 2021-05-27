@@ -45,6 +45,7 @@ class PlaceList extends GetView<PlaceController> {
   ];
 
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, width: 1500, height: 2667);
     controller.placeInit();
     getList();
     scrollController.addListener(() {
@@ -54,8 +55,6 @@ class PlaceList extends GetView<PlaceController> {
         getList();
       }
     });
-
-    ScreenUtil.init(context, width: 1500, height: 2667);
 
     return SafeArea(
       child: Obx(
@@ -78,26 +77,21 @@ class PlaceList extends GetView<PlaceController> {
             ),
             body: Stack(
               children: [
-                /*   (() {
-                  if (controller.indexCount.value == 0) {
-                    return ListViews();
-                  } else {
-                    return ListMap(placeCode: placeCode);
-                  }
-                }()),*/
-
-                /*  IndexedStack(
+                IndexedStack(
                     index: controller.indexCount.value,
                     children: <Widget>[
                       ListViews(),
                       ListMap(placeCode: placeCode),
-                    ]),*/
+                    ]),
                 Container(
                   margin: EdgeInsets.only(left: 1100.w, top: 2200.w),
                   child: controller.indexCount.value == 1
                       ? GestureDetector(
                           onTap: () {
                             controller.changeindexCount(0);
+                            print("list");
+                            controller.placeInit();
+                            getList();
                           },
                           child: Image.asset(
                             './assets/on.png',

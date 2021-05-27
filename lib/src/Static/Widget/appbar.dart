@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:uahage/src/Controller/place.restaurant.bookmark.controller.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 
 appBar(context, text) {
@@ -17,7 +18,7 @@ appBar(context, text) {
     leading: IconButton(
         icon: Icon(Icons.arrow_back_ios, color: Color(0xffff7292)),
         onPressed: () {
-          Get.back();
+          Get.back(result: BookmarkController.to.subBookmark.value);
         }),
   );
 }

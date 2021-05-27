@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+import 'package:kakao_flutter_sdk/search.dart';
 import 'package:uahage/src/Controller/place.controller.dart';
+import 'package:uahage/src/Controller/place.restaurant.bookmark.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
 import 'package:uahage/src/Service/places.dart';
 
@@ -81,11 +83,17 @@ class ListSub extends GetView<PlaceController> {
 
   @override
   Widget build(BuildContext context) {
+    print("sublist");
+    if (placeCode == 1) {
+      data.bookmark == 0
+          ? BookmarkController.to.setSubBookmark(0)
+          : BookmarkController.to.setSubBookmark(1);
+    }
+
     ScreenUtil.init(context, width: 1500, height: 2667);
     return WillPopScope(
       onWillPop: () {
-        Get.back();
-        return;
+        Get.back(result: BookmarkController.to.subBookmark.value);
       },
       child: SafeArea(
         child: Scaffold(
@@ -159,24 +167,33 @@ class ListSub extends GetView<PlaceController> {
                                       constraints: BoxConstraints(
                                           maxWidth: 170.w, maxHeight: 170.h),
                                       icon: Image.asset(
-                                          controller.place[index].bookmark == 0
+                                          BookmarkController.to.subBookmark == 0
                                               ? "./assets/listPage/love_grey.png"
                                               : "./assets/listPage/love_color.png",
                                           height: 60.h),
                                       onPressed: () async {
-                                        // if (controller.place[index].bookmark == 0) {
-                                        //   await bookmark.bookmarkCreate(
-                                        //       UserController.to.userId.value,
-                                        //       data.id);
-                                        //   print("bookmark : ${data.id}");
-                                        //   controller.setPlaceBookmark(index, 1);
-                                        // } else {
-                                        //   await bookmark.bookmarkDelete(
-                                        //       UserController.to.userId.value,
-                                        //       data.id);
-                                        //   print("bookmark : ${data.id}");
-                                        //   controller.setPlaceBookmark(index, 0);
-                                        // }
+                                        if (controller.place[index].bookmark ==
+                                            0) {
+                                          print("click 좋아요");
+                                          controller.setPlaceBookmark(index, 1);
+                                          BookmarkController.to
+                                              .setPlaceBookmarkOne(index, 1);
+                                          BookmarkController.to
+                                              .setSubBookmark(1);
+                                          await bookmark.bookmarkToogle(
+                                              UserController.to.userId.value,
+                                              controller.place[index].id);
+                                        } else {
+                                          print("click 1");
+                                          controller.setPlaceBookmark(index, 0);
+                                          BookmarkController.to
+                                              .setPlaceBookmarkOne(index, 0);
+                                          BookmarkController.to
+                                              .setSubBookmark(0);
+                                          await bookmark.bookmarkToogle(
+                                              UserController.to.userId.value,
+                                              controller.place[index].id);
+                                        }
                                       },
                                     ),
                                   );

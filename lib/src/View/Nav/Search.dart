@@ -3,7 +3,9 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:get/get.dart';
 
 import 'package:uahage/src/Controller/location.controller.dart';
+import 'package:uahage/src/Controller/place.restaurant.bookmark.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
+import 'package:uahage/src/Service/places.restaurant.bookmarks.dart';
 
 import 'package:uahage/src/Static/url.dart';
 import 'dart:async';
@@ -19,6 +21,7 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   String url = URL;
   WebViewController webview;
+  Bookmark bookmark = new Bookmark();
   final key = UniqueKey();
   List<int> greyImage = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
@@ -29,6 +32,7 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, width: 1500, height: 2667);
     return Scaffold(
       body: Stack(
         children: [
@@ -45,38 +49,37 @@ class _SearchState extends State<Search> {
               JavascriptChannel(
                   name: 'Print',
                   onMessageReceived: (JavascriptMessage message) async {
-                    // var messages = message.message;
-                    // var Message = messages.split("|");
-                    // var bookmark = await bookmarkSelect(LoginCotroller.to.userId.value, Message[0]);
-                    // var JsonMessage = {
-                    //   "id": Message[0],
-                    //   "name": Message[1],
-                    //   "address": Message[2],
-                    //   "phone": Message[3],
-                    //   "lat": Message[4],
-                    //   "lon": Message[5],
-                    //   "carriage": Message[6],
-                    //   "bed": Message[7],
-                    //   "tableware": Message[8],
-                    //   "nursingroom": Message[9],
-                    //   "meetingroom": Message[10],
-                    //   "diapers": Message[11],
-                    //   "playroom": Message[12],
-                    //   "chair": Message[13],
-                    //   "menu": Message[14],
-                    //   "bookmark": bookmark.toString()
-                    // };
-
-                    // await showpopup.showPopUpbottomMenu(
-                    //     context,
-                    //     2667.h,
-                    //     1501.w,
-                    //     JsonMessage,
-                    //     index,
-                    //     userId,
-                    //     loginOption,
-                    //     "search",
-                    //     "restaurant");
+                    var messages = message.message;
+                    var Message = messages.split("|");
+                    var JsonMessage = {
+                      "id": int.parse(Message[0]),
+                      "name": Message[1],
+                      "address": Message[2],
+                      "phone": Message[3],
+                      "stroller": Message[4] == "true" ? true : false,
+                      "baby_bed": Message[5] == "true" ? true : false,
+                      "baby_tableware": Message[6] == "true" ? true : false,
+                      "nursing_room": Message[7] == "true" ? true : false,
+                      "meeting_room": Message[8] == "true" ? true : false,
+                      "diaper_change": Message[9] == "true" ? true : false,
+                      "play_room": Message[10] == "true" ? true : false,
+                      "baby_chair": Message[11] == "true" ? true : false,
+                      "baby_menu": Message[12] == "true" ? true : false,
+                      "parking": Message[13] == "true" ? true : false,
+                      "bookmark": 0,
+                    };
+                    BookmarkController.to.placeBookmarkInit();
+                    await bookmark.bookmarkSelectAll(UserController.to.userId);
+                    for (int i = 0;
+                        i < BookmarkController.to.placeBookmark.length;
+                        i++) {
+                      if (BookmarkController.to.placeBookmark[i].id
+                              .toString() ==
+                          Message[0].toString()) {
+                        JsonMessage["bookmark"] = 1;
+                      }
+                    }
+                    await placepopup(context, JsonMessage, "", 1);
                   })
             ]),
           ),

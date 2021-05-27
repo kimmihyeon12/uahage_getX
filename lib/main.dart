@@ -6,9 +6,11 @@ import 'package:uahage/src/Binding/place.restaurant.bookmark.binding.dart';
 import 'package:uahage/src/Binding/place.binding.dart';
 import 'package:uahage/src/Binding/user.binding.dart';
 import 'package:uahage/src/Controller/location.controller.dart';
+import 'package:uahage/src/Controller/place.restaurant.bookmark.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
 import 'package:uahage/src/View/Auth/login.dart';
 import 'package:uahage/src/View/Loading/loading.dart';
+import 'package:uahage/src/View/Nav/HomeSub/searchBar.dart';
 import 'package:uahage/src/View/Nav/navigator.dart';
 import 'package:uahage/src/View/Nav/HomeSub/list.dart';
 import 'package:uahage/src/View/Nav/HomeSub/listsub.dart';
@@ -31,8 +33,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      initialBinding: BindingsBuilder(
-          () => {Get.put(UserController()), Get.put(LocationController())}),
+      initialBinding: BindingsBuilder(() => {
+            Get.put(UserController()),
+            Get.put(LocationController()),
+            Get.put(BookmarkController()),
+          }),
       getPages: [
         GetPage(
           name: "/",
@@ -59,7 +64,12 @@ class MyApp extends StatelessWidget {
         GetPage(name: "/list", page: () => PlaceList(), bindings: [
           PlaceBinding(),
         ]),
-        GetPage(name: "/listsub", page: () => ListSub(), bindings: []),
+        GetPage(name: "/listsub", page: () => ListSub(), bindings: [
+          PlaceBinding(),
+        ]),
+        GetPage(name: "/searchbar", page: () => SearchBar(), bindings: [
+          PlaceBinding(),
+        ]),
         GetPage(
           name: "/search",
           page: () => Search(),
