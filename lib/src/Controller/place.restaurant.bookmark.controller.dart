@@ -6,10 +6,6 @@ class BookmarkController extends GetxService {
   static BookmarkController get to => Get.find();
 
   RxList placeBookmark = <Restaurant>[].obs;
-  RxInt subBookmark = 0.obs;
-  setSubBookmark(value) {
-    subBookmark(value);
-  }
 
   placeBookmarkInit() {
     placeBookmark(<Restaurant>[]);

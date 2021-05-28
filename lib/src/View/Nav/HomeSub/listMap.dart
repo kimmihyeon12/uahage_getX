@@ -130,7 +130,6 @@ class _ListMapState extends State<ListMap> {
                         "admission_fee": Message[15],
                       };
                     }
-                    print(JsonMessage);
                     await placepopup(context, JsonMessage, "", placeCode);
                   }),
             ]),

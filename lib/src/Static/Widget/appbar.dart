@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:uahage/src/Controller/place.restaurant.bookmark.controller.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 
-appBar(context, text) {
+appBar(context, text, bookmarkColor) {
   return AppBar(
     title: new Text(
       text,
@@ -18,7 +18,7 @@ appBar(context, text) {
     leading: IconButton(
         icon: Icon(Icons.arrow_back_ios, color: Color(0xffff7292)),
         onPressed: () {
-          Get.back(result: BookmarkController.to.subBookmark.value);
+          Get.back(result: bookmarkColor);
         }),
   );
 }

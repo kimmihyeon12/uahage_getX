@@ -1,3 +1,4 @@
+import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
@@ -49,6 +50,33 @@ class SnsLogin extends GetView<UserController> {
       await issueAccessToken(code);
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  neverGetEmail() async {
+    NaverAccountResult resAccount = await FlutterNaverLogin.currentAccount();
+    controller.setEmail(resAccount.email);
+    print(resAccount.email);
+  }
+
+  Future naverLogin() async {
+    try {
+      await FlutterNaverLogin.logIn();
+      NaverAccessToken res = await FlutterNaverLogin.currentAccessToken;
+      print(res.accessToken);
+      controller.setNaverToken(res.accessToken);
+
+      await neverGetEmail();
+      var isAlreadyRegistered = await users.checkEmail();
+
+      if (!isAlreadyRegistered) {
+        await users.insert(null, null, null, null, null);
+        Get.toNamed("/navigator");
+      } else {
+        Get.toNamed("/register");
+      }
+    } catch (e) {
+      print(e);
     }
   }
 

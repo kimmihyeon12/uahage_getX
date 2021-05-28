@@ -21,19 +21,17 @@ class Users extends GetView<UserController> {
         // headers: <String, String>{"Authorization": controller.token.value}
       );
 
-      if (response.statusCode == 200) {
-        var data = jsonDecode(response.body)['data'];
+      var data = await jsonDecode(response.body)['data'];
 
-        return {
-          "nickname": data["nickname"] == null ? "" : data["nickname"],
-          "baby_birthday":
-              data["baby_birthday"] == null ? "" : data["baby_birthday"],
-          "baby_gender": data["baby_gender"] == null ? "" : data["baby_gender"],
-          "age_group_type":
-              data["age_group_type"] == null ? "" : data["age_group_type"],
-          "image_path": data["image_path"] == null ? "" : data["image_path"],
-        };
-      }
+      return {
+        "nickname": data["nickname"] == null ? "" : data["nickname"],
+        "baby_birthday":
+            data["baby_birthday"] == null ? "" : data["baby_birthday"],
+        "baby_gender": data["baby_gender"] == null ? "" : data["baby_gender"],
+        "age_group_type":
+            data["age_group_type"] == null ? "" : data["age_group_type"],
+        "image_path": data["image_path"] == null ? "" : data["image_path"],
+      };
     } catch (err) {
       print(err);
     }
@@ -47,25 +45,38 @@ class Users extends GetView<UserController> {
 
     Map<String, dynamic> userData = type == "withNickname"
         ? {
-            "providerName": "KAKAO",
+            "providerName": "${UserController.to.option.value}",
             "nickname": "${nickname}",
             "babyGender": "${babyGender}",
             "babyBirthday": "${babyBirthday}",
             "ageGroupType": ageGroupType,
           }
         : {
-            "providerName": "KAKAO",
+            "providerName": "${UserController.to.option.value}",
           };
 
     try {
-      var response = await http.post(
-        url + "/api/users/kakao-login",
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': '${controller.kakaotoken.value}'
-        },
-        body: jsonEncode(userData),
-      );
+      var response;
+      print(UserController.to.option);
+      if (UserController.to.option == "KAKAO") {
+        response = await http.post(
+          url + "/api/users/kakao-login",
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': '${controller.kakaotoken.value}'
+          },
+          body: jsonEncode(userData),
+        );
+      } else {
+        response = await http.post(
+          url + "/api/users/naver-login",
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': '${controller.navertoken.value}'
+          },
+          body: jsonEncode(userData),
+        );
+      }
 
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
@@ -97,58 +108,25 @@ class Users extends GetView<UserController> {
   }
 
   //DELETE
-  delete(imageLink) async {
-    if (imageLink != "") {
-      try {
-        await http.post(
-          url + "/api/profile/deleteImage",
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode({"fileName": imageLink}),
-        );
-      } catch (err) {}
-    }
-
-    try {
-      var res = await http.delete(url + "/api/users/${controller.userId.value}",
-          headers: <String, String>{"Authorization": controller.token.value});
-      var data = jsonDecode(res.body);
-      if (res.statusCode == 200) {
-        return data["message"];
-      } else {
-        throw (data["message"]);
-      }
-    } catch (e) {
-      return Future.error(e);
-    }
+  delete() async {
+    var response = await http.delete(
+      url + "/api/users/${controller.userId.value}",
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': '${controller.kakaotoken.value}'
+      },
+    );
+    return jsonDecode(response.body)["data"];
   }
 
   //UPDATE
   Future update(formdata) async {
     try {
-      /*  Map<String, dynamic> userData = {
-        "image": image,
-        "imgInit": "y",
-        "nickname": "${nickName}",
-        "ageGroupType": age,
-        "babyGender": "${gender}",
-        "babyBirthday": "${birthday}",
-      };*/
       print(formdata);
       var dio = new Dio();
       var response = await dio.put(
           url + "/api/users/${UserController.to.userId.value}",
-          data: formdata
-          /* headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          "Authorization": UserController.to.token.value
-        },
-        body: jsonEncode(userData),*/
-          );
-      /*return response.statusCode == 200
-          ? jsonDecode(response.body)["message"]
-          : Future.error(jsonDecode(response.body)["error"]);*/
+          data: formdata);
       return response.statusCode == 200 ? "성공" : "실패";
     } catch (err) {
       return Future.error(err);

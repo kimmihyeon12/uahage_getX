@@ -4,6 +4,7 @@ class UserController extends GetxService {
   static UserController get to => Get.find();
   final userId = ''.obs;
   final kakaotoken = ''.obs;
+  final navertoken = ''.obs;
   final email = ''.obs;
   final option = ''.obs;
   final token = ''.obs;
@@ -13,6 +14,10 @@ class UserController extends GetxService {
 
   void setKakaoToken(String value) {
     kakaotoken(value);
+  }
+
+  void setNaverToken(String value) {
+    navertoken(value);
   }
 
   void setToken(String value) {

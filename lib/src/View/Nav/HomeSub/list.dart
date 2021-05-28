@@ -62,19 +62,19 @@ class PlaceList extends GetView<PlaceController> {
             key: _scaffoldKey,
             backgroundColor: Colors.white,
             appBar: appBar(
-              context,
-              (() {
-                if (placeCode == 1) {
-                  return "식당·카페";
-                } else if (placeCode == 2) {
-                  return "병원";
-                } else if (placeCode == 5) {
-                  return "키즈카페";
-                } else {
-                  return "체험관";
-                }
-              }()),
-            ),
+                context,
+                (() {
+                  if (placeCode == 1) {
+                    return "식당·카페";
+                  } else if (placeCode == 2) {
+                    return "병원";
+                  } else if (placeCode == 5) {
+                    return "키즈카페";
+                  } else {
+                    return "체험관";
+                  }
+                }()),
+                ""),
             body: Stack(
               children: [
                 IndexedStack(
@@ -89,7 +89,6 @@ class PlaceList extends GetView<PlaceController> {
                       ? GestureDetector(
                           onTap: () {
                             controller.changeindexCount(0);
-                            print("list");
                             controller.placeInit();
                             getList();
                           },
@@ -136,11 +135,12 @@ class PlaceList extends GetView<PlaceController> {
                     InkWell(
                       highlightColor: Colors.white,
                       onTap: () async {
-                        Get.toNamed("/listsub", arguments: {
+                        var result = await Get.toNamed("/listsub", arguments: {
                           "data": controller.place[index],
                           "placeCode": placeCode,
                           "index": index,
                         });
+                        controller.setPlaceBookmark(index, result);
                       },
                       child: Container(
                         width: 1280.w,
@@ -284,19 +284,12 @@ class PlaceList extends GetView<PlaceController> {
                                     await bookmark.bookmarkToogle(
                                         UserController.to.userId.value,
                                         controller.place[index].id);
-
                                     controller.setPlaceBookmark(index, 1);
-                                    //  bookmark.bookmarkSelectAll(
-                                    //   UserController.to.userId);
-
-                                    //   getPlaceList(placeCode)
                                   } else {
                                     await bookmark.bookmarkToogle(
                                         UserController.to.userId.value,
                                         controller.place[index].id);
                                     controller.setPlaceBookmark(index, 0);
-                                    //  bookmark.bookmarkSelectAll(
-                                    //       UserController.to.userId);
                                   }
                                 },
                               ),

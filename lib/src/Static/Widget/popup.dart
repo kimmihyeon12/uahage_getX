@@ -187,6 +187,7 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                         } else if (placeCode == 5) {
                           message = Experiencecenter.fromJson(Message);
                         }
+
                         print(message);
                         var result = await Get.toNamed("/listsub", arguments: {
                           "data": message,

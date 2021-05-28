@@ -279,10 +279,10 @@ class _AgreementState extends State<Agreement> {
                                 200.w, 80.w, 100.w, 62.5.sp);
                           }
                           break;
-                        /*       case "naver":
-                          buildShowDialogOnOk(naverLogin(), context, 200.h,
-                              200.w, 80.w, 100.w, 62.5.sp);
-                          break;*/
+                        case "NAVER":
+                          awaitdialog(login.naverLogin(), context, 200.h, 200.w,
+                              80.w, 100.w, 62.5.sp);
+                          break;
 
                         default:
                           break;

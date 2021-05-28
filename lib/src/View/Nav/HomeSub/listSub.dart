@@ -16,13 +16,19 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class ListSub extends GetView<PlaceController> {
+class ListSub extends StatefulWidget {
+  @override
+  _ListSubState createState() => _ListSubState();
+}
+
+class _ListSubState extends State<ListSub> {
   ScrollController _scrollController = ScrollController();
   WebViewController _controller;
+  String url = URL;
   int placeCode = Get.arguments['placeCode'];
   var data = Get.arguments['data'];
   int index = Get.arguments['index'];
-  String url = URL;
+
   Bookmark bookmark = new Bookmark();
   var imagecolor = [
     "./assets/searchPage/image1.png",
@@ -83,17 +89,11 @@ class ListSub extends GetView<PlaceController> {
 
   @override
   Widget build(BuildContext context) {
-    print("sublist");
-    if (placeCode == 1) {
-      data.bookmark == 0
-          ? BookmarkController.to.setSubBookmark(0)
-          : BookmarkController.to.setSubBookmark(1);
-    }
-
+    print("listsub");
     ScreenUtil.init(context, width: 1500, height: 2667);
     return WillPopScope(
       onWillPop: () {
-        Get.back(result: BookmarkController.to.subBookmark.value);
+        Get.back(result: data.bookmark);
       },
       child: SafeArea(
         child: Scaffold(
@@ -101,10 +101,9 @@ class ListSub extends GetView<PlaceController> {
           appBar: appBar(
             context,
             data.name,
+            data.bookmark,
           ),
           body: ListView(
-            //  controller: _scrollController,
-            //  physics: enabled ? NeverScrollableScrollPhysics() : ScrollPhysics(),
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,41 +160,33 @@ class ListSub extends GetView<PlaceController> {
                               ),
                               (() {
                                 if (placeCode == 1) {
-                                  return Obx(
-                                    () => IconButton(
-                                      padding: EdgeInsets.all(0),
-                                      constraints: BoxConstraints(
-                                          maxWidth: 170.w, maxHeight: 170.h),
-                                      icon: Image.asset(
-                                          BookmarkController.to.subBookmark == 0
-                                              ? "./assets/listPage/love_grey.png"
-                                              : "./assets/listPage/love_color.png",
-                                          height: 60.h),
-                                      onPressed: () async {
-                                        if (controller.place[index].bookmark ==
-                                            0) {
-                                          print("click 좋아요");
-                                          controller.setPlaceBookmark(index, 1);
-                                          BookmarkController.to
-                                              .setPlaceBookmarkOne(index, 1);
-                                          BookmarkController.to
-                                              .setSubBookmark(1);
-                                          await bookmark.bookmarkToogle(
-                                              UserController.to.userId.value,
-                                              controller.place[index].id);
-                                        } else {
-                                          print("click 1");
-                                          controller.setPlaceBookmark(index, 0);
-                                          BookmarkController.to
-                                              .setPlaceBookmarkOne(index, 0);
-                                          BookmarkController.to
-                                              .setSubBookmark(0);
-                                          await bookmark.bookmarkToogle(
-                                              UserController.to.userId.value,
-                                              controller.place[index].id);
-                                        }
-                                      },
-                                    ),
+                                  return IconButton(
+                                    padding: EdgeInsets.all(0),
+                                    constraints: BoxConstraints(
+                                        maxWidth: 170.w, maxHeight: 170.h),
+                                    icon: Image.asset(
+                                        data.bookmark == 0
+                                            ? "./assets/listPage/love_grey.png"
+                                            : "./assets/listPage/love_color.png",
+                                        height: 60.h),
+                                    onPressed: () async {
+                                      if (data.bookmark == 0) {
+                                        print("하트");
+                                        await bookmark.bookmarkToogle(
+                                            UserController.to.userId.value,
+                                            data.id);
+                                        setState(() {
+                                          data.bookmark = 1;
+                                        });
+                                      } else {
+                                        await bookmark.bookmarkToogle(
+                                            UserController.to.userId.value,
+                                            data.id);
+                                        setState(() {
+                                          data.bookmark = 0;
+                                        });
+                                      }
+                                    },
                                   );
                                 } else
                                   return Container();

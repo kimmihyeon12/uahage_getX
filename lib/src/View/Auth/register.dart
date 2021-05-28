@@ -13,7 +13,7 @@ import 'package:uahage/src/Static/Widget/dialog.dart';
 import 'package:uahage/src/Static/url.dart';
 import 'package:uahage/src/Static/Widget/yearpicker.dart';
 import 'package:uahage/src/Static/Widget/progress.dart';
- 
+
 import 'package:uahage/src/Service/user.dart';
 import 'package:uahage/src/Service/users.dart';
 
@@ -310,7 +310,7 @@ class _RegisterState extends State<Register> {
                         width: 251.w,
                       ),
                       onTap: () {
-                        setAgeColor(10);
+                        setAgeColor(1);
                       },
                     ),
                     Padding(padding: EdgeInsets.only(left: 55.w)),
@@ -323,7 +323,7 @@ class _RegisterState extends State<Register> {
                         width: 251.w,
                       ),
                       onTap: () {
-                        setAgeColor(20);
+                        setAgeColor(2);
                       },
                     ),
                     Padding(padding: EdgeInsets.only(left: 55.w)),
@@ -336,7 +336,7 @@ class _RegisterState extends State<Register> {
                         width: 251.w,
                       ),
                       onTap: () {
-                        setAgeColor(30);
+                        setAgeColor(3);
                       },
                     ),
                   ],
@@ -357,7 +357,7 @@ class _RegisterState extends State<Register> {
                         width: 251.w,
                       ),
                       onTap: () {
-                        setAgeColor(40);
+                        setAgeColor(4);
                       },
                     ),
                     Padding(padding: EdgeInsets.only(left: 55.w)),
@@ -370,7 +370,7 @@ class _RegisterState extends State<Register> {
                         width: 251.w,
                       ),
                       onTap: () {
-                        setAgeColor(50);
+                        setAgeColor(5);
                       },
                     ),
                     Padding(padding: EdgeInsets.only(left: 55.w)),
@@ -383,7 +383,7 @@ class _RegisterState extends State<Register> {
                         width: 251.w,
                       ),
                       onTap: () {
-                        setAgeColor(60);
+                        setAgeColor(6);
                       },
                     ),
                   ],
@@ -496,7 +496,7 @@ class _RegisterState extends State<Register> {
     age = value;
     for (int i = 0; i < ageImage.length; i++) {
       setState(() {
-        if ((value / 10 - 1) == i) {
+        if ((value - 1) == i) {
           ageImage[i] = true;
         } else
           ageImage[i] = false;

@@ -492,7 +492,7 @@ class _UserModifyState extends State<UserModify> {
                           width: 251.w,
                         ),
                         onTap: () {
-                          setAgeColor(10);
+                          setAgeColor(1);
                         },
                       ),
                       Padding(padding: EdgeInsets.only(left: 55.w)),
@@ -505,7 +505,7 @@ class _UserModifyState extends State<UserModify> {
                           width: 251.w,
                         ),
                         onTap: () {
-                          setAgeColor(20);
+                          setAgeColor(2);
                         },
                       ),
                       Padding(padding: EdgeInsets.only(left: 55.w)),
@@ -518,7 +518,7 @@ class _UserModifyState extends State<UserModify> {
                           width: 251.w,
                         ),
                         onTap: () {
-                          setAgeColor(30);
+                          setAgeColor(3);
                         },
                       ),
                     ],
@@ -539,7 +539,7 @@ class _UserModifyState extends State<UserModify> {
                           width: 251.w,
                         ),
                         onTap: () {
-                          setAgeColor(40);
+                          setAgeColor(4);
                         },
                       ),
                       Padding(padding: EdgeInsets.only(left: 55.w)),
@@ -552,7 +552,7 @@ class _UserModifyState extends State<UserModify> {
                           width: 251.w,
                         ),
                         onTap: () {
-                          setAgeColor(50);
+                          setAgeColor(5);
                         },
                       ),
                       Padding(padding: EdgeInsets.only(left: 55.w)),
@@ -565,7 +565,7 @@ class _UserModifyState extends State<UserModify> {
                           width: 251.w,
                         ),
                         onTap: () {
-                          setAgeColor(60);
+                          setAgeColor(6);
                         },
                       ),
                     ],
@@ -586,13 +586,13 @@ class _UserModifyState extends State<UserModify> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0)),
                         color: isIdValid &&
-                                userdata["age_group_type"] != 0 &&
+                                userdata["age_group_type"] != "" &&
                                 userdata['baby_gender'] != "" &&
                                 userdata["baby_birthday"] != ""
                             ? Color(0xffff7292)
                             : Color(0xffcacaca),
                         onPressed: isIdValid &&
-                                userdata["age_group_type"] != 0 &&
+                                userdata["age_group_type"] != "" &&
                                 userdata['baby_gender'] != "" &&
                                 userdata["baby_birthday"] != ""
                             ? () async {
@@ -659,7 +659,7 @@ class _UserModifyState extends State<UserModify> {
 
   setAgeColor(int value) {
     setState(() {
-      userdata["age"] = value;
+      userdata["age_group_type"] = value;
     });
   }
 }
