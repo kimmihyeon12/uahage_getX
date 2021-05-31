@@ -10,6 +10,10 @@ import 'package:uahage/src/Model/kidCafe.dart';
 import 'package:uahage/src/Model/restaurant.dart';
 
 import 'package:uahage/src/Service/places.restaurant.bookmarks.dart';
+import 'package:uahage/src/View/Auth/announce.dart';
+import 'package:uahage/src/View/Nav/HomeSub/listSub.dart';
+
+import 'icon.dart';
 
 class pop extends StatefulWidget {
   @override
@@ -189,7 +193,12 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                         }
 
                         print(message);
-                        var result = await Get.toNamed("/listsub", arguments: {
+                        // // Navigator.push(
+                        // //     context,
+                        // //     MaterialPageRoute(
+                        // //         builder: (context) => ListSub("")) );
+                        // Get.to(Announce());
+                        var result = await Get.offNamed("/listsub", arguments: {
                           "data": message,
                           "placeCode": placeCode,
                           "index": 1,
@@ -309,7 +318,22 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                                 width: 650.w,
                                 alignment: Alignment.bottomRight,
                                 child: Row(children: [
-                                  //icon
+                                  icon(
+                                      context,
+                                      Message["baby_menu"],
+                                      Message["stroller"],
+                                      Message["baby_bed"],
+                                      Message["baby_tableware"],
+                                      Message["nursing_room"],
+                                      Message["meeting_room"],
+                                      Message["diaper_change"],
+                                      Message["play_room"],
+                                      Message["baby_chair"]
+
+                                      // PlaceController
+                                      //     .to.place[index].parking
+                                      //     .toString())
+                                      ),
                                 ]),
                               ),
                             ],

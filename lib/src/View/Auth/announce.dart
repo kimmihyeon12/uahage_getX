@@ -23,12 +23,6 @@ class Announce extends StatelessWidget {
                     children: [
                       Align(
                         alignment: Alignment.topRight,
-                        child: IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: Image.asset("./assets/agreementPage/x_btn.png"),
-                        ),
                       ),
                       normalfont(
                           """제1장 총   칙 \n\n제 1 조 (목적)\n  본 약관은 우아하게(이하 “회사”라 합니다)가 제공하는 위치기반서비스(이하 “서비스”)를 이용함에 있어 회사와 이용자 및 개인위치정보주체의 권리, 의무 및 책임사항에 따른 이용조건 및 절차 등 기본적인 사항을 규정함을 목적으로 합니다.\n\n제 2 조 (이용약관의 효력 및 변경)\n1. 본 약관은 서비스를 신청한 이용자 또는 개인위치정보주체가 본 약관에 동의하고 회사가 정한 소정의 절차에 따라 서비스의 이용자로 등록함으로써 효력이 발생합니다.\n2. 이용자가 온라인에서 본 약관의 "동의하기" 버튼을 클릭하였을 경우 본 약관의 내용을 모두 읽고 이를 충분히 이해하였으며, 그 적용에 동의한 것으로 봅니다.
@@ -44,7 +38,7 @@ class Announce extends StatelessWidget {
             ),
             Divider(thickness: 0.1, height: 0, color: Color(0xff000000)),
             Container(
-              margin: EdgeInsets.fromLTRB(155.w, 45.h, 154.w, 46.h),
+              margin: EdgeInsets.fromLTRB(155.w, 30.h, 154.w, 30.h),
               height: 194.w,
               width: 1192.h,
               child: FlatButton(

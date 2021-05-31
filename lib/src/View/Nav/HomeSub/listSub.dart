@@ -93,16 +93,24 @@ class _ListSubState extends State<ListSub> {
     ScreenUtil.init(context, width: 1500, height: 2667);
     return WillPopScope(
       onWillPop: () {
-        Get.back(result: data.bookmark);
+        if (placeCode == 1)
+          Get.back(result: data.bookmark);
+        else
+          Get.back(result: "");
       },
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: appBar(
-            context,
-            data.name,
-            data.bookmark,
-          ),
+          appBar: (() {
+            if (placeCode == 1)
+              return appBar(
+                context,
+                data.name,
+                data.bookmark,
+              );
+            else
+              return appBar(context, data.name, "");
+          }()),
           body: ListView(
             children: [
               Column(

@@ -6,6 +6,7 @@ import 'package:uahage/src/Controller/location.controller.dart';
 import 'package:uahage/src/Controller/place.restaurant.bookmark.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
 import 'package:uahage/src/Service/places.restaurant.bookmarks.dart';
+import 'package:uahage/src/Static/Widget/progress.dart';
 
 import 'package:uahage/src/Static/url.dart';
 import 'dart:async';
@@ -37,6 +38,10 @@ class _SearchState extends State<Search> {
       body: Stack(
         children: [
           WebView(
+            onWebResourceError: (e) {
+              print("에러났슴");
+              return progress();
+            },
             key: key,
             onWebViewCreated: (WebViewController webViewController) async {
               webview = webViewController;

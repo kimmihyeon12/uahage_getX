@@ -25,11 +25,15 @@ appBar(context, text, bookmarkColor) {
 
 imageAppbar(context, text) {
   return PreferredSize(
-      preferredSize: Size.fromHeight(165.h),
+      preferredSize: Size.fromHeight(172.h),
       child: Container(
         child: Stack(
           children: [
-            Image.asset('./assets/homePage/bar.png', fit: BoxFit.fill),
+            Image.asset(
+              './assets/homePage/bar.png',
+              fit: BoxFit.fill,
+              height: 86,
+            ),
             Center(
               child: boldfont(text, 73.0, Colors.white),
             )

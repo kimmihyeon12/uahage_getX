@@ -84,7 +84,7 @@ class PlaceList extends GetView<PlaceController> {
                       ListMap(placeCode: placeCode),
                     ]),
                 Container(
-                  margin: EdgeInsets.only(left: 1100.w, top: 2200.w),
+                  margin: EdgeInsets.only(left: 1100.w, top: 2300.w),
                   child: controller.indexCount.value == 1
                       ? GestureDetector(
                           onTap: () {
@@ -213,7 +213,7 @@ class PlaceList extends GetView<PlaceController> {
                                   ],
                                 ),
                                 Container(
-                                  height: 135.h,
+                                  height: 130.h,
                                   width: 650.w,
                                   child: Text(
                                     controller.place[index].address,
