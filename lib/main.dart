@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:uahage/src/Binding/place.restaurant.bookmark.binding.dart';
 
 import 'package:uahage/src/Binding/place.binding.dart';
 import 'package:uahage/src/Binding/user.binding.dart';
+import 'package:uahage/src/Controller/connection.controller.dart';
 import 'package:uahage/src/Controller/location.controller.dart';
 import 'package:uahage/src/Controller/place.restaurant.bookmark.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
@@ -18,7 +18,6 @@ import 'package:uahage/src/View/Auth/register.dart';
 import 'package:uahage/src/View/Auth/announce.dart';
 import 'package:uahage/src/View/Auth/agreement.dart';
 import 'package:uahage/src/View/Nav/home.dart';
-import 'package:uahage/src/Binding/locationbinding.dart';
 import 'package:uahage/src/View/Nav/search.dart';
 import 'package:uahage/src/View/Nav/myPage.dart';
 import 'package:uahage/src/View/Auth/withdrawal.dart';
@@ -38,6 +37,7 @@ class MyApp extends StatelessWidget {
             Get.put(UserController()),
             Get.put(LocationController()),
             Get.put(BookmarkController()),
+            Get.put(ConnectionController()),
           }),
       getPages: [
         GetPage(

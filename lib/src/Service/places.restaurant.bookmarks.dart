@@ -12,7 +12,9 @@ class Bookmark extends GetView<BookmarkController> {
     String url = URL;
     var data = {"userId": userId, "placeId": placeId};
     var response = await http.post(
-      url + "/api/places/restaurants/bookmarks",
+      Uri.parse(
+        url + "/api/places/restaurants/bookmarks",
+      ),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -23,8 +25,10 @@ class Bookmark extends GetView<BookmarkController> {
   bookmarkSelectAll(userId) async {
     String url = URL;
 
-    final response = await http.get(URL +
-        '/api/places/restaurants?pageNumber=0&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&userId=$userId&babyBed=&babyChair=&babyMenu=&babyTableware&stroller=&diaperChange&meetingRoom&nursingRoom&playRoom&parking=&isBookmarked=1');
+    final response = await http.get(
+      Uri.parse(URL +
+          '/api/places/restaurants?pageNumber=0&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&userId=$userId&babyBed=&babyChair=&babyMenu=&babyTableware&stroller=&diaperChange&meetingRoom&nursingRoom&playRoom&parking=&isBookmarked=1'),
+    );
     List responseJson = json.decode(response.body)["data"]["data"];
 
     var currentData;

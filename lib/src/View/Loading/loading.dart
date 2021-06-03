@@ -4,12 +4,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
 import 'package:uahage/src/Service/location.dart';
+import 'package:connectivity/connectivity.dart';
 
 class Loading extends GetView<UserController> {
   Location location = new Location();
   lodingTime() async {
     await location.setCurrentLocation();
     await 1.delay();
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     if (prefs.getString('uahageUserId') != null) {
@@ -21,8 +23,15 @@ class Loading extends GetView<UserController> {
     }
   }
 
+  connection() async {
+    ConnectivityResult connectResult;
+    connectResult = await Connectivity().checkConnectivity();
+    print(connectResult);
+  }
+
   @override
   Widget build(BuildContext context) {
+    connection();
     lodingTime();
     ScreenUtil.init(context, width: 1500, height: 2667);
 

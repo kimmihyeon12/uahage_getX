@@ -61,7 +61,7 @@ class _ListMapState extends State<ListMap> {
               webview = webViewController;
               if (placeCode == 1) {
                 await webview.loadUrl(url +
-                    '/maps/show-place?type=filter&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&babyBed=&babyChair=&babyMenu=&babyTableware=&stroller=&diaperChange=&meetingRoom=&nursingRoom=&playRoom=&parking=&isBookmarke=');
+                    '/maps/show-place?type=filter&userId=${UserController.to.userId}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&babyBed=&babyChair=&babyMenu=&babyTableware=&stroller=&diaperChange=&meetingRoom=&nursingRoom=&playRoom=&parking=&isBookmarked=');
               } else {
                 await webview.loadUrl(url +
                     '/maps/show-place?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=allsearch&placeName=${placeName}');

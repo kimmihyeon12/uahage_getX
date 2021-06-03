@@ -359,14 +359,23 @@ class _UserModifyState extends State<UserModify> {
                         height: 362.h,
                         width: 262.w,
                         child: InkWell(
-                          child: Image.asset(userdata['baby_gender'] != "F"
+                          child: Image.asset(userdata['baby_gender'] != "F" &&
+                                  userdata['baby_gender'] != "A"
                               ? girl_image[0]
                               : girl_image[1]),
                           onTap: () {
                             setState(() {
-                              print('baby gender F');
-                              userdata['baby_gender'] = "F";
+                              if (userdata['baby_gender'] == "")
+                                userdata['baby_gender'] = "F";
+                              else if (userdata['baby_gender'] == "M")
+                                userdata['baby_gender'] = "A";
+                              else if (userdata['baby_gender'] == "A")
+                                userdata['baby_gender'] = "M";
+                              else if (userdata['baby_gender'] == "F") {
+                                userdata['baby_gender'] = "";
+                              }
                             });
+                            print(userdata['baby_gender']);
                           },
                         ),
                       ),
@@ -375,14 +384,23 @@ class _UserModifyState extends State<UserModify> {
                         width: 262.w,
                         margin: EdgeInsets.only(left: 98.w),
                         child: InkWell(
-                          child: Image.asset(userdata['baby_gender'] != "M"
+                          child: Image.asset(userdata['baby_gender'] != "M" &&
+                                  userdata['baby_gender'] != "A"
                               ? boy_image[0]
                               : boy_image[1]),
                           onTap: () {
                             setState(() {
-                              print('baby gender M');
-                              userdata['baby_gender'] = "M";
+                              if (userdata['baby_gender'] == "")
+                                userdata['baby_gender'] = "M";
+                              else if (userdata['baby_gender'] == "F")
+                                userdata['baby_gender'] = "A";
+                              else if (userdata['baby_gender'] == "A")
+                                userdata['baby_gender'] = "F";
+                              else if (userdata['baby_gender'] == "M") {
+                                userdata['baby_gender'] = "";
+                              }
                             });
+                            print(userdata['baby_gender']);
                           },
                         ),
                       ),
@@ -642,6 +660,9 @@ class _UserModifyState extends State<UserModify> {
                               }
                             : () {
                                 toast(context, "모든 필드를 입력하십시오");
+                                if (isIdValid == false) {
+                                  dialog(context, "닉네임 중복을 확인해주세요");
+                                }
                               },
                         child: // 중복확인
                             normalfont("확인", 62, Color(0xffffffff)),

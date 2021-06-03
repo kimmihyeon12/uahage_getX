@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:uahage/src/Controller/connection.controller.dart';
+import 'package:uahage/src/Service/connection.dart';
+import 'package:uahage/src/Static/Widget/progress.dart';
 import 'package:uahage/src/View/Nav/search.dart';
 import 'package:uahage/src/View/Nav/star.dart';
 import 'package:uahage/src/View/Nav/Home.dart';
@@ -16,12 +21,12 @@ class _NavigationState extends State<Navigation> {
 
   @override
   Widget build(BuildContext context) {
+    connection();
     ScreenUtil.init(context, width: 1500, height: 2667);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-
     return WillPopScope(
       onWillPop: () {
         if (_selectedTabIndex >= 1) {
@@ -36,15 +41,18 @@ class _NavigationState extends State<Navigation> {
           child: Scaffold(
               body: Stack(
                 children: [
-                  IndexedStack(
-                    index: _selectedTabIndex,
-                    children: <Widget>[
-                      Home(),
-                      Search(),
-                      Star(),
-                      MyPage(),
-                    ],
-                  ),
+                  ConnectionController.to.connectionstauts !=
+                          "ConnectivityResult.none"
+                      ? IndexedStack(
+                          index: _selectedTabIndex,
+                          children: <Widget>[
+                            Home(),
+                            Search(),
+                            Star(),
+                            MyPage(),
+                          ],
+                        )
+                      : progress()
                 ],
               ),
               bottomNavigationBar: BottomNavigationBar(

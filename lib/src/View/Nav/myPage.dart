@@ -142,9 +142,11 @@ class _MyPageState extends State<MyPage> {
                             height: 362.h,
                             width: 262.w,
                             child: InkWell(
-                              child: Image.asset(userdata['baby_gender'] != "F"
-                                  ? girl_image[0]
-                                  : girl_image[1]),
+                              child: Image.asset(
+                                  userdata['baby_gender'] != "F" &&
+                                          userdata['baby_gender'] != "A"
+                                      ? girl_image[0]
+                                      : girl_image[1]),
                             ),
                           ),
                           Container(
@@ -152,9 +154,11 @@ class _MyPageState extends State<MyPage> {
                             width: 262.w,
                             margin: EdgeInsets.only(left: 98.w),
                             child: InkWell(
-                              child: Image.asset(userdata['baby_gender'] != "M"
-                                  ? boy_image[0]
-                                  : boy_image[1]),
+                              child: Image.asset(
+                                  userdata['baby_gender'] != "M" &&
+                                          userdata['baby_gender'] != "A"
+                                      ? boy_image[0]
+                                      : boy_image[1]),
                             ),
                           ),
                         ],

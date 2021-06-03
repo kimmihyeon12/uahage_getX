@@ -35,11 +35,15 @@ class Place extends GetView<PlaceController> {
 
     var response;
     if (placeName == "restaurants") {
-      response = await http.get(url +
-          '/api/places/$placeName?pageNumber=$pageNumber&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&userId=${UserController.to.userId}&babyBed=&babyChair=&babyMenu=&babyTableware&stroller=&diaperChange&meetingRoom&nursingRoom&playRoom&parking=&isBookmarked=');
+      response = await http.get(
+        Uri.parse(url +
+            '/api/places/$placeName?pageNumber=$pageNumber&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&userId=${UserController.to.userId}&babyBed=&babyChair=&babyMenu=&babyTableware&stroller=&diaperChange&meetingRoom&nursingRoom&playRoom&parking=&isBookmarked='),
+      );
     } else {
-      response = await http.get(url +
-          '/api/places/$placeName?pageNumber=$pageNumber&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}');
+      response = await http.get(
+        Uri.parse(url +
+            '/api/places/$placeName?pageNumber=$pageNumber&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}'),
+      );
     }
     List responseJson = json.decode(response.body)["data"]["data"];
 

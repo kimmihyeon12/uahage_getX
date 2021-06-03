@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:uahage/src/Controller/connection.controller.dart';
 
 import 'package:uahage/src/Controller/place.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
+import 'package:uahage/src/Service/connection.dart';
 import 'package:uahage/src/Service/places.restaurant.bookmarks.dart';
 
 import 'package:uahage/src/Service/places.dart';
 import 'package:uahage/src/Static/Widget/icon.dart';
+import 'package:uahage/src/Static/Widget/progress.dart';
 import 'package:uahage/src/View/Nav/HomeSub/listMap.dart';
 import '../../../Static/url.dart';
 import 'package:uahage/src/Static/Widget/appbar.dart';
@@ -45,6 +48,7 @@ class PlaceList extends GetView<PlaceController> {
   ];
 
   Widget build(BuildContext context) {
+    connection();
     ScreenUtil.init(context, width: 1500, height: 2667);
     controller.placeInit();
     getList();
@@ -77,12 +81,15 @@ class PlaceList extends GetView<PlaceController> {
                 ""),
             body: Stack(
               children: [
-                IndexedStack(
-                    index: controller.indexCount.value,
-                    children: <Widget>[
-                      ListViews(),
-                      ListMap(placeCode: placeCode),
-                    ]),
+                ConnectionController.to.connectionstauts !=
+                        "ConnectivityResult.none"
+                    ? IndexedStack(
+                        index: controller.indexCount.value,
+                        children: <Widget>[
+                            ListViews(),
+                            ListMap(placeCode: placeCode),
+                          ])
+                    : progress(),
                 Container(
                   margin: EdgeInsets.only(left: 1100.w, top: 2300.w),
                   child: controller.indexCount.value == 1

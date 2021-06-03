@@ -17,7 +17,7 @@ class Users extends GetView<UserController> {
     print("userid ${controller.userId.value}");
     try {
       var response = await http.get(
-        url + "/api/users/${controller.userId.value}",
+        Uri.parse(url + "/api/users/${controller.userId.value}"),
         // headers: <String, String>{"Authorization": controller.token.value}
       );
 
@@ -60,7 +60,7 @@ class Users extends GetView<UserController> {
       print(UserController.to.option);
       if (UserController.to.option == "KAKAO") {
         response = await http.post(
-          url + "/api/users/kakao-login",
+          Uri.parse(url + "/api/users/kakao-login"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': '${controller.kakaotoken.value}'
@@ -69,7 +69,9 @@ class Users extends GetView<UserController> {
         );
       } else {
         response = await http.post(
-          url + "/api/users/naver-login",
+          Uri.parse(
+            url + "/api/users/naver-login",
+          ),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': '${controller.navertoken.value}'
@@ -110,7 +112,7 @@ class Users extends GetView<UserController> {
   //DELETE
   delete() async {
     var response = await http.delete(
-      url + "/api/users/${controller.userId.value}",
+      Uri.parse(url + "/api/users/${controller.userId.value}"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': '${controller.kakaotoken.value}'
@@ -137,8 +139,8 @@ class Users extends GetView<UserController> {
   //CHECK THE EMAIL
   Future checkEmail() async {
     print("이메일 체크");
-    var response = await http.get(url +
-        "/api/users/validate-email/${controller.option.value}.${controller.email.value}");
+    var response = await http.get(Uri.parse(url +
+        "/api/users/validate-email/${controller.option.value}.${controller.email.value}"));
     return jsonDecode(response.body)["data"];
   }
 
@@ -147,9 +149,9 @@ class Users extends GetView<UserController> {
   Future checkNickName(nickName) async {
     print("닉네임 체크");
     try {
-      var response = await http.get(
+      var response = await http.get(Uri.parse(
         url + "/api/users/validate-nickname/${nickName}",
-      );
+      ));
       print("isdata nickname" + jsonDecode(response.body)["data"].toString());
       if (jsonDecode(response.body)["data"]) {
         return {"idValid": true, "value": "사용 가능한 닉네임입니다."};

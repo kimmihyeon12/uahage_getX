@@ -84,7 +84,6 @@ class _RegisterState extends State<Register> {
                                     });
                                 },
                                 maxLength: 10,
-                                textAlign: TextAlign.left,
                                 style: TextStyle(
                                   color: const Color(0xff3a3939),
                                   fontFamily: "NotoSansCJKkr_Medium",
@@ -92,7 +91,7 @@ class _RegisterState extends State<Register> {
                                   fontSize: 62.5.sp,
                                 ),
                                 decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.only(right: 410.w),
+                                  contentPadding: EdgeInsets.only(right: 20.w),
                                   enabledBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(
                                       color: const Color(0xffff7292),
@@ -115,7 +114,7 @@ class _RegisterState extends State<Register> {
                                 alignment: Alignment.centerRight,
                                 child: Container(
                                   width: 350.w,
-                                  height: 125.h,
+                                  height: 135.h,
                                   child: FlatButton(
                                     shape: new RoundedRectangleBorder(
                                       borderRadius:
@@ -171,9 +170,18 @@ class _RegisterState extends State<Register> {
                     InkWell(
                       onTap: () {
                         setState(() {
+                          boy = !boy;
                           gender = "M";
-                          boy = false;
-                          girl = true;
+                          if (!girl && boy) {
+                            gender = "F";
+                          }
+                          if (girl && boy) {
+                            gender = "";
+                          }
+                          if (!girl && !boy) {
+                            gender = "A";
+                          }
+                          print(gender);
                         });
                       },
                       child: Column(children: <Widget>[
@@ -189,9 +197,18 @@ class _RegisterState extends State<Register> {
                     InkWell(
                       onTap: () {
                         setState(() {
+                          girl = !girl;
                           gender = "F";
-                          boy = true;
-                          girl = false;
+                          if (girl && !boy) {
+                            gender = "M";
+                          }
+                          if (girl && boy) {
+                            gender = "";
+                          }
+                          if (!girl && !boy) {
+                            gender = "A";
+                          }
+                          print(gender);
                         });
                       },
                       child: Column(children: <Widget>[
@@ -429,7 +446,11 @@ class _RegisterState extends State<Register> {
                             ),
                           );
                         }
-                      : () {},
+                      : () {
+                          if (isIdValid == false) {
+                            dialog(context, "닉네임 중복을 확인해주세요");
+                          }
+                        },
                   color: isIdValid == true &&
                           age != 0 &&
                           gender != "" &&
