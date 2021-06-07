@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
@@ -6,18 +8,24 @@ import 'package:uahage/src/Controller/connection.controller.dart';
 import 'package:uahage/src/Controller/place.controller.dart';
 import 'package:uahage/src/Controller/place.restaurant.bookmark.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
+import 'package:uahage/src/Model/review.dart';
 import 'package:uahage/src/Service/connection.dart';
 import 'package:uahage/src/Service/places.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:uahage/src/Service/places.restaurant.bookmarks.dart';
+import 'package:uahage/src/Service/review.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 import 'package:uahage/src/Static/Widget/appbar.dart';
 import 'package:uahage/src/Static/Widget/progress.dart';
 import 'package:uahage/src/Static/Widget/toast.dart';
 import 'package:uahage/src/Static/url.dart';
+import 'package:uahage/src/View/Nav/HomeSub/review.dart';
+import 'package:uahage/src/View/Nav/HomeSub/reviewImage.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
+import 'listSubMessage.dart';
 
 class ListSub extends StatefulWidget {
   @override
@@ -25,14 +33,16 @@ class ListSub extends StatefulWidget {
 }
 
 class _ListSubState extends State<ListSub> {
-  ScrollController _scrollController = ScrollController();
   WebViewController _controller;
   String url = URL;
   int placeCode = Get.arguments['placeCode'];
   var data = Get.arguments['data'];
   int index = Get.arguments['index'];
-
+  var width = 1500 / 720;
+  var height = 2667 / 1280;
   Bookmark bookmark = new Bookmark();
+  List<Review> reviewData = <Review>[];
+
   var imagecolor = [
     "./assets/searchPage/image1.png",
     "./assets/searchPage/image2.png",
@@ -90,9 +100,29 @@ class _ListSubState extends State<ListSub> {
     );
   }
 
+  reviewSelect() async {
+    var responseJson = await reviewSelectImage(data.id);
+
+    var currentData;
+    for (var data in responseJson["data"]) {
+      currentData = Review.fromJson(data);
+
+      reviewData.add(currentData);
+    }
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    reviewSelect();
+  }
+
   @override
   Widget build(BuildContext context) {
     connection();
+
     print("listsub");
     ScreenUtil.init(context, width: 1500, height: 2667);
     return WillPopScope(
@@ -183,7 +213,6 @@ class _ListSubState extends State<ListSub> {
                                           height: 60.h),
                                       onPressed: () async {
                                         if (data.bookmark == 0) {
-                                          print("하트");
                                           await bookmark.bookmarkToogle(
                                               UserController.to.userId.value,
                                               data.id);
@@ -205,6 +234,66 @@ class _ListSubState extends State<ListSub> {
                                 }())
                               ],
                             ),
+                            Padding(
+                                padding: EdgeInsets.only(
+                              top: 3.3 * height.h,
+                            )),
+                            placeCode == 1
+                                ? Row(
+                                    children: [
+                                      Image.asset(
+                                        "./assets/listPage/star_color.png",
+                                        width: 38 * width.w,
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 12 * width.w)),
+                                      Image.asset(
+                                        "./assets/listPage/star_color.png",
+                                        width: 38 * width.w,
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 12 * width.w)),
+                                      Image.asset(
+                                        "./assets/listPage/star_color.png",
+                                        width: 38 * width.w,
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 12 * width.w)),
+                                      Image.asset(
+                                        "./assets/listPage/star_color.png",
+                                        width: 38 * width.w,
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 12 * width.w)),
+                                      Image.asset(
+                                        "./assets/listPage/star_color.png",
+                                        width: 38 * width.w,
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 12 * width.w)),
+                                      Text('3.5',
+                                          style: TextStyle(
+                                            color: Color(0xff4d4d4d),
+                                            fontSize: 30 * width.sp,
+                                            fontFamily: "NotoSansCJKkr_Medium",
+                                          )),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 12 * width.w)),
+                                      Text('3명이 평가에 참여했습니다',
+                                          style: TextStyle(
+                                            color: Color(0xffc6c6c6),
+                                            fontSize: 25 * width.sp,
+                                            fontFamily: "NotoSansCJKkr_Medium",
+                                          ))
+                                    ],
+                                  )
+                                : Container()
                           ],
                         ),
                       ),
@@ -288,15 +377,103 @@ class _ListSubState extends State<ListSub> {
                                 )
                               ],
                             ),
-                            Padding(padding: EdgeInsets.only(top: 50.w)),
+                            placeCode == 1
+                                ? Padding(padding: EdgeInsets.only(top: 30.w))
+                                : Padding(padding: EdgeInsets.only(top: 0.w)),
+                            placeCode == 1
+                                ? normalfont("영업시간", 58, Color(0xff4d4d4d))
+                                : Container(),
+                            placeCode == 1
+                                ? Padding(padding: EdgeInsets.only(top: 10.w))
+                                : Padding(padding: EdgeInsets.only(top: 0.w)),
+                            placeCode == 1
+                                ? Container(
+                                    width: 500 * width.w,
+                                    child: normalfont(
+                                        "오전 11:30 ~ 21:00(샐러드바 마감 20:30) 브레이크타임 15:00~17:00",
+                                        58,
+                                        Color(0xff808080)),
+                                  )
+                                : Container(),
+                            Padding(padding: EdgeInsets.only(top: 30.w))
                           ],
                         ),
                       ),
                     ),
                     Container(
-                      height: 26.h,
+                      height: 26 * height.h,
                       color: Color(0xfff7f7f7),
                     ),
+                    placeCode == 1
+                        ? Container(
+                            child: Container(
+                              padding: EdgeInsets.only(
+                                left: 75.w,
+                              ),
+                              width: MediaQuery.of(context).size.width,
+                              // alignment: Alignment.center,
+                              //  height: 520 .h,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(padding: EdgeInsets.only(top: 30.h)),
+                                  normalfont("매장정보", 58, Color(0xff4d4d4d)),
+                                  Padding(padding: EdgeInsets.only(top: 6.h)),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width: 530.w,
+                                        child: normalfont(
+                                            "OO 평일런치", 58, Color(0xff808080)),
+                                      ),
+                                      Container(
+                                        child: normalfont(
+                                            "15,900원", 58, Color(0xffc6c6c6)),
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(padding: EdgeInsets.only(top: 6.h)),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width: 530.w,
+                                        child: normalfont(
+                                            "OO 평일디너", 58, Color(0xff808080)),
+                                      ),
+                                      Container(
+                                        child: normalfont(
+                                            "22,900원", 58, Color(0xffc6c6c6)),
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(padding: EdgeInsets.only(top: 6.h)),
+                                  Row(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Container(
+                                            width: 530.w,
+                                            child: normalfont("OO 주말/공휴일", 58,
+                                                Color(0xff808080)),
+                                          ),
+                                          Container(
+                                            child: normalfont("25,900원", 58,
+                                                Color(0xffc6c6c6)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(padding: EdgeInsets.only(top: 30.h)),
+                                ],
+                              ),
+                            ),
+                          )
+                        : Container(),
+                    placeCode == 1
+                        ? Container(
+                            height: 26 * height.h, color: Color(0xfff7f7f7))
+                        : Container(),
                     (() {
                       if (placeCode == 1) {
                         return Container(
@@ -489,7 +666,7 @@ class _ListSubState extends State<ListSub> {
                       }
                     }()),
                     Container(
-                      height: 26.h,
+                      height: 26 * height.h,
                       color: Color(0xfff7f7f7),
                     ),
                     ConnectionController.to.connectionstauts !=
@@ -538,9 +715,322 @@ class _ListSubState extends State<ListSub> {
                         ),
                       ),
                     ),
+                    Container(
+                      height: 26 * height.h,
+                      color: Color(0xfff7f7f7),
+                    ),
+                    Container(
+                        margin: EdgeInsets.only(
+                          left: 87 * width.w,
+                          top: 36 * height.h,
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                    width: 210 * height.h,
+                                    child: Column(
+                                      children: [
+                                        normalfont(
+                                            "${data.name}", 58, Colors.black),
+                                        normalfont(
+                                            "다녀오셨나요?", 58, Color(0xff939393)),
+                                      ],
+                                    )),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    left: 44 * width.w,
+                                  ),
+                                ),
+                                InkWell(
+                                  child: Image.asset(
+                                    "./assets/sublistPage/reviewbutton.png",
+                                    height: 54 * height.h,
+                                  ),
+                                  onTap: () {
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (_) =>
+                                    //             ReviewPage(data: data.name)));
+                                    Get.to(ReviewPage(
+                                      data: data,
+                                    ));
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        )),
+                    Container(
+                      margin: EdgeInsets.only(
+                          left: 36 * width.w, top: 36 * width.h),
+                      child: Stack(
+                        children: [
+                          Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.4),
+                                      offset: Offset(0.0, 0.1), //(x,y)
+                                      blurRadius: 7.0,
+                                      spreadRadius: 1,
+                                    ),
+                                  ],
+                                  border: Border.all(
+                                    color: Colors.white,
+                                  ),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                              height: 193 * height.h,
+                              width: 648 * width.w),
+                          Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(left: 22 * height.h),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.only(top: 22 * height.h),
+                                  ),
+                                  normalfont(
+                                      "고객만족도", 24 * width, Color(0xff939393)),
+                                  boldfont(
+                                      "5.0", 55 * width, Color(0xff3a3939)),
+                                  Row(
+                                    children: [
+                                      Image.asset(
+                                        "./assets/listPage/star_color.png",
+                                        width: 38 * width.w,
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 12 * width.w)),
+                                      Image.asset(
+                                        "./assets/listPage/star_color.png",
+                                        width: 38 * width.w,
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 12 * width.w)),
+                                      Image.asset(
+                                        "./assets/listPage/star_color.png",
+                                        width: 38 * width.w,
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(left: 12.w)),
+                                      Image.asset(
+                                        "./assets/listPage/star_color.png",
+                                        width: 38 * width.w,
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 12 * width.w)),
+                                      Image.asset(
+                                        "./assets/listPage/star_color.png",
+                                        width: 38 * width.w,
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 12 * width.w)),
+                                    ],
+                                  ),
+                                ],
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 36 * width.w)),
+
+                    // 4 images
+                    Row(
+                      children: [
+                        Padding(padding: EdgeInsets.only(left: 36 * width.w)),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: SizedBox(
+                            width: 148 * width.w,
+                            height: 148 * height.w,
+                            child: Image.asset(
+                              "./assets/sublistPage/55.png",
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Padding(padding: EdgeInsets.only(left: 18 * width.w)),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: SizedBox(
+                            width: 148 * width.w,
+                            height: 148 * height.w,
+                            child: Image.asset(
+                              "./assets/sublistPage/44.png",
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Padding(padding: EdgeInsets.only(left: 18.w)),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: SizedBox(
+                            width: 148 * width.w,
+                            height: 148 * height.w,
+                            child: Image.asset(
+                              "./assets/sublistPage/33.png",
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Padding(padding: EdgeInsets.only(left: 18.w)),
+                        InkWell(
+                          onTap: () {
+                            Get.to(ReviewImage(data: data));
+                          },
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: Stack(
+                                children: [
+                                  SizedBox(
+                                    width: 148 * width.w,
+                                    height: 148 * height.w,
+                                    child: Image.asset(
+                                      "./assets/sublistPage/33.png",
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 148 * width.w,
+                                    height: 148 * height.w,
+                                    color: Colors.black.withOpacity(0.5),
+                                  ),
+                                  Container(
+                                    width: 148 * width.w,
+                                    height: 148 * width.w,
+                                    child: Center(
+                                      child: Image.asset(
+                                        "./assets/reviewPage/plus.png",
+                                        color: Colors.white,
+                                        width: 38 * width.w,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              )),
+                        ),
+                      ],
+                    ),
+
+                    Padding(padding: EdgeInsets.only(top: 36 * width.w)),
+                    Container(
+                      height: 26 * height.h,
+                      color: Color(0xfff7f7f7),
+                    ),
+
+                    //Sorting condition
+                    Container(
+                      // height: 20.h,
+                      width: double.infinity,
+                      child: Row(
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  top: 80 * height.h, left: 35 * width.w)),
+                          normalfont("리뷰 ", 30 * width, Color(0xff4d4d4d)),
+                          normalfont(reviewData.length.toString(), 30 * width,
+                              Color(0xffe9718d)),
+                          Spacer(),
+                          Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                InkWell(
+                                  onTap: () {},
+                                  child: normalfont(
+                                      "최신순", 26 * width, Color(0xff4d4d4d)),
+                                ),
+                                normalfont(
+                                    " | ", 26 * width, Color(0xffdddddd)),
+                                InkWell(
+                                  onTap: () {},
+                                  child: normalfont(
+                                      "평점높은순", 26 * width, Color(0xff939393)),
+                                ),
+                                normalfont(
+                                    " | ", 26 * width, Color(0xffdddddd)),
+                                InkWell(
+                                  onTap: () {},
+                                  child: normalfont(
+                                      "평점낮은순", 26 * width, Color(0xff939393)),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(padding: EdgeInsets.only(right: 38.w)),
+                        ],
+                      ),
+                    ),
+                    (() {
+                      return Container(
+                        child: ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: reviewData.length,
+                          itemBuilder: (context, index) {
+                            if (reviewData.length == 0) {
+                              print("로딩중");
+                              return Container(
+                                child: Text(" 로딩중 "),
+                              );
+                            }
+                            return Container(
+                              child: PostMessage(
+                                  avatarLink: reviewData[index].profile,
+                                  userName: reviewData[index].nickname,
+                                  datetime: reviewData[index].created_at,
+                                  tasteLevel: reviewData[index].taste_rating,
+                                  priceLevel: reviewData[index].cost_rating,
+                                  serviceLevel:
+                                      reviewData[index].service_rating,
+                                  textMessage: reviewData[index].description,
+                                  imageList:
+                                      reviewData[index].image_path.split(',')),
+                            );
+                          },
+                        ),
+                      );
+                    }())
                   ],
                 ),
               ],
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {},
+              backgroundColor: Colors.white,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // SvgPicture.asset(
+                  //   "assets/sublistPage/up-arrow.svg",
+                  //   width: 21.w,
+                  // ),
+                  Text(
+                    "TOP",
+                    style: TextStyle(
+                      color: Color(0xff4d4d4d),
+                      fontSize: 24 * width.sp,
+                      fontFamily: "NotoSansCJKkr_Medium",
+                    ),
+                  )
+                ],
+              ),
             )),
       ),
     );

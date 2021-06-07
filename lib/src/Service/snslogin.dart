@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
 import 'package:kakao_flutter_sdk/all.dart';
-import 'package:uahage/src/Service/user.dart';
+
 import 'package:uahage/src/Service/users.dart';
 
 class SnsLogin extends GetView<UserController> {

@@ -48,7 +48,9 @@ dependencies:
   circular_check_box: ^1.0.4
   flutter_screenutil: ^2.3.0
   get: ^4.1.2
- 
+  smooth_star_rating: ^1.1.1
+  flutter_rating_bar: ^3.2.0+1
+  flutter_svg:  ^0.19.2+1
   flutter:
     sdk: flutter
 
@@ -86,6 +88,8 @@ flutter:
     - assets/sublistPage/
     - assets/starPage/
     - assets/LoadingPage/
+    - assets/reviewPage/
+
     - assets/
 
   fonts:

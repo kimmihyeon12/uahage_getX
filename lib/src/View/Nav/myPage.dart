@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:uahage/src/Service/users.dart';
 import 'package:uahage/src/Static/Widget/progress.dart';
 import 'package:uahage/src/Static/Font/font.dart';
-import 'package:uahage/src/Service/user.dart';
 import 'package:uahage/src/View/Nav/userMotify.dart';
 
 class MyPage extends StatefulWidget {
