@@ -100,9 +100,8 @@ class _ListSubState extends State<ListSub> {
     );
   }
 
-  reviewSelect() async {
-    var responseJson = await reviewSelectImage(data.id);
-
+  select() async {
+    var responseJson = await reviewSelect(data.id);
     var currentData;
     for (var data in responseJson["data"]) {
       currentData = Review.fromJson(data);
@@ -116,14 +115,14 @@ class _ListSubState extends State<ListSub> {
   @override
   void initState() {
     super.initState();
-    reviewSelect();
+    select();
   }
 
   @override
   Widget build(BuildContext context) {
+    print("listsub");
     connection();
 
-    print("listsub");
     ScreenUtil.init(context, width: 1500, height: 2667);
     return WillPopScope(
       onWillPop: () {
@@ -755,9 +754,9 @@ class _ListSubState extends State<ListSub> {
                                     //     MaterialPageRoute(
                                     //         builder: (_) =>
                                     //             ReviewPage(data: data.name)));
-                                    Get.to(ReviewPage(
-                                      data: data,
-                                    ));
+                                    Get.to(() => ReviewPage(
+                                          data: data,
+                                        ));
                                   },
                                 ),
                               ],
@@ -991,17 +990,7 @@ class _ListSubState extends State<ListSub> {
                               );
                             }
                             return Container(
-                              child: PostMessage(
-                                  avatarLink: reviewData[index].profile,
-                                  userName: reviewData[index].nickname,
-                                  datetime: reviewData[index].created_at,
-                                  tasteLevel: reviewData[index].taste_rating,
-                                  priceLevel: reviewData[index].cost_rating,
-                                  serviceLevel:
-                                      reviewData[index].service_rating,
-                                  textMessage: reviewData[index].description,
-                                  imageList:
-                                      reviewData[index].image_path.split(',')),
+                              child: SubMessage(data: reviewData[index]),
                             );
                           },
                         ),

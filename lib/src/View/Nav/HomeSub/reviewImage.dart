@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:uahage/src/Service/review.dart';
 import 'package:uahage/src/Static/url.dart';
 import 'package:http/http.dart' as http;
+import 'package:uahage/src/View/Nav/HomeSub/listSubMessage.dart';
 
 class ReviewImage extends StatefulWidget {
   final data;
@@ -16,20 +21,13 @@ class _ReviewImageState extends State<ReviewImage> {
   void initState() {
     super.initState();
     data = widget.data;
+    select();
   }
 
-  reviewSelectImage() async {
-    String url = URL;
-    try {
-      var response = await http.get(
-        Uri.parse(url + "/api/places/restaurants/${data.id}/reviews?type=IMG"),
-        // headers: <String, String>{"Authorization": controller.token.value}
-      );
-
-      return response.statusCode == 200 ? "성공" : "실패";
-    } catch (err) {
-      return Future.error(err);
-    }
+  List image = [];
+  select() async {
+    image = await reviewSelectImage(data.id);
+    setState(() {});
   }
 
   @override
@@ -59,17 +57,24 @@ class _ReviewImageState extends State<ReviewImage> {
         ),
       ),
       body: GridView.builder(
-          itemCount: 40,
+          itemCount: image.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 4,
             crossAxisSpacing: 1.0,
             mainAxisSpacing: 1.0,
           ),
           itemBuilder: (context, index) {
-            return SizedBox(
-              // width: 178.w,
-              // height: 178.w,
-              child: Image.asset("assets/reviewPage/${index % 8 + 1}.png"),
+            return InkWell(
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: NetworkImage(image[index]["image_path"]),
+                      fit: BoxFit.fitWidth),
+                ),
+              ),
+              onTap: () {
+                Get.to(ImageBig(image: image[index]["image_path"]));
+              },
             );
           }),
     );

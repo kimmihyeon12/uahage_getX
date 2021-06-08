@@ -1,38 +1,53 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:uahage/src/Controller/user.controller.dart';
 import 'package:uahage/src/Static/Font/font.dart';
+import 'package:uahage/src/Static/Widget/dialog.dart';
+import 'package:uahage/src/Static/Widget/progress.dart';
+import 'package:uahage/src/Static/url.dart';
+import 'package:http/http.dart' as http;
 
-class PostMessage extends StatelessWidget {
-  final avatarLink;
-  final userName;
-  final datetime;
-  final tasteLevel;
-  final priceLevel;
-  final serviceLevel;
-  final textMessage;
-  final imageList;
+class SubMessage extends StatefulWidget {
+  final data;
+  const SubMessage({Key key, this.data}) : super(key: key);
 
-  const PostMessage({
-    Key key,
-    this.avatarLink,
-    this.userName,
-    this.datetime,
-    this.tasteLevel,
-    this.priceLevel,
-    this.serviceLevel,
-    this.textMessage,
-    this.imageList,
-  }) : super(key: key);
+  @override
+  _SubMessageState createState() => _SubMessageState();
+}
+
+class _SubMessageState extends State<SubMessage> {
+  var data;
+  List imageLink;
+  initState() {
+    // 부모의 initState호출
+    super.initState();
+    data = widget.data;
+    imageLink = data.image_path != null ? data.image_path.split(',') : null;
+    print(imageLink);
+    setState(() {});
+  }
+
+  delete(reviewId) async {
+    String url = URL;
+    try {
+      var response = await http.delete(
+        Uri.parse(url + "/api/places/restaurants/reviews/${reviewId}"),
+      );
+      return "정말 삭제하시겠습니까?";
+    } catch (err) {
+      return Future.error(err);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     var width = 1500 / 720;
     var height = 2667 / 1280;
-    print(imageList);
-    print(avatarLink);
-
+    print("listsubmessage");
     ScreenUtil.init(context, width: 1500, height: 2667);
     return Container(
       width: double.infinity,
@@ -55,7 +70,7 @@ class PostMessage extends StatelessWidget {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
-                              image: NetworkImage(avatarLink),
+                              image: NetworkImage(data.profile),
                               fit: BoxFit.cover),
                         ),
                       ),
@@ -70,10 +85,11 @@ class PostMessage extends StatelessWidget {
                           // userName
                           Row(
                             children: [
-                              boldfont("$userName", 58, Colors.black),
+                              boldfont("${data.nickname} ", 58, Colors.black),
                               Padding(
                                   padding: EdgeInsets.only(left: 16 * width.w)),
-                              normalfont("$datetime", 58, Color(0xff808080)),
+                              normalfont(
+                                  "${data.created_at} ", 58, Color(0xff808080)),
                             ],
                           ),
                           // 3 Rating buttons
@@ -82,34 +98,116 @@ class PostMessage extends StatelessWidget {
                               ContainerRating(
                                   width: 110 * width.w,
                                   text: '맛',
-                                  rating: "$tasteLevel"),
+                                  rating: "${data.taste_rating}"),
                               Padding(
                                   padding: EdgeInsets.only(left: 8 * width.w)),
                               ContainerRating(
                                   width: 115 * width.w,
                                   text: '가격',
-                                  rating: "$priceLevel"),
+                                  rating: "${data.cost_rating}"),
                               Padding(padding: EdgeInsets.only(left: 8.w)),
                               ContainerRating(
                                   width: 140 * width.w,
                                   text: '서비스',
-                                  rating: "$serviceLevel"),
+                                  rating: "${data.service_rating}"),
                             ],
                           ),
                         ],
                       ),
                     ),
                     Spacer(),
-                    InkWell(
-                      onTap: () {},
-                      child: Text(
-                        "신고",
-                        style: TextStyle(
-                            fontSize: 24 * width.sp,
-                            fontFamily: "NotoSansCJKkr_Medium",
-                            color: Color.fromRGBO(147, 147, 147, 1.0)),
-                      ),
-                    ),
+                    UserController.to.userId == data.user_id.toString()
+                        ? Row(
+                            children: [
+                              InkWell(
+                                onTap: () {},
+                                child: Text(
+                                  "수정",
+                                  style: TextStyle(
+                                      fontSize: 24 * width.sp,
+                                      fontFamily: "NotoSansCJKkr_Medium",
+                                      color:
+                                          Color.fromRGBO(147, 147, 147, 1.0)),
+                                ),
+                              ),
+                              Padding(
+                                  padding: EdgeInsets.only(left: 20 * width.w)),
+                              InkWell(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20.0)),
+                                      ),
+                                      title: normalfont("리뷰를 삭제하시겠습니까", 58,
+                                          Color(0xff4d4d4d)),
+                                      actions: [
+                                        FlatButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: normalfont(
+                                              "아니요", 55, Color(0xffff7292)),
+                                        ),
+                                        FlatButton(
+                                          onPressed: () async {
+                                            Navigator.pop(context, true);
+
+                                            //delete data in the database
+                                            showDialog(
+                                              context: context,
+                                              builder: (_) => FutureBuilder(
+                                                future: delete(data.id),
+                                                builder: (context, snapshot) {
+                                                  if (snapshot.hasData) {
+                                                    WidgetsBinding.instance
+                                                        .addPostFrameCallback(
+                                                            (_) async {
+                                                      Get.back();
+                                                    });
+                                                  } else if (snapshot
+                                                      .hasError) {
+                                                    return AlertDialog(
+                                                      title: Text(
+                                                          "${snapshot.error}"),
+                                                    );
+                                                  }
+                                                  return progress();
+                                                },
+                                              ),
+                                            );
+                                          },
+                                          child: // 네
+                                              normalfont(
+                                                  "예", 55, Color(0xffff7292)),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  "삭제",
+                                  style: TextStyle(
+                                      fontSize: 24 * width.sp,
+                                      fontFamily: "NotoSansCJKkr_Medium",
+                                      color:
+                                          Color.fromRGBO(147, 147, 147, 1.0)),
+                                ),
+                              ),
+                            ],
+                          )
+                        : InkWell(
+                            onTap: () {},
+                            child: Text(
+                              "신고",
+                              style: TextStyle(
+                                  fontSize: 24 * width.sp,
+                                  fontFamily: "NotoSansCJKkr_Medium",
+                                  color: Color.fromRGBO(147, 147, 147, 1.0)),
+                            ),
+                          ),
                   ],
                 ),
                 //text message
@@ -120,12 +218,12 @@ class PostMessage extends StatelessWidget {
                       horizontal: 13 * width.w, vertical: 19 * width.w),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(
-                      Radius.circular(20),
+                      Radius.circular(10),
                     ),
                     color: Color.fromRGBO(248, 248, 248, 1.0),
                   ),
                   child: Text(
-                    "$textMessage", //
+                    "${data.description} ", //
                     style: TextStyle(
                         color: Color.fromRGBO(0, 0, 0, 0.8),
                         fontSize: 58.sp,
@@ -133,35 +231,39 @@ class PostMessage extends StatelessWidget {
                   ),
                 ),
                 //Images
-                Container(
-                  height: 236 * height.h,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.all(8),
-                    children: <Widget>[
-                      for (int i = 0; i < imageList.length; i++)
-                        Container(
-                          margin: EdgeInsets.only(right: 10 * width.w),
-                          width: 308 * width.w,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            image: DecorationImage(
-                                image: NetworkImage(imageList[i]),
-                                fit: BoxFit.fitWidth),
+                Stack(
+                  children: [
+                    imageLink == null
+                        ? Container()
+                        : Container(
+                            height: 236 * height.h,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              padding: EdgeInsets.only(top: 16 * height.h),
+                              children: <Widget>[
+                                for (int i = 0; i < imageLink.length; i++)
+                                  InkWell(
+                                    child: Container(
+                                      margin:
+                                          EdgeInsets.only(right: 10 * width.w),
+                                      width: 308 * width.w,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                        image: DecorationImage(
+                                            image: NetworkImage(imageLink[i]),
+                                            fit: BoxFit.fitWidth),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      Get.to(ImageBig(image: imageLink[i]));
+                                    },
+                                  ),
+                              ],
+                            ),
                           ),
-                        ),
-                      // Container(
-                      //   decoration: BoxDecoration(
-                      //     borderRadius: BorderRadius.all(Radius.circular(30)),
-                      //   ),
-                      //   margin: EdgeInsets.only(right: 10 * width.w),
-                      //   width: 318 * width.w,
-                      //   child:
-                      //       Image.network(imageList[i], fit: BoxFit.fitWidth),
-                      // ),
-                    ],
-                  ),
-                ),
+                  ],
+                )
               ],
             ),
           ),
@@ -225,6 +327,28 @@ class ContainerRating extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class ImageBig extends StatelessWidget {
+  final image;
+
+  const ImageBig({
+    Key key,
+    @required this.image,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          image:
+              DecorationImage(image: NetworkImage(image), fit: BoxFit.contain),
+        ),
+      ),
+      color: Colors.black,
     );
   }
 }
