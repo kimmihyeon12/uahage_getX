@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:get/get.dart';
@@ -28,7 +30,7 @@ class _SearchState extends State<Search> {
 
   Future searchCategory() async {
     await webview.loadUrl(url +
-        "/maps/show-place?userId=${UserController.to.userId.value}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=filter&babyMenu=${greyImage[0]}&babyBed=${greyImage[1]}&babyTableware=${greyImage[2]}&meetingRoom=${greyImage[3]}&diaperChange=${greyImage[4]}&playRoom=${greyImage[5]}&stroller=${greyImage[6]}&nursingRoom=${greyImage[7]}&babyChair=${greyImage[8]}");
+        "/maps/show-place?userId=${UserController.to.userId.value}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=filter&babyMenu=${greyImage[0]}&babyBed=${greyImage[1]}&babyTableware=${greyImage[2]}&meetingRoom=${greyImage[3]}&diaperChange=${greyImage[4]}&playRoom=${greyImage[5]}&stroller=${greyImage[6]}&nursingRoom=${greyImage[7]}&babyChair=${greyImage[8]}&placeName=restaurants");
   }
 
   @override
@@ -54,37 +56,21 @@ class _SearchState extends State<Search> {
               JavascriptChannel(
                   name: 'Print',
                   onMessageReceived: (JavascriptMessage message) async {
-                    var messages = message.message;
-                    var Message = messages.split("|");
-                    var JsonMessage = {
-                      "id": int.parse(Message[0]),
-                      "name": Message[1],
-                      "address": Message[2],
-                      "phone": Message[3],
-                      "stroller": Message[4] == "true" ? true : false,
-                      "baby_bed": Message[5] == "true" ? true : false,
-                      "baby_tableware": Message[6] == "true" ? true : false,
-                      "nursing_room": Message[7] == "true" ? true : false,
-                      "meeting_room": Message[8] == "true" ? true : false,
-                      "diaper_change": Message[9] == "true" ? true : false,
-                      "play_room": Message[10] == "true" ? true : false,
-                      "baby_chair": Message[11] == "true" ? true : false,
-                      "baby_menu": Message[12] == "true" ? true : false,
-                      "parking": Message[13] == "true" ? true : false,
-                      "bookmark": 0,
-                    };
+                    var messages = jsonDecode(message.message);
+
+                    messages["bookmark"] = 0;
                     BookmarkController.to.placeBookmarkInit();
                     await bookmark.bookmarkSelectAll(UserController.to.userId);
                     for (int i = 0;
                         i < BookmarkController.to.placeBookmark.length;
                         i++) {
-                      if (BookmarkController.to.placeBookmark[i].id
-                              .toString() ==
-                          Message[0].toString()) {
-                        JsonMessage["bookmark"] = 1;
+                      if (BookmarkController.to.placeBookmark[i].id ==
+                          messages["id"]) {
+                        messages["bookmark"] = 1;
                       }
                     }
-                    await placepopup(context, JsonMessage, "", 1);
+
+                    await placepopup(context, messages, "", 1);
                   })
             ]),
           ),

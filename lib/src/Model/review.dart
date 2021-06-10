@@ -18,10 +18,10 @@ class Review {
   String nickname;
   String profile;
   String description;
-  int total_rating;
-  int taste_rating;
-  int cost_rating;
-  int service_rating;
+  String total_rating;
+  String taste_rating;
+  String cost_rating;
+  String service_rating;
   String created_at;
   String image_path;
 

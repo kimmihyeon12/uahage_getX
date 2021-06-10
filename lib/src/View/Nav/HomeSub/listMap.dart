@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:uahage/src/Controller/location.controller.dart';
@@ -35,7 +37,7 @@ class _ListMapState extends State<ListMap> {
   String test = "";
   Future searchCategory() async {
     await webview.loadUrl(url +
-        "/maps/show-place?userId=${UserController.to.userId.value}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=filter&babyMenu=${grey_image[0]}&babyBed=${grey_image[1]}&babyTableware=${grey_image[2]}&meetingRoom=${grey_image[3]}&diaperChange=${grey_image[4]}&playRoom=${grey_image[5]}&stroller=${grey_image[6]}&nursingRoom=${grey_image[7]}&babyChair=${grey_image[8]}");
+        "/maps/show-place?userId=${UserController.to.userId.value}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=filter&babyMenu=${grey_image[0]}&babyBed=${grey_image[1]}&babyTableware=${grey_image[2]}&meetingRoom=${grey_image[3]}&diaperChange=${grey_image[4]}&playRoom=${grey_image[5]}&stroller=${grey_image[6]}&nursingRoom=${grey_image[7]}&babyChair=${grey_image[8]}placeName=restaurants");
   }
 
   initState() {
@@ -58,7 +60,7 @@ class _ListMapState extends State<ListMap> {
               webview = webViewController;
               if (placeCode == 1) {
                 await webview.loadUrl(url +
-                    '/maps/show-place?type=filter&userId=${UserController.to.userId}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&babyBed=&babyChair=&babyMenu=&babyTableware=&stroller=&diaperChange=&meetingRoom=&nursingRoom=&playRoom=&parking=&isBookmarked=');
+                    '/maps/show-place?type=filter&userId=${UserController.to.userId}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&babyBed=&babyChair=&babyMenu=&babyTableware=&stroller=&diaperChange=&meetingRoom=&nursingRoom=&playRoom=&parking=&isBookmarked=&placeName=${placeName}');
               } else {
                 await webview.loadUrl(url +
                     '/maps/show-place?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=allsearch&placeName=${placeName}');
@@ -69,65 +71,23 @@ class _ListMapState extends State<ListMap> {
               JavascriptChannel(
                   name: 'Print',
                   onMessageReceived: (JavascriptMessage message) async {
-                    var messages = message.message;
-                    var Message = messages.split("|");
-                    var JsonMessage;
+                    var messages = jsonDecode(message.message);
+
                     if (placeCode == 1) {
-                      JsonMessage = {
-                        "id": int.parse(Message[0]),
-                        "name": Message[1],
-                        "address": Message[2],
-                        "phone": Message[3],
-                        "stroller": Message[4] == "true" ? true : false,
-                        "baby_bed": Message[5] == "true" ? true : false,
-                        "baby_tableware": Message[6] == "true" ? true : false,
-                        "nursing_room": Message[7] == "true" ? true : false,
-                        "meeting_room": Message[8] == "true" ? true : false,
-                        "diaper_change": Message[9] == "true" ? true : false,
-                        "play_room": Message[10] == "true" ? true : false,
-                        "baby_chair": Message[11] == "true" ? true : false,
-                        "baby_menu": Message[12] == "true" ? true : false,
-                        "parking": Message[13] == "true" ? true : false,
-                        "bookmark": 0,
-                      };
+                      messages["bookmark"] = 0;
                       BookmarkController.to.placeBookmarkInit();
                       await bookmark
                           .bookmarkSelectAll(UserController.to.userId);
                       for (int i = 0;
                           i < BookmarkController.to.placeBookmark.length;
                           i++) {
-                        if (BookmarkController.to.placeBookmark[i].id
-                                .toString() ==
-                            Message[0].toString()) {
-                          JsonMessage["bookmark"] = 1;
+                        if (BookmarkController.to.placeBookmark[i].id ==
+                            messages["id"]) {
+                          messages["bookmark"] = 1;
                         }
                       }
-                    } else if (placeCode == 2) {
-                      JsonMessage = {
-                        "id": int.parse(Message[0]),
-                        "name": Message[1],
-                        "address": Message[2],
-                        "phone": Message[3],
-                        "examination_items": Message[14],
-                      };
-                    } else if (placeCode == 5) {
-                      JsonMessage = {
-                        "id": int.parse(Message[0]),
-                        "name": Message[1],
-                        "address": Message[2],
-                        "phone": Message[3],
-                        "admission_fee": Message[15],
-                      };
-                    } else if (placeCode == 6) {
-                      JsonMessage = {
-                        "id": int.parse(Message[0]),
-                        "name": Message[1],
-                        "address": Message[2],
-                        "phone": Message[3],
-                        "admission_fee": Message[15],
-                      };
                     }
-                    await placepopup(context, JsonMessage, "", placeCode);
+                    await placepopup(context, messages, "", placeCode);
                   }),
             ]),
           ),

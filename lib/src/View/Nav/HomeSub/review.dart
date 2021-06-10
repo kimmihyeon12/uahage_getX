@@ -4,36 +4,63 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
 import 'package:uahage/src/Service/review.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 import 'package:uahage/src/Static/Widget/appbar.dart';
+import 'package:uahage/src/Static/Widget/popup.dart';
 import 'package:uahage/src/Static/url.dart';
+import 'package:uahage/src/View/Loading/loading.dart';
 
 class ReviewPage extends StatefulWidget {
   final data;
+  final reviewData;
 
-  const ReviewPage({Key key, @required this.data}) : super(key: key);
+  const ReviewPage({Key key, @required this.data, this.reviewData})
+      : super(key: key);
   @override
   _ReviewPageState createState() => _ReviewPageState();
 }
 
 class _ReviewPageState extends State<ReviewPage> {
   var data;
-  List ratingLabel = ["아주 좋아요", "맘에 들어요", "보통이에요", "그냥 그래요", "별로예요", "평가없음"];
+  var reviewData;
+  List ratingLabel = ["평가없음", "별로예요", "그냥 그래요", "보통이에요", "맘에 들어요", "아주 좋아요"];
   List<dynamic> uploadingImage = [];
-  int index1 = 5, index2 = 5, index3 = 5;
+  List<dynamic> prevImage = [];
+  List<dynamic> deleteImage = [];
+
+  int index1 = 0, index2 = 0, index3 = 0;
   bool btnColor = false;
   var width = 1500 / 720;
   var height = 2667 / 1280;
+  final myController = TextEditingController();
 
-  String review = "1";
   double taste, cost, service;
   @override
   void initState() {
     super.initState();
     data = widget.data;
+    reviewData = widget.reviewData;
+
+    index1 =
+        reviewData != null ? double.parse(reviewData.taste_rating).round() : 0;
+    taste = reviewData != null ? double.parse(reviewData.taste_rating) : 0;
+    index2 =
+        reviewData != null ? double.parse(reviewData.cost_rating).round() : 0;
+    cost = reviewData != null ? double.parse(reviewData.cost_rating) : 0;
+    index3 = reviewData != null
+        ? double.parse(reviewData.service_rating).round()
+        : 0;
+    service = reviewData != null ? double.parse(reviewData.service_rating) : 0;
+    myController.text = reviewData != null ? reviewData.description : "";
+    reviewData.image_path != null
+        ? prevImage.add(reviewData.image_path.split(','))
+        : null;
+
+    setState(() {});
   }
 
   void _showPicker(context) {
@@ -100,28 +127,6 @@ class _ReviewPageState extends State<ReviewPage> {
     }
   }
 
-  _formData() async {
-    FormData formData = FormData.fromMap({
-      "userId": UserController.to.userId.toString(),
-      "placeId": data.id,
-      "desc": review.toString(),
-      "tasteRating": taste.toString(),
-      "costRating": cost.toString(),
-      "serviceRating": service.toString(),
-    });
-    for (int i = 0; i < uploadingImage.length; i++) {
-      formData.files.add(MapEntry(
-        "images",
-        MultipartFile.fromFileSync(
-          uploadingImage[i].path,
-          filename: uploadingImage[i].path.split('/').last,
-        ),
-      ));
-    }
-
-    return formData;
-  }
-
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, width: 1500, height: 2667);
@@ -172,30 +177,30 @@ class _ReviewPageState extends State<ReviewPage> {
                         child: normalfont("맛", 58, Colors.black)),
 
                     Rating(
-                      changed: (v) {
-                        if (v == 5) {
-                          index1 = 0;
-                        } else if (v >= 4) {
-                          index1 = 1;
-                        } else if (v >= 3) {
-                          index1 = 2;
-                        } else if (v >= 2) {
-                          index1 = 3;
-                        } else if (v >= 1) {
-                          index1 = 4;
-                        } else {
-                          index1 = 5;
-                        }
-                        setState(() {
-                          taste = v;
-                        });
-                      },
-                    ),
+                        initrating: taste,
+                        changed: (v) {
+                          if (v == 5) {
+                            index1 = 5;
+                          } else if (v >= 4) {
+                            index1 = 4;
+                          } else if (v >= 3) {
+                            index1 = 3;
+                          } else if (v >= 2) {
+                            index1 = 2;
+                          } else if (v >= 1) {
+                            index1 = 1;
+                          } else {
+                            index1 = 0;
+                          }
+                          setState(() {
+                            taste = v;
+                          });
+                        }),
 
                     Container(
                       width: 160 * width.w,
                       child: normalfont("${ratingLabel[index1]}", 58,
-                          index1 == 5 ? Colors.transparent : Colors.black),
+                          index1 == 0 ? Colors.transparent : Colors.black),
                     )
                   ],
                 ),
@@ -209,19 +214,20 @@ class _ReviewPageState extends State<ReviewPage> {
                     ),
 
                     Rating(
+                      initrating: cost,
                       changed: (v) {
                         if (v == 5) {
-                          index2 = 0;
-                        } else if (v >= 4) {
-                          index2 = 1;
-                        } else if (v >= 3) {
-                          index2 = 2;
-                        } else if (v >= 2) {
-                          index2 = 3;
-                        } else if (v >= 1) {
-                          index2 = 4;
-                        } else {
                           index2 = 5;
+                        } else if (v >= 4) {
+                          index2 = 4;
+                        } else if (v >= 3) {
+                          index2 = 3;
+                        } else if (v >= 2) {
+                          index2 = 2;
+                        } else if (v >= 1) {
+                          index2 = 1;
+                        } else {
+                          index2 = 0;
                         }
                         setState(() {
                           cost = v;
@@ -232,7 +238,7 @@ class _ReviewPageState extends State<ReviewPage> {
                     Container(
                       width: 160 * width.w,
                       child: normalfont("${ratingLabel[index2]}", 58,
-                          index1 == 5 ? Colors.transparent : Colors.black),
+                          index2 == 0 ? Colors.transparent : Colors.black),
                     )
                   ],
                 ),
@@ -244,19 +250,20 @@ class _ReviewPageState extends State<ReviewPage> {
                       child: normalfont("서비스", 58, Colors.black),
                     ),
                     Rating(
+                      initrating: service,
                       changed: (v) {
                         if (v == 5) {
-                          index3 = 0;
-                        } else if (v >= 4) {
-                          index3 = 1;
-                        } else if (v >= 3) {
-                          index3 = 2;
-                        } else if (v >= 2) {
-                          index3 = 3;
-                        } else if (v >= 1) {
-                          index3 = 4;
-                        } else {
                           index3 = 5;
+                        } else if (v >= 4) {
+                          index3 = 4;
+                        } else if (v >= 3) {
+                          index3 = 3;
+                        } else if (v >= 2) {
+                          index3 = 2;
+                        } else if (v >= 1) {
+                          index3 = 1;
+                        } else {
+                          index3 = 0;
                         }
                         setState(() {
                           service = v;
@@ -266,7 +273,7 @@ class _ReviewPageState extends State<ReviewPage> {
                     Container(
                       width: 160 * width.w,
                       child: normalfont("${ratingLabel[index3]}", 58,
-                          index1 == 5 ? Colors.transparent : Colors.black),
+                          index3 == 0 ? Colors.transparent : Colors.black),
                     )
                   ],
                 ),
@@ -292,12 +299,8 @@ class _ReviewPageState extends State<ReviewPage> {
               ),
             ),
             child: TextFormField(
-              onChanged: (value) {
-                setState(() {
-                  review = value;
-                });
-                print(review);
-                if (review.length >= 10) {
+              onChanged: (e) {
+                if (myController.text.length >= 10) {
                   setState(() {
                     btnColor = true;
                   });
@@ -308,6 +311,7 @@ class _ReviewPageState extends State<ReviewPage> {
                     });
                 }
               },
+              controller: myController,
               textAlign: TextAlign.left,
               style: TextStyle(color: Color.fromRGBO(255, 114, 142, 0.6)),
               maxLines: 20,
@@ -316,7 +320,7 @@ class _ReviewPageState extends State<ReviewPage> {
               decoration: InputDecoration(
                 isDense: true,
                 border: InputBorder.none,
-                hintText: "  최소 10자 이상 리뷰를 작성해주세요.",
+                hintText: "최소 10자 이상 리뷰를 작성해주세요.",
                 hintStyle: TextStyle(color: Color.fromRGBO(255, 114, 142, 0.6)),
                 counterStyle: TextStyle(
                     color: Color.fromRGBO(255, 114, 142, 0.6),
@@ -350,58 +354,127 @@ class _ReviewPageState extends State<ReviewPage> {
                   flex: 1,
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount:
-                          uploadingImage == null ? 0 : uploadingImage.length,
+                      itemCount: (reviewData.image_path == null
+                              ? 0
+                              : prevImage[0].length) +
+                          (uploadingImage.length),
                       itemBuilder: (context, index) {
-                        print(
-                            "uploadingImage.length: ${uploadingImage.length}");
                         return Row(
                           children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: Stack(
-                                children: [
-                                  SizedBox(
-                                    width: 130 * width.w,
-                                    height: 130 * height.w,
-                                    child: Image.file(
-                                      uploadingImage[index],
-                                      fit: BoxFit.cover,
+                            (reviewData.image_path == null
+                                        ? 0
+                                        : prevImage[0].length) >
+                                    index
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: Stack(
+                                      children: [
+                                        SizedBox(
+                                          width: 130 * width.w,
+                                          height: 130 * height.w,
+                                          child: Image.network(
+                                            prevImage[0][index],
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.rectangle,
+                                            image: DecorationImage(
+                                                image: NetworkImage(prevImage[0]
+                                                    [index]), //imageURL
+                                                fit: BoxFit.cover),
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 130 * width.w,
+                                          height: 130 * height.w,
+                                          color: Colors.grey.withOpacity(0.3),
+                                        ),
+                                        Positioned(
+                                          right: 5 * width,
+                                          top: 5 * height,
+                                          child: InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                print(index);
+                                                if (prevImage[0].length >
+                                                    index) {
+                                                  deleteImage
+                                                      .add(prevImage[0][index]);
+                                                  prevImage[0].removeAt(index);
+                                                }
+                                              });
+                                            },
+                                            child: Image.asset(
+                                              "assets/reviewPage/x_button.png",
+                                              height: 27.3 * width.w,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: Stack(
+                                      children: [
+                                        SizedBox(
+                                          width: 130 * width.w,
+                                          height: 130 * height.w,
+                                          child: Image.file(
+                                            uploadingImage[index -
+                                                (reviewData.image_path == null
+                                                    ? 0
+                                                    : prevImage[0].length)],
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.rectangle,
+                                            image: DecorationImage(
+                                                image: FileImage(uploadingImage[
+                                                    index -
+                                                        (reviewData.image_path ==
+                                                                null
+                                                            ? 0
+                                                            : prevImage[0]
+                                                                .length)]), //imageURL
+                                                fit: BoxFit.cover),
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 130 * width.w,
+                                          height: 130 * height.w,
+                                          color: Colors.grey.withOpacity(0.3),
+                                        ),
+                                        Positioned(
+                                          right: 5 * width,
+                                          top: 5 * height,
+                                          child: InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                uploadingImage.removeAt(index -
+                                                    (reviewData.image_path ==
+                                                            null
+                                                        ? 0
+                                                        : prevImage[0].length));
+                                              });
+                                            },
+                                            child: Image.asset(
+                                              "assets/reviewPage/x_button.png",
+                                              height: 27.3 * width.w,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.rectangle,
-                                      image: DecorationImage(
-                                          image: FileImage(
-                                              uploadingImage[index]), //imageURL
-                                          fit: BoxFit.cover),
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 130 * width.w,
-                                    height: 130 * height.w,
-                                    color: Colors.grey.withOpacity(0.3),
-                                  ),
-                                  Positioned(
-                                    right: 5 * width,
-                                    top: 5 * height,
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          uploadingImage.removeAt(index);
-                                        });
-                                      },
-                                      child: Image.asset(
-                                        "assets/reviewPage/x_button.png",
-                                        height: 27.3 * width.w,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
                             Padding(
                                 padding: EdgeInsets.only(left: 17 * width.w)),
                           ],
@@ -437,8 +510,18 @@ class _ReviewPageState extends State<ReviewPage> {
                     color: Colors.white),
               ),
               onPressed: () async {
-                var formdata = await _formData();
-                reviewInsert(formdata);
+                if (reviewData == null) {
+                  var formdata = await selectFormData(data.id,
+                      myController.text, taste, cost, service, uploadingImage);
+                  await reviewInsert(formdata);
+                  Navigator.pop(context, 'ok');
+                } else {
+                  var formdata = await reviewUpdateFormdata(uploadingImage,
+                      myController.text, taste, cost, service, deleteImage);
+
+                  await reviewUpdate(reviewData.id, formdata);
+                  Navigator.pop(context, 'ok');
+                }
               },
             ),
           )
@@ -451,26 +534,18 @@ class _ReviewPageState extends State<ReviewPage> {
 class Rating extends StatelessWidget {
   final rateValue;
   final Function changed;
+  final initrating;
   const Rating({
     Key key,
     this.rateValue,
     this.changed,
+    this.initrating,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // return SmoothStarRating(
-    //     allowHalfRating: true,
-    //     onRated: changed,
-    //     starCount: 5,
-    //     rating: 0,
-    //     size: 26.0,
-    //     isReadOnly: false,
-    //     color: Colors.amber,
-    //     borderColor: Colors.amber,
-    //     spacing: 0.0);
     return RatingBar(
-      initialRating: 0,
+      initialRating: initrating,
       direction: Axis.horizontal,
       allowHalfRating: true,
       itemCount: 5,

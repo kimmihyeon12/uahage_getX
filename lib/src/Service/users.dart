@@ -18,7 +18,10 @@ class Users extends GetView<UserController> {
     try {
       var response = await http.get(
         Uri.parse(url + "/api/users/${controller.userId.value}"),
-        // headers: <String, String>{"Authorization": controller.token.value}
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': '${UserController.to.token.value}'
+        },
       );
 
       var data = await jsonDecode(response.body)['data'];
@@ -126,9 +129,14 @@ class Users extends GetView<UserController> {
     try {
       print(formdata);
       var dio = new Dio();
+      dio.options.headers = {
+        'Content-Type': 'application/json',
+        'Authorization': "${UserController.to.token.value}"
+      };
       var response = await dio.put(
-          url + "/api/users/${UserController.to.userId.value}",
-          data: formdata);
+        url + "/api/users/${UserController.to.userId.value}",
+        data: formdata,
+      );
       return response.statusCode == 200 ? "성공" : "실패";
     } catch (err) {
       return Future.error(err);
@@ -139,8 +147,14 @@ class Users extends GetView<UserController> {
   //CHECK THE EMAIL
   Future checkEmail() async {
     print("이메일 체크");
-    var response = await http.get(Uri.parse(url +
-        "/api/users/validate-email/${controller.option.value}.${controller.email.value}"));
+    var response = await http.get(
+      Uri.parse(url +
+          "/api/users/validate-email/${controller.option.value}.${controller.email.value}"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': '${UserController.to.token.value}'
+      },
+    );
     return jsonDecode(response.body)["data"];
   }
 
@@ -149,9 +163,15 @@ class Users extends GetView<UserController> {
   Future checkNickName(nickName) async {
     print("닉네임 체크");
     try {
-      var response = await http.get(Uri.parse(
-        url + "/api/users/validate-nickname/${nickName}",
-      ));
+      var response = await http.get(
+        Uri.parse(
+          url + "/api/users/validate-nickname/${nickName}",
+        ),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': '${UserController.to.token.value}'
+        },
+      );
       print("isdata nickname" + jsonDecode(response.body)["data"].toString());
       if (jsonDecode(response.body)["data"]) {
         return {"idValid": true, "value": "사용 가능한 닉네임입니다."};

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:uahage/src/Controller/location.controller.dart';
 import 'package:uahage/src/Controller/place.restaurant.bookmark.controller.dart';
+import 'package:uahage/src/Controller/user.controller.dart';
 import 'package:uahage/src/Model/restaurant.dart';
 import 'package:uahage/src/Static/url.dart';
 import 'package:http/http.dart' as http;
@@ -17,6 +18,7 @@ class Bookmark extends GetView<BookmarkController> {
       ),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': '${UserController.to.token.value}'
       },
       body: jsonEncode(data),
     );
@@ -28,7 +30,12 @@ class Bookmark extends GetView<BookmarkController> {
     final response = await http.get(
       Uri.parse(URL +
           '/api/places/restaurants?pageNumber=0&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&userId=$userId&babyBed=&babyChair=&babyMenu=&babyTableware&stroller=&diaperChange&meetingRoom&nursingRoom&playRoom&parking=&isBookmarked=1'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': '${UserController.to.token.value}'
+      },
     );
+
     List responseJson = json.decode(response.body)["data"]["data"];
 
     var currentData;

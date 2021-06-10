@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clipboard/clipboard.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/search.dart';
 import 'package:uahage/src/Controller/connection.controller.dart';
@@ -16,6 +17,8 @@ import 'package:uahage/src/Service/places.restaurant.bookmarks.dart';
 import 'package:uahage/src/Service/review.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 import 'package:uahage/src/Static/Widget/appbar.dart';
+import 'package:uahage/src/Static/Widget/average.dart';
+import 'package:uahage/src/Static/Widget/imageBig.dart';
 import 'package:uahage/src/Static/Widget/progress.dart';
 import 'package:uahage/src/Static/Widget/toast.dart';
 import 'package:uahage/src/Static/url.dart';
@@ -24,8 +27,6 @@ import 'package:uahage/src/View/Nav/HomeSub/reviewImage.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
-import 'listSubMessage.dart';
 
 class ListSub extends StatefulWidget {
   @override
@@ -100,22 +101,37 @@ class _ListSubState extends State<ListSub> {
     );
   }
 
-  select() async {
-    var responseJson = await reviewSelect(data.id);
+  var option = "DATE";
+  List imageList = [];
+
+  select(option) async {
+    reviewData = [];
+    imageList = [];
+    var responseJson = await reviewSelect(data.id, option);
     var currentData;
+
+    var i = 0;
     for (var data in responseJson["data"]) {
       currentData = Review.fromJson(data);
 
       reviewData.add(currentData);
-    }
+      reviewData[i].image_path != null
+          ? imageList.add(reviewData[i].image_path.split(','))
+          : imageList.add(null);
 
+      i++;
+    }
     setState(() {});
+  }
+
+  delete(reviewId) async {
+    await reviewDelete(reviewId);
   }
 
   @override
   void initState() {
     super.initState();
-    select();
+    select("DATE");
   }
 
   @override
@@ -748,15 +764,15 @@ class _ListSubState extends State<ListSub> {
                                     "./assets/sublistPage/reviewbutton.png",
                                     height: 54 * height.h,
                                   ),
-                                  onTap: () {
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //         builder: (_) =>
-                                    //             ReviewPage(data: data.name)));
-                                    Get.to(() => ReviewPage(
-                                          data: data,
-                                        ));
+                                  onTap: () async {
+                                    var result = await Get.to(ReviewPage(
+                                        reviewData: reviewData[index],
+                                        data: data));
+
+                                    if (result == "ok") {
+                                      await select(option);
+                                      setState(() {});
+                                    }
                                   },
                                 ),
                               ],
@@ -951,23 +967,44 @@ class _ListSubState extends State<ListSub> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    option = "DATE";
+                                    select(option);
+                                  },
                                   child: normalfont(
-                                      "최신순", 26 * width, Color(0xff4d4d4d)),
+                                      "최신순",
+                                      26 * width,
+                                      option == "DATE"
+                                          ? Color(0xff4d4d4d)
+                                          : Color(0xff939393)),
                                 ),
                                 normalfont(
                                     " | ", 26 * width, Color(0xffdddddd)),
                                 InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    option = "TOP";
+                                    select(option);
+                                  },
                                   child: normalfont(
-                                      "평점높은순", 26 * width, Color(0xff939393)),
+                                      "평점높은순",
+                                      26 * width,
+                                      option == "TOP"
+                                          ? Color(0xff4d4d4d)
+                                          : Color(0xff939393)),
                                 ),
                                 normalfont(
                                     " | ", 26 * width, Color(0xffdddddd)),
                                 InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    option = "LOW";
+                                    select(option);
+                                  },
                                   child: normalfont(
-                                      "평점낮은순", 26 * width, Color(0xff939393)),
+                                      "평점낮은순",
+                                      26 * width,
+                                      option == "LOW"
+                                          ? Color(0xff4d4d4d)
+                                          : Color(0xff939393)),
                                 ),
                               ],
                             ),
@@ -990,7 +1027,316 @@ class _ListSubState extends State<ListSub> {
                               );
                             }
                             return Container(
-                              child: SubMessage(data: reviewData[index]),
+                              width: double.infinity,
+                              color: Colors.white,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.fromLTRB(
+                                        40 * width.w, 30.h, 40 * width.w, 33.h),
+                                    width: double.infinity,
+                                    child: Column(
+                                      children: [
+                                        // first container
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            CircleAvatar(
+                                              radius: 40 * width.w,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  image: DecorationImage(
+                                                      image: NetworkImage(
+                                                          reviewData[index]
+                                                              .profile),
+                                                      fit: BoxFit.cover),
+                                                ),
+                                              ),
+                                            ),
+                                            // Container after avatar image
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                  left: 15 * width.w),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  // userName
+                                                  Row(
+                                                    children: [
+                                                      boldfont(
+                                                          "${reviewData[index].nickname} ",
+                                                          58,
+                                                          Colors.black),
+                                                      Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  left: 16 *
+                                                                      width.w)),
+                                                      normalfont(
+                                                          "${reviewData[index].created_at} ",
+                                                          58,
+                                                          Color(0xff808080)),
+                                                    ],
+                                                  ),
+                                                  // 3 Rating buttons
+                                                  Row(
+                                                    children: [
+                                                      average(
+                                                          110 * width.w,
+                                                          '맛',
+                                                          "${reviewData[index].taste_rating}"),
+                                                      Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  left: 8 *
+                                                                      width.w)),
+                                                      average(
+                                                          115 * width.w,
+                                                          '가격',
+                                                          "${reviewData[index].cost_rating}"),
+                                                      Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  left: 8.w)),
+                                                      average(
+                                                          140 * width.w,
+                                                          '서비스',
+                                                          "${reviewData[index].service_rating}"),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            UserController.to.userId ==
+                                                    reviewData[index]
+                                                        .user_id
+                                                        .toString()
+                                                ? Row(
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          var result = await Get
+                                                              .to(ReviewPage(
+                                                                  reviewData:
+                                                                      reviewData[
+                                                                          index],
+                                                                  data: data));
+                                                          if (result == "ok") {
+                                                            await select(
+                                                                option);
+                                                            setState(() {});
+                                                          }
+                                                        },
+                                                        child: Text(
+                                                          "수정",
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  24 * width.sp,
+                                                              fontFamily:
+                                                                  "NotoSansCJKkr_Medium",
+                                                              color: Color
+                                                                  .fromRGBO(
+                                                                      147,
+                                                                      147,
+                                                                      147,
+                                                                      1.0)),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  left: 20 *
+                                                                      width.w)),
+                                                      InkWell(
+                                                        onTap: () {
+                                                          return showDialog(
+                                                            context: context,
+                                                            barrierDismissible:
+                                                                false, // user must tap button!
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return AlertDialog(
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              20.0)),
+                                                                ),
+                                                                title: normalfont(
+                                                                    "리뷰를 삭제하시겠습니까",
+                                                                    62.5,
+                                                                    Color(
+                                                                        0xff4d4d4d)),
+                                                                actions: <
+                                                                    Widget>[
+                                                                  FlatButton(
+                                                                    child: normalfont(
+                                                                        "예",
+                                                                        62.5,
+                                                                        Color(
+                                                                            0xffff7292)),
+                                                                    onPressed:
+                                                                        () async {
+                                                                      Navigator.pop(
+                                                                          context,
+                                                                          "OK");
+                                                                      await delete(
+                                                                          reviewData[index]
+                                                                              .id);
+                                                                      await select(
+                                                                          option);
+                                                                    },
+                                                                  ),
+                                                                  FlatButton(
+                                                                    child: normalfont(
+                                                                        "아니오",
+                                                                        62.5,
+                                                                        Color(
+                                                                            0xffff7292)),
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.pop(
+                                                                          context,
+                                                                          "Cancel");
+                                                                    },
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                        child: Text(
+                                                          "삭제",
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  24 * width.sp,
+                                                              fontFamily:
+                                                                  "NotoSansCJKkr_Medium",
+                                                              color: Color
+                                                                  .fromRGBO(
+                                                                      147,
+                                                                      147,
+                                                                      147,
+                                                                      1.0)),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                : InkWell(
+                                                    onTap: () {},
+                                                    child: Text(
+                                                      "신고",
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              24 * width.sp,
+                                                          fontFamily:
+                                                              "NotoSansCJKkr_Medium",
+                                                          color: Color.fromRGBO(
+                                                              147,
+                                                              147,
+                                                              147,
+                                                              1.0)),
+                                                    ),
+                                                  ),
+                                          ],
+                                        ),
+                                        //text message
+                                        Container(
+                                          width: double.infinity,
+                                          margin: EdgeInsets.only(
+                                              top: 16 * width.w),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 13 * width.w,
+                                              vertical: 19 * width.w),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10),
+                                            ),
+                                            color: Color.fromRGBO(
+                                                248, 248, 248, 1.0),
+                                          ),
+                                          child: Text(
+                                            "${reviewData[index].description} ", //
+                                            style: TextStyle(
+                                                color: Color.fromRGBO(
+                                                    0, 0, 0, 0.8),
+                                                fontSize: 58.sp,
+                                                fontFamily:
+                                                    "NotoSansCJKkr_Medium"),
+                                          ),
+                                        ),
+                                        //Images
+                                        Stack(
+                                          children: [
+                                            imageList[index] == null
+                                                ? Container()
+                                                : Container(
+                                                    height: 236 * height.h,
+                                                    child: ListView(
+                                                      scrollDirection:
+                                                          Axis.horizontal,
+                                                      padding: EdgeInsets.only(
+                                                          top: 16 * height.h),
+                                                      children: <Widget>[
+                                                        for (int i = 0;
+                                                            i <
+                                                                imageList[index]
+                                                                    .length;
+                                                            i++)
+                                                          InkWell(
+                                                            child: Container(
+                                                              margin: EdgeInsets
+                                                                  .only(
+                                                                      right: 10 *
+                                                                          width
+                                                                              .w),
+                                                              width:
+                                                                  308 * width.w,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius: BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            10)),
+                                                                image: DecorationImage(
+                                                                    image: NetworkImage(
+                                                                        imageList[index]
+                                                                            [
+                                                                            i]),
+                                                                    fit: BoxFit
+                                                                        .fitWidth),
+                                                              ),
+                                                            ),
+                                                            onTap: () {
+                                                              Get.to(ImageBig(
+                                                                  image: imageList[
+                                                                          index]
+                                                                      [i]));
+                                                            },
+                                                          ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Divider(
+                                    color: Color.fromRGBO(212, 212, 212, 1.0),
+                                  )
+                                ],
+                              ),
                             );
                           },
                         ),

@@ -133,7 +133,7 @@ class _HomeState extends State<Home> {
                             onPressed: keyword != ""
                                 ? () {
                                     FocusScope.of(context).unfocus();
-                                    print("searchbar");
+
                                     Get.toNamed("/searchbar",
                                         arguments: keyword);
                                   }

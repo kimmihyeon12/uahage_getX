@@ -140,6 +140,7 @@ Future<Object> popup(context, grey_image) {
 }
 
 Future<Object> placepopup(context, Message, type, placeCode) async {
+  print(Message["name"]);
   int mark;
   if (placeCode == 1) {
     mark = Message["bookmark"];

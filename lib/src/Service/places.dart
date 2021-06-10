@@ -38,11 +38,19 @@ class Place extends GetView<PlaceController> {
       response = await http.get(
         Uri.parse(url +
             '/api/places/$placeName?pageNumber=$pageNumber&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&userId=${UserController.to.userId}&babyBed=&babyChair=&babyMenu=&babyTableware&stroller=&diaperChange&meetingRoom&nursingRoom&playRoom&parking=&isBookmarked='),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': '${UserController.to.token.value}'
+        },
       );
     } else {
       response = await http.get(
         Uri.parse(url +
             '/api/places/$placeName?pageNumber=$pageNumber&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': '${UserController.to.token.value}'
+        },
       );
     }
     List responseJson = json.decode(response.body)["data"]["data"];
