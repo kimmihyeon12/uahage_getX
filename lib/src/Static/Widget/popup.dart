@@ -10,6 +10,10 @@ import 'package:uahage/src/Model/kidCafe.dart';
 import 'package:uahage/src/Model/restaurant.dart';
 
 import 'package:uahage/src/Service/places.restaurant.bookmarks.dart';
+import 'package:uahage/src/Service/report.dart';
+import 'package:uahage/src/Service/review.dart';
+import 'package:uahage/src/Static/Font/font.dart';
+import 'package:uahage/src/Static/Widget/dialog.dart';
 import 'package:uahage/src/View/Auth/announce.dart';
 import 'package:uahage/src/View/Nav/HomeSub/listSub.dart';
 
@@ -347,6 +351,342 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
               ],
             );
           });
+        });
+      },
+      barrierDismissible: true,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierColor: null,
+      transitionDuration: const Duration(milliseconds: 150));
+}
+
+class Report extends StatefulWidget {
+  List reportIndex = [false, false, false, false, false, false];
+  var width = 1500 / 720;
+  var height = 2667 / 1280;
+
+  @override
+  _ReportState createState() => _ReportState();
+}
+
+class _ReportState extends State<Report> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+report(context, reviewId) {
+  print("report");
+  List reportIndex = [false, false, false, false, false, false];
+  var width = 1500 / 720;
+  var height = 2667 / 1280;
+
+  final myController = TextEditingController();
+  bool btnColor = false;
+  return showGeneralDialog(
+      context: context,
+      pageBuilder: (BuildContext buildContext, Animation<double> animation,
+          Animation<double> secondaryAnimation) {
+        return StatefulBuilder(builder: (context, setState) {
+          return SafeArea(
+            child: Builder(builder: (context) {
+              return Container(
+                color: Colors.black54,
+                child: Stack(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(
+                          top: 231 * height.h,
+                          bottom: 0.h,
+                          left: 85 * width.w,
+                          right: 0.w),
+                      width: 550 * width.w,
+                      height: 736 * height.h,
+                      child: Card(
+                        shadowColor: Colors.black54,
+                        elevation: 1,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: Container(
+                            margin: EdgeInsets.only(
+                              top: 30 * height.h,
+                              left: 33 * width.w,
+                              right: 33 * width.w,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                        width: 420 * width.w,
+                                        child:
+                                            boldfont("신고유형", 68, Colors.black)),
+                                    InkWell(
+                                      onTap: () {
+                                        Get.back();
+                                      },
+                                      child: Image.asset(
+                                        "./assets/sublistPage/cancel.png",
+                                        width: 26 * width.w,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                Padding(
+                                    padding:
+                                        EdgeInsets.only(top: 37 * height.h)),
+                                Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          reportIndex[0] = !reportIndex[0];
+                                        });
+                                      },
+                                      child: reportIndex[0]
+                                          ? Image.asset(
+                                              "./assets/sublistPage/check.png",
+                                              width: 32 * width.w,
+                                            )
+                                          : Image.asset(
+                                              "./assets/sublistPage/uncheck.png",
+                                              width: 32 * width.w,
+                                            ),
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(
+                                            right: 7 * width.w)),
+                                    Container(
+                                      width: 206 * width.w,
+                                      child: normalfont(
+                                          "영리목적/홍보성", 58, Color(0xff666666)),
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          reportIndex[1] = !reportIndex[1];
+                                        });
+                                      },
+                                      child: reportIndex[1]
+                                          ? Image.asset(
+                                              "./assets/sublistPage/check.png",
+                                              width: 32 * width.w,
+                                            )
+                                          : Image.asset(
+                                              "./assets/sublistPage/uncheck.png",
+                                              width: 32 * width.w,
+                                            ),
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(
+                                            right: 7 * width.w)),
+                                    normalfont("기능작동오류", 58, Color(0xff666666)),
+                                  ],
+                                ),
+                                Padding(
+                                    padding:
+                                        EdgeInsets.only(top: 47 * height.h)),
+
+                                Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          reportIndex[2] = !reportIndex[2];
+                                        });
+                                      },
+                                      child: reportIndex[2]
+                                          ? Image.asset(
+                                              "./assets/sublistPage/check.png",
+                                              width: 32 * width.w,
+                                            )
+                                          : Image.asset(
+                                              "./assets/sublistPage/uncheck.png",
+                                              width: 32 * width.w,
+                                            ),
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(
+                                            right: 7 * width.w)),
+                                    Container(
+                                      width: 206 * width.w,
+                                      child: normalfont(
+                                          "음란성/선전성", 58, Color(0xff666666)),
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          reportIndex[3] = !reportIndex[3];
+                                        });
+                                      },
+                                      child: reportIndex[3]
+                                          ? Image.asset(
+                                              "./assets/sublistPage/check.png",
+                                              width: 32 * width.w,
+                                            )
+                                          : Image.asset(
+                                              "./assets/sublistPage/uncheck.png",
+                                              width: 32 * width.w,
+                                            ),
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(
+                                            right: 7 * width.w)),
+                                    normalfont(
+                                        "욕설/인신공격", 58, Color(0xff666666)),
+                                  ],
+                                ),
+                                Padding(
+                                    padding:
+                                        EdgeInsets.only(top: 47 * height.h)),
+                                Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          reportIndex[4] = !reportIndex[4];
+                                        });
+                                      },
+                                      child: reportIndex[4]
+                                          ? Image.asset(
+                                              "./assets/sublistPage/check.png",
+                                              width: 32 * width.w,
+                                            )
+                                          : Image.asset(
+                                              "./assets/sublistPage/uncheck.png",
+                                              width: 32 * width.w,
+                                            ),
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(
+                                            right: 7 * width.w)),
+                                    Container(
+                                      width: 206 * width.w,
+                                      child: normalfont(
+                                          "개인정보노출", 58, Color(0xff666666)),
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          reportIndex[5] = !reportIndex[5];
+                                        });
+                                      },
+                                      child: reportIndex[5]
+                                          ? Image.asset(
+                                              "./assets/sublistPage/check.png",
+                                              width: 32 * width.w,
+                                            )
+                                          : Image.asset(
+                                              "./assets/sublistPage/uncheck.png",
+                                              width: 32 * width.w,
+                                            ),
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(
+                                            right: 7 * width.w)),
+                                    normalfont("반복 게시", 58, Color(0xff666666)),
+                                  ],
+                                ),
+                                Padding(
+                                    padding:
+                                        EdgeInsets.only(top: 49 * height.h)),
+                                // Text input
+                                Container(
+                                  width: double.infinity,
+                                  height: 330 * width.w,
+                                  decoration: BoxDecoration(
+                                    color: Color.fromRGBO(255, 114, 142, 0.05),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                    border: Border.all(
+                                      color: Color.fromRGBO(255, 114, 142, 0.4),
+                                    ),
+                                  ),
+                                  child: TextFormField(
+                                    onChanged: (e) {
+                                      if (myController.text.length >= 10) {
+                                        setState(() {
+                                          btnColor = true;
+                                        });
+                                      } else {
+                                        if (btnColor)
+                                          setState(() {
+                                            btnColor = false;
+                                          });
+                                      }
+                                    },
+                                    controller: myController,
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromRGBO(255, 114, 142, 0.6)),
+                                    maxLines: 20,
+                                    maxLength: 100,
+                                    cursorColor:
+                                        Color.fromRGBO(255, 114, 142, 0.6),
+                                    decoration: InputDecoration(
+                                      isDense: true,
+                                      border: InputBorder.none,
+                                      hintText: "신고하실 내용을 설명해주세요",
+                                      hintStyle: TextStyle(
+                                          color: Color.fromRGBO(
+                                              255, 114, 142, 0.6)),
+                                      counterStyle: TextStyle(
+                                          fontSize: 50.sp,
+                                          color: Color.fromRGBO(
+                                              255, 114, 142, 0.6),
+                                          fontFamily: "NotoSansCJKkr_Medium"),
+                                      contentPadding: EdgeInsets.only(
+                                          top: 20.sp,
+                                          right: 19.sp,
+                                          left: 15.sp),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )),
+                      ),
+                    ),
+                    Positioned(
+                      top: 1000 * height.h,
+                      left: 117 * width.w,
+                      right: 117 * width.w,
+                      child: SizedBox(
+                        width: 488 * width.w,
+                        height: 96 * height.h,
+                        child: FlatButton(
+                          onPressed: () async {
+                            bool result = await reviewReport(
+                                reportIndex, reviewId, myController.text);
+                            if (result) {
+                              await dialog(context, "신고가 완료되었습니다");
+                              Get.back();
+                            }
+                          },
+                          shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(8.0),
+                          ),
+                          color: Color.fromRGBO(255, 114, 148, 1.0),
+                          child: Text(
+                            "완료",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'NotoSansCJKkr_Medium',
+                              fontSize: 60.sp,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          );
         });
       },
       barrierDismissible: true,

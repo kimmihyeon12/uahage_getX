@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:uahage/src/Service/review.dart';
+import 'package:uahage/src/Static/Widget/appbar.dart';
 import 'package:uahage/src/Static/Widget/imageBig.dart';
 import 'package:uahage/src/Static/url.dart';
 import 'package:http/http.dart' as http;
@@ -32,30 +33,11 @@ class _ReviewImageState extends State<ReviewImage> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, width: 720, height: 1280);
+    ScreenUtil.init(context, width: 1500, height: 2667);
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(90.h),
-        child: AppBar(
-          backgroundColor: Colors.white,
-          centerTitle: true,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: Color(0xffff7292)),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          title: Text(
-            '사진리뷰 모아보기',
-            style: TextStyle(
-                color: Color(0xffff728e),
-                fontFamily: "NotoSansCJKkr_Medium",
-                fontSize: 30.0.sp),
-          ),
-        ),
-      ),
+      appBar: appBar(context, "사진리뷰모아보기", ""),
       body: GridView.builder(
           itemCount: image.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

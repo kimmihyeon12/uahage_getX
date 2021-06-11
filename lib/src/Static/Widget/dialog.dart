@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 import 'package:uahage/src/Static/Widget/progress.dart';
 
@@ -22,7 +23,7 @@ dialog(context, text) {
       actions: [
         FlatButton(
           onPressed: () {
-            Navigator.pop(context);
+            Get.back();
           },
           child: normalfont("확인", 62.5, Color(0xffff7292)),
         ),

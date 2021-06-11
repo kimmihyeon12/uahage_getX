@@ -118,7 +118,7 @@ class Users extends GetView<UserController> {
       Uri.parse(url + "/api/users/${controller.userId.value}"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': '${controller.kakaotoken.value}'
+        'Authorization': '${controller.token.value}'
       },
     );
     return jsonDecode(response.body)["data"];
