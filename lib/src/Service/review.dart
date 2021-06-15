@@ -121,7 +121,7 @@ reviewUpdateFormdata(uploadingImage, desc, tasteRating, costRating,
   return formData;
 }
 
-selectFormData(placeId, text, taste, cost, service, uploadingImage) async {
+insertFormData(placeId, text, taste, cost, service, uploadingImage) async {
   FormData formData = FormData.fromMap({
     "userId": UserController.to.userId.toString(),
     "placeId": placeId,

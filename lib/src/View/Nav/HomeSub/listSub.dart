@@ -26,6 +26,7 @@ import 'package:uahage/src/Static/Widget/toast.dart';
 import 'package:uahage/src/Static/url.dart';
 import 'package:uahage/src/View/Nav/HomeSub/review.dart';
 import 'package:uahage/src/View/Nav/HomeSub/reviewImage.dart';
+import 'package:uahage/src/View/Nav/HomeSub/reviseSuggest.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -106,19 +107,31 @@ class _ListSubState extends State<ListSub> {
   var option = "DATE";
   List imageList = [];
   double aver = 0;
+  List score = [];
   double averStar = 0;
+  int maxScoreNumber;
+  int maxScore = 0;
+  bool isMyId = false;
+  var datas;
+  int count = 0;
+  //리뷰 전체보기
   select(option) async {
     reviewData = [];
     imageList = [];
     var responseJson = await reviewSelect(data.id, option);
 
     var currentData;
-    print(responseJson);
 
     var i = 0;
     for (var data in responseJson["data"]) {
       currentData = Review.fromJson(data);
 
+      if (data["user_id"].toString() == UserController.to.userId.toString()) {
+        setState(() {
+          isMyId = true;
+          datas = Review.fromJson(data);
+        });
+      }
       reviewData.add(currentData);
       reviewData[i].image_path != null
           ? imageList.add(reviewData[i].image_path.split(','))
@@ -127,12 +140,26 @@ class _ListSubState extends State<ListSub> {
       i++;
     }
     setState(() {
-      aver = responseJson["average"] ?? 0;
+      aver = 4;
+      //aver = responseJson["average"] ?? 0;
+      score = [];
+      score.add(responseJson['totalDetailObj']["onePointTotal"]);
+      score.add(responseJson['totalDetailObj']["twoPointTotal"]);
+      score.add(responseJson['totalDetailObj']["threePointTotal"]);
+      score.add(responseJson['totalDetailObj']["fourPointTotal"]);
+      score.add(responseJson['totalDetailObj']["fivePointTotal"]);
+      for (int i = 0; i < score.length; i++) {
+        if (maxScore < score[i]) {
+          maxScore = score[i];
+        }
+      }
       averStar = ((aver * 2).ceil()) / 2;
-      print(averStar);
+
+      print(score);
     });
   }
 
+//리뷰삭제하기
   delete(reviewId) async {
     await reviewDelete(reviewId);
   }
@@ -143,9 +170,11 @@ class _ListSubState extends State<ListSub> {
     select("DATE");
   }
 
-  int count = 0;
   @override
   Widget build(BuildContext context) {
+    print("listsub");
+    count = 0;
+    prevImage = [];
     for (int i = 0; i < imageList.length; i++) {
       if (imageList[i] != null) {
         for (int j = 0; j < imageList[i].length; j++) {
@@ -156,7 +185,6 @@ class _ListSubState extends State<ListSub> {
         }
       }
     }
-    print("listsub");
     connection();
     print(imageList);
 
@@ -310,28 +338,21 @@ class _ListSubState extends State<ListSub> {
                                                     width: 38 * width.w,
                                                   ),
                                                 )
-                                              : Container(
-                                                  margin: EdgeInsets.only(
-                                                      right: 12 * width.w),
-                                                  child: Image.asset(
-                                                    "./assets/listPage/star_color.png",
-                                                    width: 38 * width.w,
-                                                  ),
-                                                ),
+                                              : Container(),
                                           for (int i = 0;
-                                              i < 5 - averStar.toInt() - 1;
+                                              i < 5 - averStar.ceil().toInt();
                                               i++)
                                             Container(
-                                              margin: EdgeInsets.only(
-                                                  left: 12 * width.w),
                                               child: Image.asset(
                                                 "./assets/listPage/star_grey.png",
                                                 width: 38 * width.w,
                                               ),
+                                              margin: EdgeInsets.only(
+                                                  right: 12 * width.w),
                                             ),
-                                          Padding(
-                                              padding: EdgeInsets.only(
-                                                  left: 12 * width.w)),
+                                          // Padding(
+                                          //     padding: EdgeInsets.only(
+                                          //         left: 12 * width.w)),
                                           Text('${aver}',
                                               style: TextStyle(
                                                 color: Color(0xff4d4d4d),
@@ -432,7 +453,7 @@ class _ListSubState extends State<ListSub> {
                                         ],
                                       ),
                                       onTap: () {
-                                        FlutterClipboard.copy(data.address);
+                                        FlutterClipboard.copy(data.phone);
                                         toast(context, "번호가 복사되었습니다");
                                       },
                                     )
@@ -794,13 +815,19 @@ class _ListSubState extends State<ListSub> {
                                     ]),
                               ))
                             : progress(),
-                        Container(
+                        InkWell(
+                          onTap: () {
+                            Get.to(ReviseSuggest(
+                                placeId: data.id, placeCategoryId: placeCode));
+                          },
                           child: Container(
-                            height: 170.h,
-                            child: Center(
-                              child: Image.asset(
-                                "./assets/sublistPage/modify.png",
-                                height: 80.h,
+                            child: Container(
+                              height: 170.h,
+                              child: Center(
+                                child: Image.asset(
+                                  "./assets/sublistPage/modify.png",
+                                  height: 80.h,
+                                ),
                               ),
                             ),
                           ),
@@ -809,282 +836,460 @@ class _ListSubState extends State<ListSub> {
                           height: 26 * height.h,
                           color: Color(0xfff7f7f7),
                         ),
-                        Container(
-                            margin: EdgeInsets.only(
-                              left: 87 * width.w,
-                              top: 36 * height.h,
-                            ),
-                            child: Column(
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                        width: 210 * height.h,
-                                        child: Column(
-                                          children: [
-                                            normalfont("${data.name}", 58,
-                                                Colors.black),
-                                            normalfont("다녀오셨나요?", 58,
-                                                Color(0xff939393)),
-                                          ],
-                                        )),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        left: 44 * width.w,
-                                      ),
+                        placeCode == 2
+                            ? Container(
+                                margin: EdgeInsets.only(
+                                    top: 36 * height.h,
+                                    left: 35 * width.w,
+                                    right: 35 * width.w,
+                                    bottom: 253 * height.h),
+                                padding: EdgeInsets.all(18 * width.w),
+                                decoration: BoxDecoration(
+                                    color: Color.fromRGBO(255, 114, 142, 0.1),
+                                    border: Border.all(
+                                      color: Color.fromRGBO(255, 114, 142, 0.7),
                                     ),
-                                    InkWell(
-                                      child: Image.asset(
-                                        "./assets/sublistPage/reviewbutton.png",
-                                        height: 54 * height.h,
-                                      ),
-                                      onTap: () async {
-                                        var result = await Get.to(ReviewPage(
-                                            reviewData: reviewData[index],
-                                            data: data));
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10))),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        boldfont("특정의료기관에 대한 리뷰", 56,
+                                            Color.fromRGBO(255, 114, 142, 0.7)),
+                                        normalfont("는 의료법에 따라 치료 효과로", 56,
+                                            Color.fromRGBO(255, 114, 142, 0.7))
+                                      ],
+                                    ),
+                                    normalfont(
+                                        "오인하게 할 우려가 있고,환자유인행위의 소지가 있어 리뷰를 작성할 수 없습니다.",
+                                        56,
+                                        Color.fromRGBO(255, 114, 142, 0.7))
+                                  ],
+                                ))
+                            : Container(),
 
-                                        if (result == "ok") {
-                                          await select(option);
-                                          setState(() {});
-                                        }
-                                      },
+                        placeCode == 1
+                            ? Container(
+                                margin: EdgeInsets.only(
+                                  left: 87 * width.w,
+                                  top: 36 * height.h,
+                                ),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            width: 210 * height.h,
+                                            child: Column(
+                                              children: [
+                                                normalfont("${data.name}", 58,
+                                                    Colors.black),
+                                                normalfont("다녀오셨나요?", 58,
+                                                    Color(0xff939393)),
+                                              ],
+                                            )),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                            left: 44 * width.w,
+                                          ),
+                                        ),
+                                        isMyId
+                                            ? InkWell(
+                                                child: Image.asset(
+                                                  "./assets/sublistPage/reviewrevisebutton.png",
+                                                  height: 54 * height.h,
+                                                ),
+                                                onTap: () async {
+                                                  var result = await Get.to(
+                                                      ReviewPage(
+                                                          reviewData: datas,
+                                                          data: data));
+
+                                                  if (result == "ok") {
+                                                    await select(option);
+                                                    setState(() {});
+                                                  }
+                                                },
+                                              )
+                                            : InkWell(
+                                                child: Image.asset(
+                                                  "./assets/sublistPage/reviewbutton.png",
+                                                  height: 54 * height.h,
+                                                ),
+                                                onTap: () async {
+                                                  if (reviewData[index]
+                                                          .nickname ==
+                                                      null) {
+                                                    dialog(
+                                                        context, "프로필을 입력해주세요");
+                                                  } else {
+                                                    var result = await Get.to(
+                                                        ReviewPage(
+                                                            reviewData: null,
+                                                            data: data));
+
+                                                    if (result == "ok") {
+                                                      await select(option);
+                                                      setState(() {});
+                                                    }
+                                                  }
+                                                },
+                                              ),
+                                      ],
                                     ),
                                   ],
-                                ),
-                              ],
-                            )),
-                        Container(
-                          margin: EdgeInsets.only(
-                              left: 36 * width.w, top: 36 * width.h),
-                          child: Stack(
-                            children: [
-                              Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.4),
-                                          offset: Offset(0.0, 0.1), //(x,y)
-                                          blurRadius: 7.0,
-                                          spreadRadius: 1,
-                                        ),
-                                      ],
-                                      border: Border.all(
-                                        color: Colors.white,
-                                      ),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(20))),
-                                  height: 193 * height.h,
-                                  width: 648 * width.w),
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.only(left: 22 * height.h),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.only(top: 22 * height.h),
-                                      ),
-                                      normalfont("고객만족도", 24 * width,
-                                          Color(0xff939393)),
-                                      boldfont('${aver}', 55 * width,
-                                          Color(0xff3a3939)),
-                                      Row(
-                                        children: [
-                                          for (int i = 0;
-                                              i < averStar.toInt();
-                                              i++)
-                                            Container(
-                                              margin: EdgeInsets.only(
-                                                  left: 12 * width.w),
-                                              child: Image.asset(
-                                                "./assets/listPage/star_color.png",
-                                                width: 38 * width.w,
+                                ))
+                            : Container(),
+
+                        placeCode == 1
+                            ? Container(
+                                margin: EdgeInsets.only(
+                                    left: 36 * width.w, top: 36 * width.h),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey
+                                                    .withOpacity(0.4),
+                                                offset:
+                                                    Offset(0.0, 0.1), //(x,y)
+                                                blurRadius: 7.0,
+                                                spreadRadius: 1,
                                               ),
+                                            ],
+                                            border: Border.all(
+                                              color: Colors.white,
                                             ),
-                                          (averStar - averStar.toInt() == 0.5)
-                                              ? Container(
-                                                  margin: EdgeInsets.only(
-                                                      left: 12 * width.w),
-                                                  child: Image.asset(
-                                                    "./assets/listPage/star_half.png",
-                                                    width: 38 * width.w,
-                                                  ),
-                                                )
-                                              : Container(
-                                                  margin: EdgeInsets.only(
-                                                      left: 12 * width.w),
-                                                  child: Image.asset(
-                                                    "./assets/listPage/star_color.png",
-                                                    width: 38 * width.w,
-                                                  ),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20))),
+                                        height: 193 * height.h,
+                                        width: 648 * width.w),
+                                    score.length > 0
+                                        ? Container(
+                                            margin: EdgeInsets.only(top: 35.h),
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 22 * height.h),
                                                 ),
-                                          for (int i = 0;
-                                              i < 5 - averStar.toInt() - 1;
-                                              i++)
-                                            Container(
-                                              margin: EdgeInsets.only(
-                                                  left: 12 * width.w),
-                                              child: Image.asset(
-                                                "./assets/listPage/star_grey.png",
-                                                width: 38 * width.w,
-                                              ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    normalfont(
+                                                        "고객만족도",
+                                                        24 * width,
+                                                        Color(0xff939393)),
+                                                    boldfont(
+                                                        '${aver}',
+                                                        55 * width,
+                                                        Color(0xff3a3939)),
+                                                    Row(
+                                                      children: [
+                                                        for (int i = 0;
+                                                            i <
+                                                                averStar
+                                                                    .toInt();
+                                                            i++)
+                                                          Container(
+                                                            margin:
+                                                                EdgeInsets.only(
+                                                                    right: 12 *
+                                                                        width
+                                                                            .w),
+                                                            child: Image.asset(
+                                                              "./assets/listPage/star_color.png",
+                                                              width:
+                                                                  38 * width.w,
+                                                            ),
+                                                          ),
+                                                        (averStar -
+                                                                    averStar
+                                                                        .toInt() ==
+                                                                0.5)
+                                                            ? Container(
+                                                                margin: EdgeInsets.only(
+                                                                    right: 12 *
+                                                                        width
+                                                                            .w),
+                                                                child:
+                                                                    Image.asset(
+                                                                  "./assets/listPage/star_half.png",
+                                                                  width: 38 *
+                                                                      width.w,
+                                                                ),
+                                                              )
+                                                            : Container(),
+                                                        for (int i = 0;
+                                                            i <
+                                                                5 -
+                                                                    averStar
+                                                                        .ceil()
+                                                                        .toInt();
+                                                            i++)
+                                                          Container(
+                                                            child: Image.asset(
+                                                              "./assets/listPage/star_grey.png",
+                                                              width:
+                                                                  38 * width.w,
+                                                            ),
+                                                            margin:
+                                                                EdgeInsets.only(
+                                                                    right: 12 *
+                                                                        width
+                                                                            .w),
+                                                          ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 30 * width.w)),
+                                                Column(
+                                                  children: [
+                                                    Image.asset(
+                                                      "./assets/sublistPage/line.png",
+                                                      height: 158 * height.h,
+                                                    ),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 35 * width.w)),
+                                                Column(
+                                                  children: [
+                                                    normalfont('${score[4]}',
+                                                        50, Color(0xffa9a9a9)),
+                                                    scoreImage(4),
+                                                    normalfont("5점", 50,
+                                                        Color(0xffa9a9a9)),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 21 * width.w)),
+                                                Column(
+                                                  children: [
+                                                    normalfont('${score[3]}',
+                                                        50, Color(0xffa9a9a9)),
+                                                    scoreImage(3),
+                                                    normalfont("4점", 50,
+                                                        Color(0xffa9a9a9)),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 21 * width.w)),
+                                                Column(
+                                                  children: [
+                                                    normalfont('${score[2]}',
+                                                        50, Color(0xffa9a9a9)),
+                                                    scoreImage(2),
+                                                    normalfont("3점", 50,
+                                                        Color(0xffa9a9a9)),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 21 * width.w)),
+                                                Column(
+                                                  children: [
+                                                    normalfont('${score[1]}',
+                                                        50, Color(0xffa9a9a9)),
+                                                    scoreImage(1),
+                                                    normalfont("2점", 50,
+                                                        Color(0xffa9a9a9)),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 21 * width.w)),
+                                                Column(
+                                                  children: [
+                                                    normalfont('${score[0]}',
+                                                        50, Color(0xffa9a9a9)),
+                                                    scoreImage(0),
+                                                    normalfont("1점", 50,
+                                                        Color(0xffa9a9a9)),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 21 * width.w)),
+                                              ],
                                             ),
-                                        ],
-                                      ),
-                                    ],
-                                  )
-                                ],
+                                          )
+                                        : Container()
+                                  ],
+                                ),
                               )
-                            ],
-                          ),
-                        ),
-                        Padding(padding: EdgeInsets.only(top: 36 * width.w)),
+                            : Container(),
+
+                        placeCode == 1
+                            ? Padding(
+                                padding: EdgeInsets.only(top: 36 * width.w))
+                            : Padding(
+                                padding: EdgeInsets.only(top: 0 * width.w)),
 
                         // 4 images
 
-                        Row(
-                          children: [
-                            Padding(padding: EdgeInsets.only(left: 36.w)),
-                            for (int i = 0; i < prevImage.length; i++)
-                              i < 3
-                                  ? Container(
-                                      margin:
-                                          EdgeInsets.only(left: 18 * width.w),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        child: SizedBox(
-                                          width: 148 * width.w,
-                                          height: 148 * height.w,
-                                          child: Image.network(
-                                            prevImage[i],
-                                            fit: BoxFit.cover,
+                        placeCode == 1
+                            ? Row(
+                                children: [
+                                  Padding(padding: EdgeInsets.only(left: 36.w)),
+                                  for (int i = 0; i < prevImage.length; i++)
+                                    i < 3
+                                        ? Container(
+                                            margin: EdgeInsets.only(
+                                                left: 18 * width.w),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              child: SizedBox(
+                                                width: 148 * width.w,
+                                                height: 148 * height.w,
+                                                child: Image.network(
+                                                  prevImage[i],
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        : InkWell(
+                                            onTap: () {
+                                              Get.to(ReviewImage(data: data));
+                                            },
+                                            child: Container(
+                                              margin: EdgeInsets.only(
+                                                  left: 18 * width.w),
+                                              child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                  child: Stack(
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 148 * width.w,
+                                                        height: 148 * height.w,
+                                                        child: Image.network(
+                                                          prevImage[i],
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        width: 148 * width.w,
+                                                        height: 148 * height.w,
+                                                        color: Colors.black
+                                                            .withOpacity(0.5),
+                                                      ),
+                                                      Container(
+                                                        width: 148 * width.w,
+                                                        height: 148 * width.w,
+                                                        child: Center(
+                                                          child: Image.asset(
+                                                            "./assets/reviewPage/plus.png",
+                                                            color: Colors.white,
+                                                            width: 38 * width.w,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    )
-                                  : InkWell(
-                                      onTap: () {
-                                        Get.to(ReviewImage(data: data));
-                                      },
-                                      child: Container(
-                                        margin:
-                                            EdgeInsets.only(left: 18 * width.w),
-                                        child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
-                                            child: Stack(
-                                              children: [
-                                                SizedBox(
-                                                  width: 148 * width.w,
-                                                  height: 148 * height.w,
-                                                  child: Image.network(
-                                                    prevImage[i],
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  width: 148 * width.w,
-                                                  height: 148 * height.w,
-                                                  color: Colors.black
-                                                      .withOpacity(0.5),
-                                                ),
-                                                Container(
-                                                  width: 148 * width.w,
-                                                  height: 148 * width.w,
-                                                  child: Center(
-                                                    child: Image.asset(
-                                                      "./assets/reviewPage/plus.png",
-                                                      color: Colors.white,
-                                                      width: 38 * width.w,
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            )),
-                                      ),
-                                    ),
-                          ],
-                        ),
-
-                        Padding(padding: EdgeInsets.only(top: 36 * width.w)),
-                        Container(
-                          height: 26 * height.h,
-                          color: Color(0xfff7f7f7),
-                        ),
+                                ],
+                              )
+                            : Container(),
+                        placeCode == 1
+                            ? Padding(
+                                padding: EdgeInsets.only(top: 36 * width.w))
+                            : Padding(
+                                padding: EdgeInsets.only(top: 0 * width.w)),
+                        placeCode == 1
+                            ? Container(
+                                height: 26 * height.h,
+                                color: Color(0xfff7f7f7),
+                              )
+                            : Container(),
 
                         //Sorting condition
-                        Container(
-                          // height: 20.h,
-                          width: double.infinity,
-                          child: Row(
-                            children: [
-                              Padding(
-                                  padding: EdgeInsets.only(
-                                      top: 80 * height.h, left: 35 * width.w)),
-                              normalfont("리뷰 ", 30 * width, Color(0xff4d4d4d)),
-                              normalfont(reviewData.length.toString(),
-                                  30 * width, Color(0xffe9718d)),
-                              Spacer(),
-                              Container(
+                        placeCode == 1
+                            ? Container(
+                                // height: 20.h,
+                                width: double.infinity,
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
                                   children: [
-                                    InkWell(
-                                      onTap: () {
-                                        option = "DATE";
-                                        select(option);
-                                      },
-                                      child: normalfont(
-                                          "최신순",
-                                          26 * width,
-                                          option == "DATE"
-                                              ? Color(0xff4d4d4d)
-                                              : Color(0xff939393)),
-                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(
+                                            top: 80 * height.h,
+                                            left: 35 * width.w)),
                                     normalfont(
-                                        " | ", 26 * width, Color(0xffdddddd)),
-                                    InkWell(
-                                      onTap: () {
-                                        option = "TOP";
-                                        select(option);
-                                      },
-                                      child: normalfont(
-                                          "평점높은순",
-                                          26 * width,
-                                          option == "TOP"
-                                              ? Color(0xff4d4d4d)
-                                              : Color(0xff939393)),
+                                        "리뷰 ", 30 * width, Color(0xff4d4d4d)),
+                                    normalfont(reviewData.length.toString(),
+                                        30 * width, Color(0xffe9718d)),
+                                    Spacer(),
+                                    Container(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              option = "DATE";
+                                              select(option);
+                                            },
+                                            child: normalfont(
+                                                "최신순",
+                                                26 * width,
+                                                option == "DATE"
+                                                    ? Color(0xff4d4d4d)
+                                                    : Color(0xff939393)),
+                                          ),
+                                          normalfont(" | ", 26 * width,
+                                              Color(0xffdddddd)),
+                                          InkWell(
+                                            onTap: () {
+                                              option = "TOP";
+                                              select(option);
+                                            },
+                                            child: normalfont(
+                                                "평점높은순",
+                                                26 * width,
+                                                option == "TOP"
+                                                    ? Color(0xff4d4d4d)
+                                                    : Color(0xff939393)),
+                                          ),
+                                          normalfont(" | ", 26 * width,
+                                              Color(0xffdddddd)),
+                                          InkWell(
+                                            onTap: () {
+                                              option = "LOW";
+                                              select(option);
+                                            },
+                                            child: normalfont(
+                                                "평점낮은순",
+                                                26 * width,
+                                                option == "LOW"
+                                                    ? Color(0xff4d4d4d)
+                                                    : Color(0xff939393)),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    normalfont(
-                                        " | ", 26 * width, Color(0xffdddddd)),
-                                    InkWell(
-                                      onTap: () {
-                                        option = "LOW";
-                                        select(option);
-                                      },
-                                      child: normalfont(
-                                          "평점낮은순",
-                                          26 * width,
-                                          option == "LOW"
-                                              ? Color(0xff4d4d4d)
-                                              : Color(0xff939393)),
-                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(right: 38.w)),
                                   ],
                                 ),
-                              ),
-                              Padding(padding: EdgeInsets.only(right: 38.w)),
-                            ],
-                          ),
-                        ),
+                              )
+                            : Container(),
                         (() {
                           return Container(
                             child: ListView.builder(
@@ -1118,19 +1323,41 @@ class _ListSubState extends State<ListSub> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                CircleAvatar(
-                                                  radius: 40 * width.w,
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      image: DecorationImage(
-                                                          image: NetworkImage(
-                                                              reviewData[index]
-                                                                  .profile),
-                                                          fit: BoxFit.cover),
-                                                    ),
-                                                  ),
-                                                ),
+                                                reviewData[index].profile !=
+                                                        null
+                                                    ? CircleAvatar(
+                                                        radius: 40 * width.w,
+                                                        child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            image: DecorationImage(
+                                                                image: NetworkImage(
+                                                                    reviewData[
+                                                                            index]
+                                                                        .profile),
+                                                                fit: BoxFit
+                                                                    .cover),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : CircleAvatar(
+                                                        radius: 40 * width.w,
+                                                        child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            image: DecorationImage(
+                                                                image: AssetImage(
+                                                                    "./assets/myPage/avatar.png"),
+                                                                fit: BoxFit
+                                                                    .cover),
+                                                          ),
+                                                        ),
+                                                      ),
+
                                                 // Container after avatar image
                                                 Container(
                                                   margin: EdgeInsets.only(
@@ -1206,8 +1433,7 @@ class _ListSubState extends State<ListSub> {
                                                               var result = await Get
                                                                   .to(ReviewPage(
                                                                       reviewData:
-                                                                          reviewData[
-                                                                              index],
+                                                                          datas,
                                                                       data:
                                                                           data));
                                                               if (result ==
@@ -1274,6 +1500,10 @@ class _ListSubState extends State<ListSub> {
                                                                               "OK");
                                                                           await delete(
                                                                               reviewData[index].id);
+                                                                          datas =
+                                                                              null;
+                                                                          isMyId =
+                                                                              false;
                                                                           await select(
                                                                               option);
                                                                         },
@@ -1459,5 +1689,44 @@ class _ListSubState extends State<ListSub> {
             )),
       ),
     );
+  }
+
+  Widget scoreImage(i) {
+    print("i $i");
+    if (maxScore == score[i] && score[i] != 0) {
+      return Image.asset(
+        "./assets/sublistPage/bar6.png",
+        height: 89 * height.h,
+      );
+    } else {
+      if (score[i] == 0) {
+        return Image.asset(
+          "./assets/sublistPage/bar1.png",
+          height: 89 * height.h,
+        );
+      } else if (0 <= score[i] || score[i] <= maxScore * (1 / 4).ceil()) {
+        return Image.asset(
+          "./assets/sublistPage/bar2.png",
+          height: 89 * height.h,
+        );
+      } else if (maxScore * (1 / 4).ceil() < score[i] ||
+          score[i] <= maxScore * (2 / 4).ceil()) {
+        return Image.asset(
+          "./assets/sublistPage/bar3.png",
+          height: 89 * height.h,
+        );
+      } else if (maxScore * (2 / 4).ceil() < score[i] ||
+          score[i] <= maxScore * (3 / 4).ceil()) {
+        return Image.asset(
+          "./assets/sublistPage/bar4.png",
+          height: 89 * height.h,
+        );
+      } else {
+        return Image.asset(
+          "./assets/sublistPage/bar5.png",
+          height: 89 * height.h,
+        );
+      }
+    }
   }
 }

@@ -361,6 +361,7 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
 
 class Report extends StatefulWidget {
   List reportIndex = [false, false, false, false, false, false];
+
   var width = 1500 / 720;
   var height = 2667 / 1280;
 
@@ -380,7 +381,7 @@ report(context, reviewId) {
   List reportIndex = [false, false, false, false, false, false];
   var width = 1500 / 720;
   var height = 2667 / 1280;
-
+  bool isreport = false;
   final myController = TextEditingController();
   bool btnColor = false;
   return showGeneralDialog(
@@ -445,6 +446,14 @@ report(context, reviewId) {
                                       onTap: () {
                                         setState(() {
                                           reportIndex[0] = !reportIndex[0];
+                                          isreport = false;
+                                          for (int i = 0;
+                                              i < reportIndex.length;
+                                              i++) {
+                                            if (reportIndex[i]) {
+                                              isreport = true;
+                                            }
+                                          }
                                         });
                                       },
                                       child: reportIndex[0]
@@ -469,6 +478,14 @@ report(context, reviewId) {
                                       onTap: () {
                                         setState(() {
                                           reportIndex[1] = !reportIndex[1];
+                                          isreport = false;
+                                          for (int i = 0;
+                                              i < reportIndex.length;
+                                              i++) {
+                                            if (reportIndex[i]) {
+                                              isreport = true;
+                                            }
+                                          }
                                         });
                                       },
                                       child: reportIndex[1]
@@ -497,6 +514,14 @@ report(context, reviewId) {
                                       onTap: () {
                                         setState(() {
                                           reportIndex[2] = !reportIndex[2];
+                                          isreport = false;
+                                          for (int i = 0;
+                                              i < reportIndex.length;
+                                              i++) {
+                                            if (reportIndex[i]) {
+                                              isreport = true;
+                                            }
+                                          }
                                         });
                                       },
                                       child: reportIndex[2]
@@ -521,6 +546,14 @@ report(context, reviewId) {
                                       onTap: () {
                                         setState(() {
                                           reportIndex[3] = !reportIndex[3];
+                                          isreport = false;
+                                          for (int i = 0;
+                                              i < reportIndex.length;
+                                              i++) {
+                                            if (reportIndex[i]) {
+                                              isreport = true;
+                                            }
+                                          }
                                         });
                                       },
                                       child: reportIndex[3]
@@ -549,6 +582,14 @@ report(context, reviewId) {
                                       onTap: () {
                                         setState(() {
                                           reportIndex[4] = !reportIndex[4];
+                                          isreport = false;
+                                          for (int i = 0;
+                                              i < reportIndex.length;
+                                              i++) {
+                                            if (reportIndex[i]) {
+                                              isreport = true;
+                                            }
+                                          }
                                         });
                                       },
                                       child: reportIndex[4]
@@ -573,6 +614,14 @@ report(context, reviewId) {
                                       onTap: () {
                                         setState(() {
                                           reportIndex[5] = !reportIndex[5];
+                                          isreport = false;
+                                          for (int i = 0;
+                                              i < reportIndex.length;
+                                              i++) {
+                                            if (reportIndex[i]) {
+                                              isreport = true;
+                                            }
+                                          }
                                         });
                                       },
                                       child: reportIndex[5]
@@ -660,17 +709,25 @@ report(context, reviewId) {
                         height: 96 * height.h,
                         child: FlatButton(
                           onPressed: () async {
-                            bool result = await reviewReport(
-                                reportIndex, reviewId, myController.text);
-                            if (result) {
-                              await dialog(context, "신고가 완료되었습니다");
-                              Get.back();
+                            if (myController.text.length > 10 && isreport) {
+                              bool result = await reviewReport(
+                                  reportIndex, reviewId, myController.text);
+                              if (result) {
+                                await dialog(context, "신고가 완료되었습니다");
+                                Get.back();
+                              }
+                            } else {
+                              await dialog(context, "모든필드를 입력해주세요");
                             }
                           },
                           shape: new RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(8.0),
                           ),
-                          color: Color.fromRGBO(255, 114, 148, 1.0),
+                          color: (() {
+                            return myController.text.length > 10 && isreport
+                                ? Color.fromRGBO(255, 114, 148, 1.0)
+                                : Color.fromRGBO(212, 212, 212, 1.0);
+                          }()),
                           child: Text(
                             "완료",
                             style: TextStyle(

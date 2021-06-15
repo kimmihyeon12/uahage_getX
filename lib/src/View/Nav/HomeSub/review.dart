@@ -10,6 +10,7 @@ import 'package:uahage/src/Controller/user.controller.dart';
 import 'package:uahage/src/Service/review.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 import 'package:uahage/src/Static/Widget/appbar.dart';
+import 'package:uahage/src/Static/Widget/dialog.dart';
 import 'package:uahage/src/Static/Widget/popup.dart';
 import 'package:uahage/src/Static/url.dart';
 import 'package:uahage/src/View/Loading/loading.dart';
@@ -37,14 +38,16 @@ class _ReviewPageState extends State<ReviewPage> {
   var width = 1500 / 720;
   var height = 2667 / 1280;
   final myController = TextEditingController();
-
-  double taste, cost, service;
+  bool imageLoad = false;
+  double taste, cost, service = 0;
   @override
   void initState() {
     super.initState();
+
     data = widget.data;
     reviewData = widget.reviewData;
-
+    print("reviewData");
+    print(reviewData);
     index1 =
         reviewData != null ? double.parse(reviewData.taste_rating).round() : 0;
     taste = reviewData != null ? double.parse(reviewData.taste_rating) : 0;
@@ -56,9 +59,12 @@ class _ReviewPageState extends State<ReviewPage> {
         : 0;
     service = reviewData != null ? double.parse(reviewData.service_rating) : 0;
     myController.text = reviewData != null ? reviewData.description : "";
-    reviewData.image_path != null
-        ? prevImage.add(reviewData.image_path.split(','))
-        : null;
+    if (reviewData != null) {
+      if (reviewData.image_path != null) {
+        imageLoad = true;
+        prevImage.add(reviewData.image_path.split(','));
+      }
+    }
 
     setState(() {});
   }
@@ -130,7 +136,11 @@ class _ReviewPageState extends State<ReviewPage> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, width: 1500, height: 2667);
-
+    if (myController.text.length >= 10) {
+      setState(() {
+        btnColor = true;
+      });
+    }
     return Scaffold(
       appBar: appBar(
         context,
@@ -342,8 +352,16 @@ class _ReviewPageState extends State<ReviewPage> {
               children: [
                 InkWell(
                   onTap: () async {
-                    FocusScope.of(context).unfocus();
-                    _showPicker(context);
+                    if ((imageLoad == false
+                            ? 0
+                            : prevImage[0].length + uploadingImage.length) >
+                        4) {
+                      print("사진 못넣음");
+                      dialog(context, "5장이상의 사진을 넣을수 없습니다");
+                    } else {
+                      FocusScope.of(context).unfocus();
+                      _showPicker(context);
+                    }
                   },
                   child: Image.asset(
                     "assets/reviewPage/camera_button.png",
@@ -354,16 +372,13 @@ class _ReviewPageState extends State<ReviewPage> {
                   flex: 1,
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: (reviewData.image_path == null
-                              ? 0
-                              : prevImage[0].length) +
-                          (uploadingImage.length),
+                      itemCount:
+                          (imageLoad == false ? 0 : prevImage[0].length) +
+                              (uploadingImage.length),
                       itemBuilder: (context, index) {
                         return Row(
                           children: [
-                            (reviewData.image_path == null
-                                        ? 0
-                                        : prevImage[0].length) >
+                            (imageLoad == false ? 0 : prevImage[0].length) >
                                     index
                                 ? ClipRRect(
                                     borderRadius: BorderRadius.circular(10.0),
@@ -426,7 +441,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                           height: 130 * height.w,
                                           child: Image.file(
                                             uploadingImage[index -
-                                                (reviewData.image_path == null
+                                                (imageLoad == false
                                                     ? 0
                                                     : prevImage[0].length)],
                                             fit: BoxFit.cover,
@@ -438,8 +453,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                             image: DecorationImage(
                                                 image: FileImage(uploadingImage[
                                                     index -
-                                                        (reviewData.image_path ==
-                                                                null
+                                                        (imageLoad == false
                                                             ? 0
                                                             : prevImage[0]
                                                                 .length)]), //imageURL
@@ -496,7 +510,7 @@ class _ReviewPageState extends State<ReviewPage> {
             child: RaisedButton(
               elevation: 0,
               hoverElevation: 0,
-              color: btnColor
+              color: btnColor && service > 0 && cost > 0 && taste > 0
                   ? Color.fromRGBO(255, 114, 142, 1.0)
                   : Color.fromRGBO(212, 212, 212, 1.0),
               shape: RoundedRectangleBorder(
@@ -511,8 +525,9 @@ class _ReviewPageState extends State<ReviewPage> {
               ),
               onPressed: () async {
                 if (reviewData == null) {
-                  var formdata = await selectFormData(data.id,
+                  var formdata = await insertFormData(data.id,
                       myController.text, taste, cost, service, uploadingImage);
+
                   await reviewInsert(formdata);
                   Navigator.pop(context, 'ok');
                 } else {
