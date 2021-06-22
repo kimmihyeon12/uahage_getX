@@ -189,3 +189,23 @@ class Users extends GetView<UserController> {
     return Container();
   }
 }
+
+isNicknameCheck() async {
+  String url = URL;
+  try {
+    var response = await http.get(
+      Uri.parse(
+        url + "/api/users/${UserController.to.userId.value}/nickname",
+      ),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': '${UserController.to.token.value}'
+      },
+    );
+    print('jsondecode ${jsonDecode(response.body)["data"]}');
+    return jsonDecode(response.body)["data"]["nickname"] == null ? false : true;
+  } catch (err) {
+    print(err);
+    return Future.error(err);
+  }
+}

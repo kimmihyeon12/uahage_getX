@@ -12,6 +12,7 @@ import 'package:uahage/src/Static/Font/font.dart';
 import 'package:uahage/src/Static/Widget/appbar.dart';
 import 'package:uahage/src/Static/Widget/dialog.dart';
 import 'package:uahage/src/Static/Widget/popup.dart';
+import 'package:uahage/src/Static/Widget/toast.dart';
 import 'package:uahage/src/Static/url.dart';
 import 'package:uahage/src/View/Loading/loading.dart';
 
@@ -82,7 +83,7 @@ class _ReviewPageState extends State<ReviewPage> {
                         Icons.photo_library,
                         color: Color.fromRGBO(255, 114, 148, 1.0),
                       ),
-                      title: Text('겔러리'),
+                      title: Text('갤러리'),
                       onTap: () async {
                         await _imgFromGallery();
                         Navigator.of(context).pop();
@@ -174,18 +175,16 @@ class _ReviewPageState extends State<ReviewPage> {
                 top: 36 * height.sp,
                 bottom: 35.7 * height.sp,
                 right: 77 * width.sp,
-                left: 77 * width.sp),
+                left: 90 * width.sp),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Padding(padding: EdgeInsets.only(left: 22.w)),
                     Container(
-                        width: 82 * width.w,
-                        child: normalfont("맛", 58, Colors.black)),
-
+                        margin: EdgeInsets.only(left: 50.w),
+                        child: boldfont("맛", 58, Colors.black)),
+                    Padding(padding: EdgeInsets.only(left: 39.3 * width.w)),
                     Rating(
                         initrating: taste,
                         changed: (v) {
@@ -206,23 +205,21 @@ class _ReviewPageState extends State<ReviewPage> {
                             taste = v;
                           });
                         }),
-
+                    Padding(padding: EdgeInsets.only(left: 22.3 * width.w)),
                     Container(
                       width: 160 * width.w,
                       child: normalfont("${ratingLabel[index1]}", 58,
-                          index1 == 0 ? Colors.transparent : Colors.black),
+                          index1 == 0 ? Color(0xffefefef) : Color(0xff4d4d4d)),
                     )
                   ],
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Padding(padding: EdgeInsets.only(left: 11.w)),
                     Container(
-                      width: 82 * width.w,
-                      child: normalfont("가격", 58, Colors.black),
+                      margin: EdgeInsets.only(left: 25.w),
+                      child: boldfont("가격", 58, Colors.black),
                     ),
-
+                    Padding(padding: EdgeInsets.only(left: 26.3 * width.w)),
                     Rating(
                       initrating: cost,
                       changed: (v) {
@@ -244,21 +241,20 @@ class _ReviewPageState extends State<ReviewPage> {
                         });
                       },
                     ),
-
+                    Padding(padding: EdgeInsets.only(left: 22.3 * width.w)),
                     Container(
                       width: 160 * width.w,
                       child: normalfont("${ratingLabel[index2]}", 58,
-                          index2 == 0 ? Colors.transparent : Colors.black),
+                          index2 == 0 ? Color(0xffefefef) : Color(0xff4d4d4d)),
                     )
                   ],
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      width: 82 * width.w,
-                      child: normalfont("서비스", 58, Colors.black),
+                      child: boldfont("서비스", 58, Colors.black),
                     ),
+                    Padding(padding: EdgeInsets.only(left: 12.3 * width.w)),
                     Rating(
                       initrating: service,
                       changed: (v) {
@@ -280,10 +276,11 @@ class _ReviewPageState extends State<ReviewPage> {
                         });
                       },
                     ),
+                    Padding(padding: EdgeInsets.only(left: 22.3 * width.w)),
                     Container(
                       width: 160 * width.w,
                       child: normalfont("${ratingLabel[index3]}", 58,
-                          index3 == 0 ? Colors.transparent : Colors.black),
+                          index3 == 0 ? Color(0xffefefef) : Color(0xff4d4d4d)),
                     )
                   ],
                 ),
@@ -524,18 +521,27 @@ class _ReviewPageState extends State<ReviewPage> {
                     color: Colors.white),
               ),
               onPressed: () async {
-                if (reviewData == null) {
-                  var formdata = await insertFormData(data.id,
-                      myController.text, taste, cost, service, uploadingImage);
+                if (btnColor && service > 0 && cost > 0 && taste > 0) {
+                  if (reviewData == null) {
+                    var formdata = await insertFormData(
+                        data.id,
+                        myController.text,
+                        taste,
+                        cost,
+                        service,
+                        uploadingImage);
 
-                  await reviewInsert(formdata);
-                  Navigator.pop(context, 'ok');
+                    await reviewInsert(formdata);
+                    Navigator.pop(context, 'ok');
+                  } else {
+                    var formdata = await reviewUpdateFormdata(uploadingImage,
+                        myController.text, taste, cost, service, deleteImage);
+
+                    await reviewUpdate(reviewData.id, formdata);
+                    Navigator.pop(context, 'ok');
+                  }
                 } else {
-                  var formdata = await reviewUpdateFormdata(uploadingImage,
-                      myController.text, taste, cost, service, deleteImage);
-
-                  await reviewUpdate(reviewData.id, formdata);
-                  Navigator.pop(context, 'ok');
+                  toast(context, "모든필드를 입력해주세요", "bottom");
                 }
               },
             ),
@@ -559,12 +565,14 @@ class Rating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var width = 1500 / 720;
+    var height = 2667 / 1280;
     return RatingBar(
       initialRating: initrating,
       direction: Axis.horizontal,
       allowHalfRating: true,
       itemCount: 5,
-      itemSize: 80.w,
+      itemSize: 45.3 * width.w,
       ratingWidget: RatingWidget(
         full: Image.asset(
           'assets/listPage/star_color.png',

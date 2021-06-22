@@ -30,7 +30,7 @@ class _SearchState extends State<Search> {
 
   Future searchCategory() async {
     await webview.loadUrl(url +
-        "/maps/show-place?userId=${UserController.to.userId.value}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=filter&babyMenu=${greyImage[0]}&babyBed=${greyImage[1]}&babyTableware=${greyImage[2]}&meetingRoom=${greyImage[3]}&diaperChange=${greyImage[4]}&playRoom=${greyImage[5]}&stroller=${greyImage[6]}&nursingRoom=${greyImage[7]}&babyChair=${greyImage[8]}&placeName=restaurants");
+        "/maps/show-place?userId=${UserController.to.userId.value}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=filter&babyMenu=${greyImage[0]}&babyBed=${greyImage[1]}&babyTableware=${greyImage[2]}&meetingRoom=${greyImage[3]}&diaperChange=${greyImage[4]}&playRoom=${greyImage[5]}&stroller=${greyImage[6]}&nursingRoom=${greyImage[7]}&babyChair=${greyImage[8]}&placeName=restaurants&token=${UserController.to.token.value}");
   }
 
   @override
@@ -49,7 +49,7 @@ class _SearchState extends State<Search> {
               webview = webViewController;
 
               await webview.loadUrl(url +
-                  '/maps?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}');
+                  '/maps?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&token=${UserController.to.token.value}');
             },
             javascriptMode: JavascriptMode.unrestricted,
             javascriptChannels: Set.from([

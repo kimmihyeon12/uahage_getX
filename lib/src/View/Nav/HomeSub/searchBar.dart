@@ -47,7 +47,7 @@ class _SearchBarState extends State<SearchBar> {
                         controller = webViewController;
                         final key = UniqueKey();
                         await controller.loadUrl(url +
-                            "/maps/show-list?userId=${UserController.to.userId}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&keyword=%27$keyword%27");
+                            "/maps/show-list?userId=${UserController.to.userId}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&keyword=%27$keyword%27&token=${UserController.to.token.value}");
                         print(controller.currentUrl().toString());
                       },
                       javascriptMode: JavascriptMode.unrestricted,

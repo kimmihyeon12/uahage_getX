@@ -22,7 +22,7 @@ class _HomeState extends State<Home> {
     "./assets/homePage/kidsCafe.png",
     "./assets/homePage/experiencecenter.png",
     "./assets/homePage/amusementpark.png",
-    "./assets/homePage/toylibrary.png",
+    "./assets/homePage/craftshop.png",
     "./assets/homePage/childcareCenter.png"
   ];
   imageView(fileName) {
@@ -56,16 +56,16 @@ class _HomeState extends State<Home> {
                   child: Stack(
                     children: [
                       PageView.builder(
-                        itemCount: 5,
+                        itemCount: 1,
                         itemBuilder: (context, index) {
                           return imageView("image${index + 1}");
                         },
-                        onPageChanged: (int page) {
-                          setState(() {
-                            print(page);
-                            index = page + 1;
-                          });
-                        },
+                        // onPageChanged: (int page) {
+                        //   setState(() {
+                        //     print(page);
+                        //     index = page + 1;
+                        //   });
+                        // },
                       ),
                       Align(
                         alignment: Alignment.topRight,
@@ -76,11 +76,11 @@ class _HomeState extends State<Home> {
                               //     image: AssetImage('./assets/path.png'),
                               //   ),
                               borderRadius: BorderRadius.circular(20.0)),
-                          margin: EdgeInsets.only(top: 40.h, right: 40.w),
+                          margin: EdgeInsets.only(top: 775.h, right: 40.w),
                           padding:
                               EdgeInsets.symmetric(vertical: 1, horizontal: 10),
                           child: Text(
-                            '$index/5',
+                            '$index/1',
                             style: TextStyle(
                               fontSize: 62.sp,
                               color: Colors.white,
@@ -106,11 +106,18 @@ class _HomeState extends State<Home> {
                       },
                       cursorColor: Color(0xffff7292),
                       style: TextStyle(
-                          color: Color(0xffcccccc),
+                          color: Color(0xffff7292),
                           fontSize: 60.sp,
                           letterSpacing: -1.0),
                       decoration: InputDecoration(
+                        fillColor: Color(0xffff7292),
                         enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              width: 2,
+                              color: Color(0xffff7292),
+                            )),
+                        focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
                               width: 2,
@@ -138,7 +145,7 @@ class _HomeState extends State<Home> {
                                         arguments: keyword);
                                   }
                                 : () {
-                                    toast(context, "주소를 입력해주세요!");
+                                    toast(context, "주소를 입력해주세요!", "bottom");
                                     FocusScope.of(context).unfocus();
                                   },
                             icon: Image.asset(
@@ -201,7 +208,7 @@ class _HomeState extends State<Home> {
                           ),
                           onTap: () {
                             currentFocus.unfocus();
-                            toast(context, " 서비스 준비 중이에요!  ");
+                            Get.toNamed("/list", arguments: 3);
                           },
                         ),
                         Padding(
@@ -216,7 +223,7 @@ class _HomeState extends State<Home> {
                           ),
                           onTap: () {
                             currentFocus.unfocus();
-                            toast(context, " 서비스 준비 중이에요!  ");
+                            toast(context, " 서비스 준비 중이에요!  ", "bottom");
                           },
                         ),
                       ],
@@ -270,7 +277,7 @@ class _HomeState extends State<Home> {
                           ),
                           onTap: () {
                             currentFocus.unfocus();
-                            toast(context, " 서비스 준비 중이에요!  ");
+                            toast(context, " 서비스 준비 중이에요!  ", "bottom");
                           },
                         ),
                         Padding(
@@ -280,12 +287,12 @@ class _HomeState extends State<Home> {
                         GestureDetector(
                           child: Image.asset(
                             homeimage[7],
-                            width: 294.w,
-                            height: 202.h,
+                            width: 300.w,
+                            height: 220.h,
                           ),
                           onTap: () {
                             currentFocus.unfocus();
-                            toast(context, " 서비스 준비 중이에요!  ");
+                            toast(context, " 서비스 준비 중이에요!  ", "bottom");
                           },
                         ),
                       ],
@@ -309,7 +316,7 @@ class _HomeState extends State<Home> {
                           ),
                           onTap: () {
                             currentFocus.unfocus();
-                            toast(context, " 서비스 준비 중이에요!  ");
+                            toast(context, " 서비스 준비 중이에요!  ", "bottom");
                           },
                         ),
                       ],

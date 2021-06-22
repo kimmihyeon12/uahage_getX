@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:uahage/src/Binding/place.restaurant.bookmark.binding.dart';
 import 'package:uahage/src/Controller/place.restaurant.bookmark.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
@@ -144,11 +145,32 @@ Future<Object> popup(context, grey_image) {
 }
 
 Future<Object> placepopup(context, Message, type, placeCode) async {
+  var restaurantListImage = [
+    "https://uahage.s3.ap-northeast-2.amazonaws.com/restaurant_image/image1.png",
+    "https://uahage.s3.ap-northeast-2.amazonaws.com/restaurant_image/image2.png",
+    "https://uahage.s3.ap-northeast-2.amazonaws.com/restaurant_image/image3.png",
+  ];
+  var hospitalListImage = [
+    "https://uahage.s3.ap-northeast-2.amazonaws.com/hospital_image/image1.png",
+    "https://uahage.s3.ap-northeast-2.amazonaws.com/hospital_image/image2.png",
+  ];
+  var kidsCafeListImage = [
+    "https://uahage.s3.ap-northeast-2.amazonaws.com/kids_cafe/image1.png",
+    "https://uahage.s3.ap-northeast-2.amazonaws.com/kids_cafe/image2.png",
+  ];
+  var experienceListImage = [
+    "https://uahage.s3.ap-northeast-2.amazonaws.com/experience_/image1.png",
+    "https://uahage.s3.ap-northeast-2.amazonaws.com/experience_/image2.png",
+    "https://uahage.s3.ap-northeast-2.amazonaws.com/experience_/image3.png",
+    "https://uahage.s3.ap-northeast-2.amazonaws.com/experience_/image4.png",
+  ];
   print(Message["name"]);
   int mark;
   if (placeCode == 1) {
     mark = Message["bookmark"];
   }
+  var width = 1500 / 720;
+  var height = 2667 / 1280;
 
   Bookmark bookmark = new Bookmark();
   return showGeneralDialog(
@@ -181,7 +203,7 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                     elevation: 1,
                     color: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(20.0),
                     ),
                     child: InkWell(
                       onTap: () async {
@@ -219,11 +241,32 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                               padding: EdgeInsets.only(
                             left: 30.w,
                           )),
-                          Image.asset(
-                            "./assets/listPage/clipGroup1.png",
-                            height: 409.h,
-                            width: 413.w,
-                          ),
+                          (() {
+                            if (placeCode == 1)
+                              return Image.network(
+                                restaurantListImage[0],
+                                height: 409.h,
+                                width: 413.w,
+                              );
+                            if (placeCode == 2)
+                              return Image.network(
+                                hospitalListImage[0],
+                                height: 409.h,
+                                width: 413.w,
+                              );
+                            if (placeCode == 4)
+                              return Image.network(
+                                kidsCafeListImage[0],
+                                height: 409.h,
+                                width: 413.w,
+                              );
+                            if (placeCode == 5)
+                              return Image.network(
+                                experienceListImage[0],
+                                height: 409.h,
+                                width: 413.w,
+                              );
+                          }()),
                           Padding(
                               padding: EdgeInsets.only(
                             left: 53.w,
@@ -232,27 +275,18 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                margin: EdgeInsets.only(top: 50.h),
-                                width: 900.w,
-                                height: 82.h,
+                                margin: EdgeInsets.only(top: 55.h),
+                                height: 92.h,
                                 child: Row(
                                   children: [
                                     Container(
-                                      width: 700.w,
-                                      child: Text(
-                                          Message["name"].length <= 10
-                                              ? Message["name"]
-                                              : Message["name"]
-                                                  .substring(0, 11),
-                                          style: TextStyle(
-                                            color: const Color(0xff010000),
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily: "NotoSansCJKkr_Bold",
-                                            fontStyle: FontStyle.normal,
-                                            fontSize: 58.sp,
-                                          ),
-                                          textAlign: TextAlign.left),
-                                    ),
+                                        width: 700.w,
+                                        child: boldfont(
+                                            Message["name"].length <= 10
+                                                ? Message["name"]
+                                                : '${Message["name"].substring(0, 11)}...',
+                                            60,
+                                            Color(0xff010000))),
                                     (() {
                                       if (placeCode == 1) {
                                         return Container(
@@ -286,9 +320,9 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                                                     UserController
                                                         .to.userId.value,
                                                     Message["id"]);
-                                                BookmarkController.to
-                                                    .starPlaceBookmarkrefresh(
-                                                        Message["index"]);
+                                                // BookmarkController.to
+                                                //     .starPlaceBookmarkrefresh(
+                                                //         Message["index"]);
                                                 setState(() {
                                                   mark = 0;
                                                 });
@@ -303,24 +337,50 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                                   ],
                                 ),
                               ),
-                              Container(
-                                margin: EdgeInsets.only(top: 10.h),
-                                width: 650.w,
-                                height: 135.h,
-                                child: Text(Message["address"],
-                                    style: TextStyle(
-                                        color: const Color(0xffb0b0b0),
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: "NotoSansCJKkr_Medium",
-                                        fontStyle: FontStyle.normal,
-                                        fontSize: 56.sp,
-                                        height: 1.3),
-                                    textAlign: TextAlign.left),
-                              ),
+                              // Padding(
+                              //   padding: EdgeInsets.only(left: 10 * width.w),
+                              // ),
+
+                              placeCode == 1
+                                  ? Row(
+                                      children: [
+                                        Image.asset(
+                                          "./assets/listPage/star_color.png",
+                                          width: 30 * width.w,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 4.7 * width.w),
+                                        ),
+                                        normalfont(Message["total"] ?? "0.0",
+                                            54, Color(0xff4d4d4d))
+                                      ],
+                                    )
+                                  : Container(),
+                              placeCode == 1
+                                  ? Container(
+                                      margin: EdgeInsets.only(top: 10.h),
+                                      child: Message["address"].length > 18
+                                          ? normalfont(
+                                              '${Message["address"].substring(0, 18)}...',
+                                              54,
+                                              Color(0xffb0b0b0))
+                                          : normalfont(Message["address"], 54,
+                                              Color(0xffb0b0b0)),
+                                    )
+                                  : Container(
+                                      width: 750.w,
+                                      margin: EdgeInsets.only(top: 10.h),
+                                      child: Message["address"].length > 32
+                                          ? normalfont(
+                                              '${Message["address"].substring(0, 32)}...',
+                                              54,
+                                              Color(0xffb0b0b0))
+                                          : normalfont(Message["address"], 54,
+                                              Color(0xffb0b0b0)),
+                                    ),
                               Container(
                                 margin: EdgeInsets.only(top: 15.h),
-                                height: 120.h,
-                                width: 650.w,
                                 alignment: Alignment.bottomRight,
                                 child: Row(children: [
                                   icon(
@@ -655,44 +715,48 @@ report(context, reviewId) {
                                       color: Color.fromRGBO(255, 114, 142, 0.4),
                                     ),
                                   ),
-                                  child: TextFormField(
-                                    onChanged: (e) {
-                                      if (myController.text.length >= 10) {
-                                        setState(() {
-                                          btnColor = true;
-                                        });
-                                      } else {
-                                        if (btnColor)
+                                  child: Container(
+                                    margin:
+                                        EdgeInsets.only(bottom: 10, right: 5),
+                                    child: TextFormField(
+                                      onChanged: (e) {
+                                        if (myController.text.length >= 10) {
                                           setState(() {
-                                            btnColor = false;
+                                            btnColor = true;
                                           });
-                                      }
-                                    },
-                                    controller: myController,
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                        color:
-                                            Color.fromRGBO(255, 114, 142, 0.6)),
-                                    maxLines: 20,
-                                    maxLength: 100,
-                                    cursorColor:
-                                        Color.fromRGBO(255, 114, 142, 0.6),
-                                    decoration: InputDecoration(
-                                      isDense: true,
-                                      border: InputBorder.none,
-                                      hintText: "신고하실 내용을 설명해주세요",
-                                      hintStyle: TextStyle(
+                                        } else {
+                                          if (btnColor)
+                                            setState(() {
+                                              btnColor = false;
+                                            });
+                                        }
+                                      },
+                                      controller: myController,
+                                      //  textAlign: TextAlign.left,
+                                      style: TextStyle(
                                           color: Color.fromRGBO(
                                               255, 114, 142, 0.6)),
-                                      counterStyle: TextStyle(
-                                          fontSize: 50.sp,
-                                          color: Color.fromRGBO(
-                                              255, 114, 142, 0.6),
-                                          fontFamily: "NotoSansCJKkr_Medium"),
-                                      contentPadding: EdgeInsets.only(
-                                          top: 20.sp,
-                                          right: 19.sp,
-                                          left: 15.sp),
+                                      maxLines: 20,
+                                      maxLength: 100,
+                                      cursorColor:
+                                          Color.fromRGBO(255, 114, 142, 0.6),
+                                      decoration: InputDecoration(
+                                        isDense: true,
+                                        border: InputBorder.none,
+                                        hintText: "신고하실 내용을 설명해주세요",
+                                        hintStyle: TextStyle(
+                                            color: Color.fromRGBO(
+                                                255, 114, 142, 0.6)),
+                                        counterStyle: TextStyle(
+                                            fontSize: 50.sp,
+                                            color: Color.fromRGBO(
+                                                255, 114, 142, 0.6),
+                                            fontFamily: "NotoSansCJKkr_Medium"),
+                                        contentPadding: EdgeInsets.only(
+                                            top: 20.sp,
+                                            right: 19.sp,
+                                            left: 15.sp),
+                                      ),
                                     ),
                                   ),
                                 ),

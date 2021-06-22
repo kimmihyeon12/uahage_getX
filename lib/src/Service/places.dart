@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:uahage/src/Controller/location.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
+import 'package:uahage/src/Model/dayCareCenter.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:uahage/src/Model/kidCafe.dart';
@@ -37,7 +38,7 @@ class Place extends GetView<PlaceController> {
     if (placeName == "restaurants") {
       response = await http.get(
         Uri.parse(url +
-            '/api/places/$placeName?pageNumber=$pageNumber&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&userId=${UserController.to.userId}&babyBed=&babyChair=&babyMenu=&babyTableware&stroller=&diaperChange&meetingRoom&nursingRoom&playRoom&parking=&isBookmarked='),
+            '/api/places/$placeName?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&userId=${UserController.to.userId}&babyBed=&babyChair=&babyMenu=&babyTableware&stroller=&diaperChange&meetingRoom&nursingRoom&playRoom&parking=&isBookmarked=&pageNumber=$pageNumber'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': '${UserController.to.token.value}'
@@ -59,9 +60,12 @@ class Place extends GetView<PlaceController> {
     for (var data in responseJson) {
       print(data);
       if (placeCode == 1) {
+        // data.total == null ? "0" : data["total"];
         currentData = Restaurant.fromJson(data);
       } else if (placeCode == 2) {
         currentData = Hospitals.fromJson(data);
+      } else if (placeCode == 3) {
+        currentData = DayCareCenter.fromJson(data);
       } else if (placeCode == 5) {
         currentData = KidCafe.fromJson(data);
       } else if (placeCode == 6) {

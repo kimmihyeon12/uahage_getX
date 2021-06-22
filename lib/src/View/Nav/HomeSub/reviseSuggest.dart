@@ -46,7 +46,7 @@ class _ReviseSuggestState extends State<ReviseSuggest> {
                         Icons.photo_library,
                         color: Color.fromRGBO(255, 114, 148, 1.0),
                       ),
-                      title: Text('겔러리'),
+                      title: Text('갤러리'),
                       onTap: () async {
                         await _imgFromGallery();
                         Navigator.of(context).pop();
@@ -126,10 +126,10 @@ class _ReviseSuggestState extends State<ReviseSuggest> {
                 var formdata = await suggestionFormData(placeId,
                     placeCategoryId, myController.text, uploadingImage);
                 await revisesuggestion(formdata);
-                toast(context, "정상적으로 등록되었습니다");
+                toast(context, "정상적으로 등록되었습니다.", "bottom");
                 Navigator.pop(context, 'ok');
               } else {
-                dialog(context, "모든 필드를 입력해주세요");
+                toast(context, "10자 이상 작성해주세요.", "center");
               }
             },
             child: Container(
@@ -161,7 +161,7 @@ class _ReviseSuggestState extends State<ReviseSuggest> {
                 child: TextFormField(
                   autofocus: true,
                   onChanged: (e) {
-                    if (myController.text.length > 1) {
+                    if (myController.text.length > 9) {
                       setState(() {
                         btnColor = true;
                       });
@@ -183,7 +183,7 @@ class _ReviseSuggestState extends State<ReviseSuggest> {
                   decoration: InputDecoration(
                     isDense: true,
                     border: InputBorder.none,
-                    hintText: "상호, 위치 이전,영업시간, 전화번호, 폐업 등 정보를 작성해주세요.",
+                    hintText: "상호, 위치 이전,영업시간, 전화번호, 폐업 등\n정보를 작성해주세요.",
                     hintStyle: TextStyle(
                       color: Color(0xffc6c6c6),
                     ),
@@ -206,8 +206,12 @@ class _ReviseSuggestState extends State<ReviseSuggest> {
                   children: [
                     InkWell(
                       onTap: () async {
-                        FocusScope.of(context).unfocus();
-                        _showPicker(context);
+                        if (uploadingImage.length > 4) {
+                          dialog(context, "5장이상의 사진을 넣을수 없습니다");
+                        } else {
+                          FocusScope.of(context).unfocus();
+                          _showPicker(context);
+                        }
                       },
                       child: Image.asset(
                         "assets/reviewPage/camera_button.png",
@@ -255,15 +259,10 @@ class _ReviseSuggestState extends State<ReviseSuggest> {
                                         top: 5 * height,
                                         child: InkWell(
                                           onTap: () {
-                                            // setState(() {
-                                            //   print(index);
-                                            //   if (prevImage[0].length >
-                                            //       index) {
-                                            //     deleteImage
-                                            //         .add(prevImage[0][index]);
-                                            //     prevImage[0].removeAt(index);
-                                            //   }
-                                            // });
+                                            setState(() {
+                                              print(index);
+                                              uploadingImage.removeAt(index);
+                                            });
                                           },
                                           child: Image.asset(
                                             "assets/reviewPage/x_button.png",
@@ -286,9 +285,9 @@ class _ReviseSuggestState extends State<ReviseSuggest> {
               ),
               Padding(padding: EdgeInsets.only(top: 20 * height.h)),
               Container(
-                  padding: EdgeInsets.all(14 * height.h),
+                  padding: EdgeInsets.all(16 * height.h),
                   decoration: BoxDecoration(
-                      color: Color.fromRGBO(255, 114, 142, 0.1),
+                      color: Color.fromRGBO(255, 114, 142, 0.05),
                       border: Border.all(
                         color: Color.fromRGBO(255, 114, 142, 0.7),
                       ),

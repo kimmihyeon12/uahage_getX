@@ -3,7 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 
-toast(context, text) {
+toast(context, text, position) {
   ScreenUtil.init(context, width: 1500, height: 2667);
   FToast fToast = FToast();
   fToast.init(context);
@@ -20,10 +20,17 @@ toast(context, text) {
       ],
     ),
   );
-
-  fToast.showToast(
-    child: toast,
-    gravity: ToastGravity.BOTTOM,
-    toastDuration: Duration(seconds: 1),
-  );
+  if (position == "center") {
+    return fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.CENTER,
+      toastDuration: Duration(seconds: 1),
+    );
+  } else {
+    return fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 1),
+    );
+  }
 }

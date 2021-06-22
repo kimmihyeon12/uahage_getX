@@ -20,6 +20,7 @@ class Loading extends GetView<UserController> {
       Get.offNamed("/navigator");
     } else {
       Get.offNamed("/login");
+      //  Get.offNamed("/withdrawal");
     }
   }
 

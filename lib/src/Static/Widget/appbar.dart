@@ -9,7 +9,7 @@ appBar(context, text, bookmarkColor) {
     title: new Text(
       text,
       style: TextStyle(
-          fontSize: 62.sp,
+          fontSize: 70.sp,
           fontFamily: 'NotoSansCJKkr_Medium',
           color: Color.fromRGBO(255, 114, 148, 1.0)),
     ),
@@ -35,7 +35,11 @@ imageAppbar(context, text) {
               height: 86,
             ),
             Center(
-              child: boldfont(text, 73.0, Colors.white),
+              child: Image.asset(
+                './assets/homePage/uahage.png',
+                fit: BoxFit.fill,
+                height: 100.h,
+              ),
             )
           ],
         ),

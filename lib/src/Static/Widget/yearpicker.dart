@@ -30,8 +30,15 @@ yearPicker(context) async {
               initialDateTime: DateTime.now(),
               onDateTimeChanged: (DateTime newDate) async {
                 var datee = newDate.toString().substring(0, 10).split('-');
+
+                if (int.parse(datee[1]) < 10) {
+                  datee[1] = int.parse(datee[1]).toString();
+                }
+                if (int.parse(datee[2]) < 10) {
+                  datee[2] = int.parse(datee[1]).toString();
+                }
                 yController.text =
-                    datee[0] + "년 " + datee[1] + "월 " + datee[2] + "일";
+                    datee[0] + "년   " + datee[1] + "월   " + datee[2] + "일";
               },
               minimumYear: 2000,
               maximumYear: year,

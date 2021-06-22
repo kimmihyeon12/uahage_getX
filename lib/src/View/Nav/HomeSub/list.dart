@@ -9,6 +9,7 @@ import 'package:uahage/src/Service/connection.dart';
 import 'package:uahage/src/Service/places.restaurant.bookmarks.dart';
 
 import 'package:uahage/src/Service/places.dart';
+import 'package:uahage/src/Static/Font/font.dart';
 import 'package:uahage/src/Static/Widget/icon.dart';
 import 'package:uahage/src/Static/Widget/progress.dart';
 import 'package:uahage/src/View/Nav/HomeSub/listMap.dart';
@@ -46,7 +47,8 @@ class PlaceList extends GetView<PlaceController> {
     "https://uahage.s3.ap-northeast-2.amazonaws.com/experience_/image3.png",
     "https://uahage.s3.ap-northeast-2.amazonaws.com/experience_/image4.png",
   ];
-
+  var width = 1500 / 720;
+  var height = 2667 / 1280;
   Widget build(BuildContext context) {
     connection();
     ScreenUtil.init(context, width: 1500, height: 2667);
@@ -71,7 +73,9 @@ class PlaceList extends GetView<PlaceController> {
                   if (placeCode == 1) {
                     return "식당·카페";
                   } else if (placeCode == 2) {
-                    return "병원";
+                    return "영유아 건강검진 병원";
+                  } else if (placeCode == 3) {
+                    return "어린이집";
                   } else if (placeCode == 5) {
                     return "키즈카페";
                   } else {
@@ -147,6 +151,7 @@ class PlaceList extends GetView<PlaceController> {
                           "placeCode": placeCode,
                           "index": index,
                         });
+
                         controller.setPlaceBookmark(index, result);
                       },
                       child: Container(
@@ -212,30 +217,79 @@ class PlaceList extends GetView<PlaceController> {
                                       child: Text(
                                         '${controller.place[index].name}',
                                         style: TextStyle(
-                                          fontSize: 56.sp,
+                                          fontSize: 60.sp,
                                           fontFamily: 'NotoSansCJKkr_Medium',
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
-                                Container(
-                                  height: 130.h,
-                                  width: 650.w,
-                                  child: Text(
-                                    controller.place[index].address,
-                                    style: TextStyle(
-                                      // fontFamily: 'NatoSans',
-                                      color: Colors.grey,
-                                      fontSize: 56.sp,
-                                      fontFamily: 'NotoSansCJKkr_Medium',
-                                      height: 1.3,
-                                    ),
-                                  ),
-                                ),
+                                placeCode == 1
+                                    ? Row(
+                                        children: [
+                                          Image.asset(
+                                            "./assets/listPage/star_color.png",
+                                            width: 30 * width.w,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 4.7 * width.w),
+                                          ),
+                                          normalfont(
+                                              controller.place[index].total ??
+                                                  "0.0",
+                                              54,
+                                              Color(0xff4d4d4d))
+                                        ],
+                                      )
+                                    : Container(),
                                 placeCode == 1
                                     ? Container(
-                                        margin: EdgeInsets.only(top: 15.h),
+                                        margin: EdgeInsets.only(top: 10.h),
+                                        child: controller.place[index].address
+                                                    .length >
+                                                18
+                                            ? normalfont(
+                                                '${controller.place[index].address.substring(0, 18)}...',
+                                                54,
+                                                Color(0xffb0b0b0))
+                                            : normalfont(
+                                                controller.place[index].address,
+                                                54,
+                                                Color(0xffb0b0b0)),
+                                      )
+                                    : Container(
+                                        width: 750.w,
+                                        margin: EdgeInsets.only(top: 10.h),
+                                        child: controller.place[index].address
+                                                    .length >
+                                                32
+                                            ? normalfont(
+                                                '${controller.place[index].address.substring(0, 32)}...',
+                                                54,
+                                                Color(0xffb0b0b0))
+                                            : normalfont(
+                                                controller.place[index].address,
+                                                54,
+                                                Color(0xffb0b0b0)),
+                                      ),
+                                // Container(
+                                //   height: 130.h,
+                                //   width: 650.w,
+                                //   child: Text(
+                                //     controller.place[index].address,
+                                //     style: TextStyle(
+                                //       // fontFamily: 'NatoSans',
+                                //       color: Colors.grey,
+                                //       fontSize: 56.sp,
+                                //       fontFamily: 'NotoSansCJKkr_Medium',
+                                //       height: 1.3,
+                                //     ),
+                                //   ),
+                                // ),
+                                placeCode == 1
+                                    ? Container(
+                                        margin: EdgeInsets.only(top: 5.h),
                                         height: 120.h,
                                         width: 650.w,
                                         alignment: Alignment.bottomRight,

@@ -65,7 +65,7 @@ class _UserModifyState extends State<UserModify> {
                         Icons.photo_library,
                         color: Color.fromRGBO(255, 114, 148, 1.0),
                       ),
-                      title: new Text('겔러리'),
+                      title: new Text('갤러리'),
                       onTap: () async {
                         await _imgFromGallery();
                         Navigator.of(context).pop();
@@ -289,6 +289,7 @@ class _UserModifyState extends State<UserModify> {
                                       fontFamily: "NotoSansCJKkr_Bold",
                                       fontSize: 58.sp),
                                   decoration: InputDecoration(
+                                    counterText: '',
                                     contentPadding:
                                         EdgeInsets.only(right: 410.w),
                                     enabledBorder: UnderlineInputBorder(
@@ -659,7 +660,7 @@ class _UserModifyState extends State<UserModify> {
                                 );
                               }
                             : () {
-                                toast(context, "모든 필드를 입력하십시오");
+                                toast(context, "모든 필드를 입력하십시오", "bottom");
                                 if (isIdValid == false) {
                                   dialog(context, "닉네임 중복을 확인해주세요");
                                 }

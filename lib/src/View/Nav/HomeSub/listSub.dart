@@ -15,6 +15,7 @@ import 'package:uahage/src/Service/places.dart';
 import 'package:http/http.dart' as http;
 import 'package:uahage/src/Service/places.restaurant.bookmarks.dart';
 import 'package:uahage/src/Service/review.dart';
+import 'package:uahage/src/Service/users.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 import 'package:uahage/src/Static/Widget/appbar.dart';
 import 'package:uahage/src/Static/Widget/average.dart';
@@ -114,6 +115,7 @@ class _ListSubState extends State<ListSub> {
   bool isMyId = false;
   var datas;
   int count = 0;
+  var _isnickname;
   //리뷰 전체보기
   select(option) async {
     reviewData = [];
@@ -140,8 +142,9 @@ class _ListSubState extends State<ListSub> {
       i++;
     }
     setState(() {
-      aver = 4;
-      //aver = responseJson["average"] ?? 0;
+      responseJson["average"].toString() == "null"
+          ? aver = 0
+          : aver = double.parse(responseJson["average"].toString());
       score = [];
       score.add(responseJson['totalDetailObj']["onePointTotal"]);
       score.add(responseJson['totalDetailObj']["twoPointTotal"]);
@@ -154,8 +157,6 @@ class _ListSubState extends State<ListSub> {
         }
       }
       averStar = ((aver * 2).ceil()) / 2;
-
-      print(score);
     });
   }
 
@@ -164,15 +165,25 @@ class _ListSubState extends State<ListSub> {
     await reviewDelete(reviewId);
   }
 
+  checkNick() async {
+    _isnickname = await isNicknameCheck();
+    print('isnickname $_isnickname');
+  }
+
   @override
   void initState() {
     super.initState();
     select("DATE");
   }
 
+  final ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     print("listsub");
+    //
+    checkNick();
+
     count = 0;
     prevImage = [];
     for (int i = 0; i < imageList.length; i++) {
@@ -210,6 +221,7 @@ class _ListSubState extends State<ListSub> {
                 return appBar(context, data.name, "");
             }()),
             body: ListView(
+              controller: _scrollController,
               children: [
                 Stack(
                   children: [
@@ -421,7 +433,7 @@ class _ListSubState extends State<ListSub> {
                                       ),
                                       onTap: () {
                                         FlutterClipboard.copy(data.address);
-                                        toast(context, "주소가 복사되었습니다");
+                                        toast(context, "주소가 복사되었습니다", "bottom");
                                       },
                                     )
                                   ],
@@ -454,33 +466,33 @@ class _ListSubState extends State<ListSub> {
                                       ),
                                       onTap: () {
                                         FlutterClipboard.copy(data.phone);
-                                        toast(context, "번호가 복사되었습니다");
+                                        toast(context, "번호가 복사되었습니다", "bottom");
                                       },
                                     )
                                   ],
                                 ),
-                                placeCode == 1
-                                    ? Padding(
-                                        padding: EdgeInsets.only(top: 30.w))
-                                    : Padding(
-                                        padding: EdgeInsets.only(top: 0.w)),
-                                placeCode == 1
-                                    ? normalfont("영업시간", 58, Color(0xff4d4d4d))
-                                    : Container(),
-                                placeCode == 1
-                                    ? Padding(
-                                        padding: EdgeInsets.only(top: 10.w))
-                                    : Padding(
-                                        padding: EdgeInsets.only(top: 0.w)),
-                                placeCode == 1
-                                    ? Container(
-                                        width: 500 * width.w,
-                                        child: normalfont(
-                                            "오전 11:30 ~ 21:00(샐러드바 마감 20:30) 브레이크타임 15:00~17:00",
-                                            58,
-                                            Color(0xff808080)),
-                                      )
-                                    : Container(),
+                                // placeCode == 1
+                                //     ? Padding(
+                                //         padding: EdgeInsets.only(top: 30.w))
+                                //     : Padding(
+                                //         padding: EdgeInsets.only(top: 0.w)),
+                                // placeCode == 1
+                                //     ? normalfont("영업시간", 58, Color(0xff4d4d4d))
+                                //     : Container(),
+                                // placeCode == 1
+                                //     ? Padding(
+                                //         padding: EdgeInsets.only(top: 10.w))
+                                //     : Padding(
+                                //         padding: EdgeInsets.only(top: 0.w)),
+                                // placeCode == 1
+                                //     ? Container(
+                                //         width: 500 * width.w,
+                                //         child: normalfont(
+                                //             "오전 11:30 ~ 21:00(샐러드바 마감 20:30) 브레이크타임 15:00~17:00",
+                                //             58,
+                                //             Color(0xff808080)),
+                                //       )
+                                //     : Container(),
                                 Padding(padding: EdgeInsets.only(top: 30.w))
                               ],
                             ),
@@ -490,82 +502,79 @@ class _ListSubState extends State<ListSub> {
                           height: 26 * height.h,
                           color: Color(0xfff7f7f7),
                         ),
-                        placeCode == 1
-                            ? Container(
-                                child: Container(
-                                  padding: EdgeInsets.only(
-                                    left: 75.w,
-                                  ),
-                                  width: MediaQuery.of(context).size.width,
-                                  // alignment: Alignment.center,
-                                  //  height: 520 .h,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                          padding: EdgeInsets.only(top: 30.h)),
-                                      normalfont("매장정보", 58, Color(0xff4d4d4d)),
-                                      Padding(
-                                          padding: EdgeInsets.only(top: 6.h)),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            width: 530.w,
-                                            child: normalfont("OO 평일런치", 58,
-                                                Color(0xff808080)),
-                                          ),
-                                          Container(
-                                            child: normalfont("15,900원", 58,
-                                                Color(0xffc6c6c6)),
-                                          ),
-                                        ],
-                                      ),
-                                      Padding(
-                                          padding: EdgeInsets.only(top: 6.h)),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            width: 530.w,
-                                            child: normalfont("OO 평일디너", 58,
-                                                Color(0xff808080)),
-                                          ),
-                                          Container(
-                                            child: normalfont("22,900원", 58,
-                                                Color(0xffc6c6c6)),
-                                          ),
-                                        ],
-                                      ),
-                                      Padding(
-                                          padding: EdgeInsets.only(top: 6.h)),
-                                      Row(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Container(
-                                                width: 530.w,
-                                                child: normalfont("OO 주말/공휴일",
-                                                    58, Color(0xff808080)),
-                                              ),
-                                              Container(
-                                                child: normalfont("25,900원", 58,
-                                                    Color(0xffc6c6c6)),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      Padding(
-                                          padding: EdgeInsets.only(top: 30.h)),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            : Container(),
-                        placeCode == 1
-                            ? Container(
-                                height: 26 * height.h, color: Color(0xfff7f7f7))
-                            : Container(),
+                        // placeCode == 1
+                        //     ? Container(
+                        //         child: Container(
+                        //           padding: EdgeInsets.only(
+                        //             left: 75.w,
+                        //           ),
+                        //           width: MediaQuery.of(context).size.width,
+                        //           // alignment: Alignment.center,
+                        //           //  height: 520 .h,
+                        //           child: Column(
+                        //             crossAxisAlignment:
+                        //                 CrossAxisAlignment.start,
+                        //             children: [
+                        //               Padding(
+                        //                   padding: EdgeInsets.only(top: 30.h)),
+                        //               normalfont("매장정보", 58, Color(0xff4d4d4d)),
+                        //               Padding(
+                        //                   padding: EdgeInsets.only(top: 6.h)),
+                        //               Row(
+                        //                 children: [
+                        //                   Container(
+                        //                     width: 530.w,
+                        //                     child: normalfont("OO 평일런치", 58,
+                        //                         Color(0xff808080)),
+                        //                   ),
+                        //                   Container(
+                        //                     child: normalfont("15,900원", 58,
+                        //                         Color(0xffc6c6c6)),
+                        //                   ),
+                        //                 ],
+                        //               ),
+                        //               Padding(
+                        //                   padding: EdgeInsets.only(top: 6.h)),
+                        //               Row(
+                        //                 children: [
+                        //                   Container(
+                        //                     width: 530.w,
+                        //                     child: normalfont("OO 평일디너", 58,
+                        //                         Color(0xff808080)),
+                        //                   ),
+                        //                   Container(
+                        //                     child: normalfont("22,900원", 58,
+                        //                         Color(0xffc6c6c6)),
+                        //                   ),
+                        //                 ],
+                        //               ),
+                        //               Padding(
+                        //                   padding: EdgeInsets.only(top: 6.h)),
+                        //               Row(
+                        //                 children: [
+                        //                   Row(
+                        //                     children: [
+                        //                       Container(
+                        //                         width: 530.w,
+                        //                         child: normalfont("OO 주말/공휴일",
+                        //                             58, Color(0xff808080)),
+                        //                       ),
+                        //                       Container(
+                        //                         child: normalfont("25,900원", 58,
+                        //                             Color(0xffc6c6c6)),
+                        //                       ),
+                        //                     ],
+                        //                   ),
+                        //                 ],
+                        //               ),
+                        //               Padding(
+                        //                   padding: EdgeInsets.only(top: 30.h)),
+                        //             ],
+                        //           ),
+                        //         ),
+                        //       )
+                        //     : Container(),
+
                         (() {
                           if (placeCode == 1) {
                             return Container(
@@ -749,6 +758,32 @@ class _ListSubState extends State<ListSub> {
                                 ),
                               ),
                             );
+                          } else if (placeCode == 3) {
+                            return Container(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                padding: EdgeInsets.only(
+                                  left: 75.w,
+                                  top: 50.h,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    normalfont("정보", 58, Color(0xff4d4d4d)),
+                                    Padding(
+                                        padding: EdgeInsets.only(top: 10.h)),
+                                    normalfont(
+                                        data.use_bus == true
+                                            ? "버스 : 운행"
+                                            : "버스 : 미운행",
+                                        58,
+                                        Color(0xff808080)),
+                                    Padding(
+                                        padding: EdgeInsets.only(top: 50.h)),
+                                  ],
+                                ),
+                              ),
+                            );
                           } else {
                             return Container(
                               child: Container(
@@ -883,14 +918,48 @@ class _ListSubState extends State<ListSub> {
                                       children: [
                                         Container(
                                             width: 210 * height.h,
-                                            child: Column(
-                                              children: [
-                                                normalfont("${data.name}", 58,
-                                                    Colors.black),
-                                                normalfont("다녀오셨나요?", 58,
-                                                    Color(0xff939393)),
-                                              ],
-                                            )),
+                                            child: RichText(
+                                              textAlign: TextAlign.center,
+                                              text: TextSpan(
+                                                style: TextStyle(
+                                                    color: Color(0xff939393),
+                                                    fontWeight: FontWeight.w500,
+                                                    fontFamily:
+                                                        "NotoSansCJKkr_Medium",
+                                                    fontStyle: FontStyle.normal,
+                                                    fontSize: 62.sp),
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                      text: '${data.name}',
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontFamily:
+                                                              "NotoSansCJKkr_Bold",
+                                                          fontStyle:
+                                                              FontStyle.normal,
+                                                          fontSize: 62.sp)),
+                                                  TextSpan(text: '에'),
+                                                  TextSpan(text: ' 다녀오셨나요?'),
+                                                ],
+                                              ),
+                                            )
+                                            // child: Column(
+                                            //   children: [
+                                            //     Row(
+                                            //       children: [
+                                            //         normalfont("${data.name}",
+                                            //             58, Colors.black),
+                                            //         normalfont("에", 58,
+                                            //             Color(0xff939393)),
+                                            //         normalfont("다녀오셨나요?", 58,
+                                            //             Color(0xff939393)),
+                                            //       ],
+                                            //     ),
+                                            //   ],
+                                            // )
+                                            ),
                                         Padding(
                                           padding: EdgeInsets.only(
                                             left: 44 * width.w,
@@ -903,14 +972,19 @@ class _ListSubState extends State<ListSub> {
                                                   height: 54 * height.h,
                                                 ),
                                                 onTap: () async {
-                                                  var result = await Get.to(
-                                                      ReviewPage(
-                                                          reviewData: datas,
-                                                          data: data));
+                                                  if (_isnickname == true) {
+                                                    var result = await Get.to(
+                                                        ReviewPage(
+                                                            reviewData: datas,
+                                                            data: data));
 
-                                                  if (result == "ok") {
-                                                    await select(option);
-                                                    setState(() {});
+                                                    if (result == "ok") {
+                                                      await select(option);
+                                                      setState(() {});
+                                                    }
+                                                  } else {
+                                                    dialog(
+                                                        context, "회원정보 수정해주세요");
                                                   }
                                                 },
                                               )
@@ -920,12 +994,7 @@ class _ListSubState extends State<ListSub> {
                                                   height: 54 * height.h,
                                                 ),
                                                 onTap: () async {
-                                                  if (reviewData[index]
-                                                          .nickname ==
-                                                      null) {
-                                                    dialog(
-                                                        context, "프로필을 입력해주세요");
-                                                  } else {
+                                                  if (_isnickname == true) {
                                                     var result = await Get.to(
                                                         ReviewPage(
                                                             reviewData: null,
@@ -935,6 +1004,9 @@ class _ListSubState extends State<ListSub> {
                                                       await select(option);
                                                       setState(() {});
                                                     }
+                                                  } else {
+                                                    dialog(
+                                                        context, "회원정보 수정해주세요");
                                                   }
                                                 },
                                               ),
@@ -958,7 +1030,7 @@ class _ListSubState extends State<ListSub> {
                                                 color: Colors.grey
                                                     .withOpacity(0.4),
                                                 offset:
-                                                    Offset(0.0, 0.1), //(x,y)
+                                                    Offset(2.0, 4.0), //(x,y)
                                                 blurRadius: 7.0,
                                                 spreadRadius: 1,
                                               ),
@@ -1380,7 +1452,7 @@ class _ListSubState extends State<ListSub> {
                                                           Padding(
                                                               padding: EdgeInsets
                                                                   .only(
-                                                                      left: 16 *
+                                                                      left: 5 *
                                                                           width
                                                                               .w)),
                                                           normalfont(
@@ -1394,7 +1466,7 @@ class _ListSubState extends State<ListSub> {
                                                       Row(
                                                         children: [
                                                           average(
-                                                              110 * width.w,
+                                                              97 * width.w,
                                                               '맛',
                                                               "${reviewData[index].taste_rating}"),
                                                           Padding(
@@ -1666,26 +1738,11 @@ class _ListSubState extends State<ListSub> {
                 ),
               ],
             ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {},
-              backgroundColor: Colors.white,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // SvgPicture.asset(
-                  //   "assets/sublistPage/up-arrow.svg",
-                  //   width: 21.w,
-                  // ),
-                  Text(
-                    "TOP",
-                    style: TextStyle(
-                      color: Color(0xff4d4d4d),
-                      fontSize: 24 * width.sp,
-                      fontFamily: "NotoSansCJKkr_Medium",
-                    ),
-                  )
-                ],
-              ),
+            floatingActionButton: InkWell(
+              onTap: () {
+                _scrollController.jumpTo(1);
+              },
+              child: Image.asset("./assets/sublistPage/top.png", width: 330.w),
             )),
       ),
     );

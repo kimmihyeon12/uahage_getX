@@ -33,23 +33,16 @@ class _WithdrawalState extends State<Withdrawal> {
       onWillPop: () async => false,
       child: SafeArea(
         child: Scaffold(
-            // resizeToAvoidBottomPadding: false,
             body: Stack(
           children: [
-            Container(
-              child: Image(
-                image: AssetImage('./assets/firstPage/backgroundimage.png'),
-                width: MediaQuery.of(context).size.width,
-                fit: BoxFit.fitWidth,
-              ),
-              //  color:Colors.black
-            ),
+            Image.asset('./assets/firstPage/rectangleRectangle.png',
+                height: 1415.h, fit: BoxFit.fitHeight),
             Container(
               alignment: Alignment.bottomCenter,
               child: Image(
                 image: AssetImage('./assets/firstPage/backfamily.png'),
-                height: 1415.h,
-                width: 1446.w,
+                //height: 2668.h,
+                width: 1501.w,
                 // height: 50,
               ),
             ),
@@ -59,16 +52,6 @@ class _WithdrawalState extends State<Withdrawal> {
                     padding: EdgeInsets.only(
                   left: 658.w,
                 )),
-                Image(
-                  image: AssetImage('./assets/firstPage/Lighting.png'),
-                  height: 440.h,
-                  width: 143.w,
-                ),
-                Image(
-                  image: AssetImage('./assets/firstPage/logo.png'),
-                  height: 88.h,
-                  width: 662.w,
-                ),
               ],
             ),
             Center(

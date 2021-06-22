@@ -15,9 +15,6 @@ Widget average(width, text, rating) {
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        //taste
-        // normalfont("$text", 20 * width.sp, Color(0xff808080)),
-        // normalfont("$text", 20 * width.sp, Color(0xff808080)),
         Text(
           '$text',
           style: TextStyle(
