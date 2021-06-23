@@ -5,6 +5,7 @@ import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:uahage/src/Binding/place.restaurant.bookmark.binding.dart';
 import 'package:uahage/src/Controller/place.restaurant.bookmark.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
+import 'package:uahage/src/Model/craftRooms.dart';
 import 'package:uahage/src/Model/dayCareCenter.dart';
 import 'package:uahage/src/Model/experienceCenter.dart';
 import 'package:uahage/src/Model/hospitals.dart';
@@ -219,12 +220,14 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                           message = Hospitals.fromJson(Message);
                         } else if (placeCode == 3) {
                           message = DayCareCenter.fromJson(Message);
-                        } else if (placeCode == 4) {
-                          message = KidCafe.fromJson(Message);
                         } else if (placeCode == 5) {
+                          message = KidCafe.fromJson(Message);
+                        } else if (placeCode == 6) {
                           message = Experiencecenter.fromJson(Message);
+                        } else if (placeCode == 8) {
+                          message = CraftRooms.fromJson(Message);
                         }
-
+                        print("message");
                         print(message);
                         // // Navigator.push(
                         // //     context,
@@ -247,38 +250,40 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                               padding: EdgeInsets.only(
                             left: 30.w,
                           )),
-                          (() {
-                            if (placeCode == 1)
-                              return Image.network(
-                                restaurantListImage[0],
-                                height: 409.h,
-                                width: 413.w,
-                              );
-                            if (placeCode == 2)
-                              return Image.network(
-                                hospitalListImage[0],
-                                height: 409.h,
-                                width: 413.w,
-                              );
-                            if (placeCode == 3)
-                              return Image.network(
-                                experienceListImage[0],
-                                height: 409.h,
-                                width: 413.w,
-                              );
-                            if (placeCode == 4)
-                              return Image.network(
-                                kidsCafeListImage[0],
-                                height: 409.h,
-                                width: 413.w,
-                              );
-                            if (placeCode == 5)
-                              return Image.network(
-                                experienceListImage[0],
-                                height: 409.h,
-                                width: 413.w,
-                              );
-                          }()),
+                          Container(
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                    (() {
+                                      if (placeCode == 1) {
+                                        return restaurantListImage[0];
+                                      } else if (placeCode == 2) {
+                                        return hospitalListImage[0];
+                                      } else if (placeCode == 3) {
+                                        return experienceListImage[0];
+                                      } else if (placeCode == 5) {
+                                        return kidsCafeListImage[0];
+                                      } else if (placeCode == 6) {
+                                        return experienceListImage[0];
+                                      } else if (placeCode == 8) {
+                                        if (Message["image_path"] == null) {
+                                          return experienceListImage[0];
+                                        } else {
+                                          return Message["image_path"][0];
+                                        }
+                                      } else {
+                                        return restaurantListImage[0];
+                                      }
+                                    }()),
+                                    scale: 0.1,
+                                  ),
+                                ),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0))),
+                            height: 413.w,
+                            width: 413.w,
+                          ),
                           Padding(
                               padding: EdgeInsets.only(
                             left: 53.w,

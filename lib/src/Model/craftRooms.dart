@@ -15,7 +15,7 @@ class CraftRooms {
   String url;
   String worked_at;
   String store_info;
-  String image_path;
+  List image_path;
   factory CraftRooms.fromJson(Map<String, dynamic> json) => CraftRooms(
       id: json["id"],
       name: json["name"],
@@ -24,5 +24,5 @@ class CraftRooms {
       url: json["url"],
       worked_at: json["worked_at"],
       store_info: json["store_info"],
-      image_path: json["image_path"]);
+      image_path: json["image_path"] as List);
 }

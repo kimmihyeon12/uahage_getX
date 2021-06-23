@@ -109,7 +109,7 @@ class _ListSubState extends State<ListSub> {
 
   var option = "DATE";
   List imageList = [];
-  List image_path = [];
+
   double aver = 0;
   List score = [];
   double averStar = 0;
@@ -170,15 +170,12 @@ class _ListSubState extends State<ListSub> {
 
   checkNick() async {
     _isnickname = await isNicknameCheck();
-    print('isnickname $_isnickname');
   }
 
   @override
   void initState() {
     super.initState();
-    image_path = data.image_path != null ? data.image_path.split(",") : null;
-    setState(() {});
-    print(image_path);
+
     select("DATE");
   }
 
@@ -266,24 +263,20 @@ class _ListSubState extends State<ListSub> {
                                       return mainImage(
                                           kidsCafeListImage[1], 1500.w);
                                   } else if (placeCode == 8) {
-                                    if (image_path == null) {
+                                    if (data.image_path == null) {
                                       return mainImage(
                                           experienceListImage[0], 1500.w);
                                     } else {
-                                      print("image_path");
-                                      print(image_path);
-
                                       return Container(
-                                        height: 800.w,
                                         color: Colors.black,
                                         child: SizedBox(
-                                          height: 800.w,
+                                          height: 870.w,
                                           child: PageView.builder(
-                                            itemCount: image_path.length,
+                                            itemCount: data.image_path.length,
                                             itemBuilder: (context, index) {
                                               return Image.network(
-                                                  image_path[index],
-                                                  fit: BoxFit.fitWidth);
+                                                  data.image_path[index],
+                                                  fit: BoxFit.cover);
                                             },
                                           ),
                                         ),
@@ -512,7 +505,7 @@ class _ListSubState extends State<ListSub> {
                                         ),
                                         onTap: () async {
                                           // FlutterClipboard.copy(data.phone);
-                                          print(data.phone);
+
                                           if (await canLaunch(
                                               'tel:${data.phone}')) {
                                             await launch('tel:${data.phone}');
@@ -543,8 +536,13 @@ class _ListSubState extends State<ListSub> {
                                                 Padding(
                                                     padding: EdgeInsets.only(
                                                         top: 10.h)),
-                                                normalfont("${data.worked_at}",
-                                                    58, Color(0xff808080)),
+                                                normalfont(
+                                                    data.worked_at ==
+                                                            "undefined"
+                                                        ? '준비중입니다'
+                                                        : '${data.worked_at}',
+                                                    58,
+                                                    Color(0xff808080)),
                                                 Padding(
                                                     padding: EdgeInsets.only(
                                                         top: 50.h)),
@@ -886,7 +884,7 @@ class _ListSubState extends State<ListSub> {
                                           padding: EdgeInsets.only(top: 10.h)),
                                       normalfont(
                                           data.store_info == "undefined"
-                                              ? "없음"
+                                              ? '준비중입니다'
                                               : "${data.store_info}",
                                           58,
                                           Color(0xff808080)),
@@ -897,8 +895,8 @@ class _ListSubState extends State<ListSub> {
                                           padding: EdgeInsets.only(top: 10.h)),
                                       InkWell(
                                         child: normalfont(
-                                            data.url == null
-                                                ? "없음"
+                                            data.url == "undefined"
+                                                ? '준비중입니다'
                                                 : "${data.url}",
                                             58,
                                             Color(0xff808080)),
@@ -967,18 +965,24 @@ class _ListSubState extends State<ListSub> {
                                         Padding(
                                             padding:
                                                 EdgeInsets.only(top: 30.h)),
-                                        Container(
-                                          height: 1100.h,
-                                          child: WebView(
-                                            // gestureNavigationEnabled: true,
-                                            onWebViewCreated: (WebViewController
-                                                webViewController) {
-                                              _controller = webViewController;
-                                              _controller.loadUrl(url +
-                                                  '/maps/show-place-name?placeName=${data.name}&placeAddress=${data.address}');
-                                            },
-                                            javascriptMode:
-                                                JavascriptMode.unrestricted,
+                                        GestureDetector(
+                                          onTap: () {
+                                            print("Container clicked");
+                                          },
+                                          child: Container(
+                                            height: 1100.h,
+                                            child: WebView(
+                                              // gestureNavigationEnabled: true,
+                                              onWebViewCreated:
+                                                  (WebViewController
+                                                      webViewController) {
+                                                _controller = webViewController;
+                                                _controller.loadUrl(url +
+                                                    '/maps/show-place-name?placeName=${data.name}&placeAddress=${data.address}');
+                                              },
+                                              javascriptMode:
+                                                  JavascriptMode.unrestricted,
+                                            ),
                                           ),
                                         ),
                                       ]),
@@ -1537,7 +1541,6 @@ class _ListSubState extends State<ListSub> {
                                 itemCount: reviewData.length,
                                 itemBuilder: (context, index) {
                                   if (reviewData.length == 0) {
-                                    print("로딩중");
                                     return Container(
                                       child: Text(" 로딩중 "),
                                     );
@@ -1919,7 +1922,6 @@ class _ListSubState extends State<ListSub> {
   }
 
   Widget scoreImage(i) {
-    print("i $i");
     if (maxScore == score[i] && score[i] != 0) {
       return Image.asset(
         "./assets/sublistPage/bar6.png",

@@ -63,7 +63,6 @@ class Place extends GetView<PlaceController> {
     for (var data in responseJson) {
       print(data);
       if (placeCode == 1) {
-        // data.total == null ? "0" : data["total"];
         currentData = Restaurant.fromJson(data);
       } else if (placeCode == 2) {
         currentData = Hospitals.fromJson(data);

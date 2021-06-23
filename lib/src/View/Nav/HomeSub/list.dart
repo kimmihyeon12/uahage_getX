@@ -166,6 +166,7 @@ class PlaceList extends GetView<PlaceController> {
                             Container(
                               decoration: BoxDecoration(
                                   image: DecorationImage(
+                                    fit: BoxFit.cover,
                                     image: NetworkImage(
                                       (() {
                                         if (placeCode == 1) {
@@ -190,14 +191,14 @@ class PlaceList extends GetView<PlaceController> {
                                           else
                                             return experienceListImage[3];
                                         } else if (placeCode == 8) {
-                                          if (index % 4 == 1)
-                                            return experienceListImage[0];
-                                          else if (index % 4 == 2)
-                                            return experienceListImage[1];
-                                          else if (index % 4 == 3)
-                                            return experienceListImage[2];
-                                          else
+                                          if (controller
+                                                  .place[index].image_path !=
+                                              null) {
+                                            return controller
+                                                .place[index].image_path[0];
+                                          } else {
                                             return experienceListImage[3];
+                                          }
                                         } else {
                                           if (index % 2 == 1)
                                             return kidsCafeListImage[0];
@@ -205,11 +206,12 @@ class PlaceList extends GetView<PlaceController> {
                                             return kidsCafeListImage[1];
                                         }
                                       }()),
+                                      scale: 0.1,
                                     ),
                                   ),
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(10.0))),
-                              height: 414.h,
+                              height: 413.w,
                               width: 413.w,
                             ),
                             Padding(
