@@ -16,7 +16,7 @@ toast(context, text, position) {
     child: Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        normalfont(text, 45, Colors.white),
+        normalfont(text, 56, Colors.white),
       ],
     ),
   );

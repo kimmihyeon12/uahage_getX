@@ -71,7 +71,7 @@ class _HomeState extends State<Home> {
                         alignment: Alignment.topRight,
                         child: Container(
                           decoration: new BoxDecoration(
-                              color: Colors.pink[200],
+                              color: Color.fromRGBO(255, 114, 148, 0.5),
                               //   image: DecorationImage(
                               //     image: AssetImage('./assets/path.png'),
                               //   ),
@@ -88,6 +88,11 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                       ),
+                      Container(
+                        margin: EdgeInsets.only(left: 65.w, top: 55.h),
+                        child: boldfont(
+                            "영·유아 보호자와\n함께하는\n정보제공 서비스", 85, Color(0xffff7292)),
+                      )
                     ],
                   ),
                 ),
@@ -292,7 +297,7 @@ class _HomeState extends State<Home> {
                           ),
                           onTap: () {
                             currentFocus.unfocus();
-                            toast(context, " 서비스 준비 중이에요!  ", "bottom");
+                            Get.toNamed("/list", arguments: 8);
                           },
                         ),
                       ],

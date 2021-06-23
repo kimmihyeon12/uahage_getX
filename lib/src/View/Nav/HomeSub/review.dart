@@ -406,8 +406,8 @@ class _ReviewPageState extends State<ReviewPage> {
                                           color: Colors.grey.withOpacity(0.3),
                                         ),
                                         Positioned(
-                                          right: 5 * width,
-                                          top: 5 * height,
+                                          right: 3 * width,
+                                          top: 3 * height,
                                           child: InkWell(
                                             onTap: () {
                                               setState(() {
@@ -465,8 +465,8 @@ class _ReviewPageState extends State<ReviewPage> {
                                           color: Colors.grey.withOpacity(0.3),
                                         ),
                                         Positioned(
-                                          right: 5 * width,
-                                          top: 5 * height,
+                                          right: 3 * width,
+                                          top: 3 * height,
                                           child: InkWell(
                                             onTap: () {
                                               setState(() {

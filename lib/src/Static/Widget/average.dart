@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-Widget average(width, text, rating) {
+Widget average(text, rating) {
   return Container(
-    width: width,
+    //  width: width,
+    padding: EdgeInsets.only(left: 20.w, right: 20.w),
     decoration: BoxDecoration(
         border: Border.all(
           color: Color.fromRGBO(77, 77, 77, 0.2),

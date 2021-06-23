@@ -5,6 +5,7 @@ import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:uahage/src/Binding/place.restaurant.bookmark.binding.dart';
 import 'package:uahage/src/Controller/place.restaurant.bookmark.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
+import 'package:uahage/src/Model/dayCareCenter.dart';
 import 'package:uahage/src/Model/experienceCenter.dart';
 import 'package:uahage/src/Model/hospitals.dart';
 import 'package:uahage/src/Model/kidCafe.dart';
@@ -67,7 +68,10 @@ Future<Object> popup(context, grey_image) {
                                   child: InkWell(
                                     onTap: () {
                                       setState(() {
-                                        grey_image[index] = 1;
+                                        if (grey_image[index] == 1)
+                                          grey_image[index] = 0;
+                                        else
+                                          grey_image[index] = 1;
                                       });
                                       print(grey_image);
                                     },
@@ -213,6 +217,8 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                           message.bookmark = mark;
                         } else if (placeCode == 2) {
                           message = Hospitals.fromJson(Message);
+                        } else if (placeCode == 3) {
+                          message = DayCareCenter.fromJson(Message);
                         } else if (placeCode == 4) {
                           message = KidCafe.fromJson(Message);
                         } else if (placeCode == 5) {
@@ -254,6 +260,12 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                                 height: 409.h,
                                 width: 413.w,
                               );
+                            if (placeCode == 3)
+                              return Image.network(
+                                experienceListImage[0],
+                                height: 409.h,
+                                width: 413.w,
+                              );
                             if (placeCode == 4)
                               return Image.network(
                                 kidsCafeListImage[0],
@@ -283,7 +295,7 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                                         width: 700.w,
                                         child: boldfont(
                                             Message["name"].length <= 10
-                                                ? Message["name"]
+                                                ? '${Message["name"]}'
                                                 : '${Message["name"].substring(0, 11)}...',
                                             60,
                                             Color(0xff010000))),
@@ -365,8 +377,8 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                                               '${Message["address"].substring(0, 18)}...',
                                               54,
                                               Color(0xffb0b0b0))
-                                          : normalfont(Message["address"], 54,
-                                              Color(0xffb0b0b0)),
+                                          : normalfont('${Message["address"]}',
+                                              54, Color(0xffb0b0b0)),
                                     )
                                   : Container(
                                       width: 750.w,
@@ -781,7 +793,9 @@ report(context, reviewId) {
                                 Get.back();
                               }
                             } else {
-                              await dialog(context, "모든필드를 입력해주세요");
+                              isreport
+                                  ? await dialog(context, "10글자 이상 작성해 주세요.")
+                                  : await dialog(context, "신고유형을 선택해 주세요");
                             }
                           },
                           shape: new RoundedRectangleBorder(

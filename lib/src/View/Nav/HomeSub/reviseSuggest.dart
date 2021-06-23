@@ -186,6 +186,7 @@ class _ReviseSuggestState extends State<ReviseSuggest> {
                     hintText: "상호, 위치 이전,영업시간, 전화번호, 폐업 등\n정보를 작성해주세요.",
                     hintStyle: TextStyle(
                       color: Color(0xffc6c6c6),
+                      height: 1.2,
                     ),
                     counterStyle: TextStyle(
                         color: Color(0xffc6c6c6),
@@ -255,8 +256,8 @@ class _ReviseSuggestState extends State<ReviseSuggest> {
                                         color: Colors.grey.withOpacity(0.3),
                                       ),
                                       Positioned(
-                                        right: 5 * width,
-                                        top: 5 * height,
+                                        right: 3 * width,
+                                        top: 3 * height,
                                         child: InkWell(
                                           onTap: () {
                                             setState(() {
@@ -264,9 +265,11 @@ class _ReviseSuggestState extends State<ReviseSuggest> {
                                               uploadingImage.removeAt(index);
                                             });
                                           },
-                                          child: Image.asset(
-                                            "assets/reviewPage/x_button.png",
-                                            height: 27.3 * width.w,
+                                          child: Container(
+                                            child: Image.asset(
+                                              "assets/reviewPage/x_button.png",
+                                              height: 27.3 * width.w,
+                                            ),
                                           ),
                                         ),
                                       ),

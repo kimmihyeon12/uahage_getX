@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:uahage/src/Controller/location.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
+import 'package:uahage/src/Model/craftRooms.dart';
 import 'package:uahage/src/Model/dayCareCenter.dart';
 import 'dart:convert';
 import 'dart:async';
@@ -25,6 +26,8 @@ class Place extends GetView<PlaceController> {
       return "kid-cafes";
     } else if (placeCode == 6) {
       return "experience-centers";
+    } else if (placeCode == 8) {
+      return "craft-rooms";
     }
   }
 
@@ -70,8 +73,10 @@ class Place extends GetView<PlaceController> {
         currentData = KidCafe.fromJson(data);
       } else if (placeCode == 6) {
         currentData = Experiencecenter.fromJson(data);
+      } else if (placeCode == 8) {
+        currentData = CraftRooms.fromJson(data);
       }
-      print(currentData);
+
       await controller.setPlace(currentData);
       await controller.setPlacePaceNumber();
     }

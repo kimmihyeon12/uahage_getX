@@ -51,6 +51,7 @@ dependencies:
   smooth_star_rating: ^1.1.1
   flutter_rating_bar: ^3.2.0+1
   flutter_svg:  ^0.19.2+1
+  url_launcher: ^5.7.8
   flutter:
     sdk: flutter
 

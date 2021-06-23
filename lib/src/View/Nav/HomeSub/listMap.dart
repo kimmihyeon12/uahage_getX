@@ -72,7 +72,7 @@ class _ListMapState extends State<ListMap> {
                   name: 'Print',
                   onMessageReceived: (JavascriptMessage message) async {
                     var messages = jsonDecode(message.message);
-
+                    print('name ${messages["use_bus"]}');
                     if (placeCode == 1) {
                       messages["bookmark"] = 0;
                       BookmarkController.to.placeBookmarkInit();
@@ -108,14 +108,6 @@ class _ListMapState extends State<ListMap> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12.withOpacity(0.3),
-                          spreadRadius: 2,
-                          blurRadius: 3,
-                          offset: Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
                     ),
                     margin: EdgeInsets.fromLTRB(51.w, 100.h, 51.w, 0),
                     height: 196.h,
@@ -142,7 +134,7 @@ class _ListMapState extends State<ListMap> {
                                       fontWeight: FontWeight.w500,
                                       fontFamily: "NotoSansCJKkr_Medium",
                                       fontStyle: FontStyle.normal,
-                                      fontSize: 60.sp),
+                                      fontSize: 65.sp),
                                   textAlign: TextAlign.left),
                               InkWell(
                                 child: Image.asset(

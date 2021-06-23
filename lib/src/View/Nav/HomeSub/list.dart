@@ -78,8 +78,12 @@ class PlaceList extends GetView<PlaceController> {
                     return "어린이집";
                   } else if (placeCode == 5) {
                     return "키즈카페";
+                  } else if (placeCode == 6) {
+                    return "키즈카페";
+                  } else if (placeCode == 8) {
+                    return "공방";
                   } else {
-                    return "체험관";
+                    return "기타";
                   }
                 }()),
                 ""),
@@ -177,6 +181,15 @@ class PlaceList extends GetView<PlaceController> {
                                           else
                                             return hospitalListImage[1];
                                         } else if (placeCode == 6) {
+                                          if (index % 4 == 1)
+                                            return experienceListImage[0];
+                                          else if (index % 4 == 2)
+                                            return experienceListImage[1];
+                                          else if (index % 4 == 3)
+                                            return experienceListImage[2];
+                                          else
+                                            return experienceListImage[3];
+                                        } else if (placeCode == 8) {
                                           if (index % 4 == 1)
                                             return experienceListImage[0];
                                           else if (index % 4 == 2)
