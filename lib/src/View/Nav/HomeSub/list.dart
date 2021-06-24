@@ -141,7 +141,7 @@ class PlaceList extends GetView<PlaceController> {
             child: Container(
                 height: 450.h,
                 padding: EdgeInsets.only(
-                  top: 1.h,
+                  top: 45.h,
                   left: 26.w,
                 ),
                 child: Row(
@@ -221,12 +221,12 @@ class PlaceList extends GetView<PlaceController> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Padding(padding: EdgeInsets.only(top: 10.h)),
+                                // Padding(padding: EdgeInsets.only(top: 10.h)),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
-                                      margin: EdgeInsets.only(top: 20.h),
+                                      //margin: EdgeInsets.only(top: 20.h),
                                       width: 700.w,
                                       height: 82.h,
                                       child: Text(

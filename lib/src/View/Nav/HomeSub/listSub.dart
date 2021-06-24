@@ -541,7 +541,7 @@ class _ListSubState extends State<ListSub> {
                                                 normalfont(
                                                     data.worked_at ==
                                                             "undefined"
-                                                        ? '준비중입니다'
+                                                        ? '문의'
                                                         : '${data.worked_at}',
                                                     58,
                                                     Color(0xff808080)),
@@ -886,7 +886,7 @@ class _ListSubState extends State<ListSub> {
                                           padding: EdgeInsets.only(top: 10.h)),
                                       normalfont(
                                           data.store_info == "undefined"
-                                              ? '준비중입니다'
+                                              ? '준비 중입니다.'
                                               : "${data.store_info}",
                                           58,
                                           Color(0xff808080)),
@@ -898,7 +898,7 @@ class _ListSubState extends State<ListSub> {
                                       InkWell(
                                         child: normalfont(
                                             data.url == "undefined"
-                                                ? '준비중입니다'
+                                                ? '준비 중입니다.'
                                                 : "${data.url}",
                                             58,
                                             Color(0xff808080)),

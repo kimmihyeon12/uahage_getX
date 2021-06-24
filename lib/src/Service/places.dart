@@ -56,6 +56,7 @@ class Place extends GetView<PlaceController> {
           'Authorization': '${UserController.to.token.value}'
         },
       );
+      print(pageNumber);
     }
     List responseJson = json.decode(response.body)["data"]["data"];
 

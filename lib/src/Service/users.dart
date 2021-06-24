@@ -172,11 +172,14 @@ class Users extends GetView<UserController> {
           'Authorization': '${UserController.to.token.value}'
         },
       );
-      print("isdata nickname" + jsonDecode(response.body)["data"].toString());
-      if (jsonDecode(response.body)["data"]) {
+
+      if (jsonDecode(response.body)["data"]["isSuccess"]) {
         return {"idValid": true, "value": "사용 가능한 닉네임입니다."};
       } else {
-        return {"idValid": false, "value": "이미 사용중인 닉네임입니다."};
+        return {
+          "idValid": false,
+          "value": jsonDecode(response.body)["message"]
+        };
       }
     } catch (err) {
       print(err);

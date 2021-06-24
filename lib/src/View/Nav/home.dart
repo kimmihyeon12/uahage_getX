@@ -14,6 +14,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  var width = 1500 / 720;
+  var height = 2667 / 1280;
   var homeimage = [
     "./assets/homePage/restaurant.png",
     "./assets/homePage/hospital.png",
@@ -287,13 +289,13 @@ class _HomeState extends State<Home> {
                         ),
                         Padding(
                             padding: EdgeInsets.only(
-                          left: 159.w,
+                          left: 111.9 * width.w,
                         )),
                         GestureDetector(
                           child: Image.asset(
                             homeimage[7],
-                            width: 300.w,
-                            height: 220.h,
+                            width: 75.3 * width.w,
+                            height: 105.8 * height.h,
                           ),
                           onTap: () {
                             currentFocus.unfocus();
