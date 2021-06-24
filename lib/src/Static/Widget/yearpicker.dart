@@ -35,7 +35,7 @@ yearPicker(context) async {
                   datee[1] = int.parse(datee[1]).toString();
                 }
                 if (int.parse(datee[2]) < 10) {
-                  datee[2] = int.parse(datee[1]).toString();
+                  datee[2] = int.parse(datee[2]).toString();
                 }
                 yController.text =
                     datee[0] + "년   " + datee[1] + "월   " + datee[2] + "일";

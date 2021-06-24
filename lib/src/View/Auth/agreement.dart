@@ -20,6 +20,7 @@ class _AgreementState extends State<Agreement> {
   initKakaoTalkInstalled() async {
     final installed = await isKakaoTalkInstalled();
     setState(() {
+      print('installed $installed');
       kakaoinstalled = installed;
     });
   }
@@ -271,7 +272,7 @@ class _AgreementState extends State<Agreement> {
                     } else {
                       switch (UserController.to.option.value) {
                         case "KAKAO":
-                          if (kakaoinstalled == null)
+                          if (kakaoinstalled)
                             awaitdialog(login.loginWithTalk(), context, 200.h,
                                 200.w, 80.w, 100.w, 62.5.sp);
                           else {

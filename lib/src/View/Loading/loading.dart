@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
 import 'package:uahage/src/Service/location.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/services.dart';
 
 class Loading extends GetView<UserController> {
   Location location = new Location();
@@ -32,6 +33,7 @@ class Loading extends GetView<UserController> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     connection();
     lodingTime();
     ScreenUtil.init(context, width: 1500, height: 2667);

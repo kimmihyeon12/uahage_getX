@@ -27,6 +27,7 @@ class _RegisterState extends State<Register> {
   Users users = new Users();
   //user
   bool isIdValid = false;
+
   String birthday = "";
   String nickName = "";
   String gender = "";
@@ -45,6 +46,7 @@ class _RegisterState extends State<Register> {
     './assets/register/girl_grey.png',
     './assets/register/girl_pink.png'
   ];
+
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, width: 1500, height: 2667);

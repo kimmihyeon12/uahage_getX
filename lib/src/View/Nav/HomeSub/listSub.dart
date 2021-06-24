@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -972,7 +974,14 @@ class _ListSubState extends State<ListSub> {
                                           child: Container(
                                             height: 1100.h,
                                             child: WebView(
-                                              // gestureNavigationEnabled: true,
+                                              gestureRecognizers: Set()
+                                                ..add(
+                                                  Factory<
+                                                      VerticalDragGestureRecognizer>(
+                                                    () =>
+                                                        VerticalDragGestureRecognizer(),
+                                                  ),
+                                                ),
                                               onWebViewCreated:
                                                   (WebViewController
                                                       webViewController) {
@@ -1043,7 +1052,7 @@ class _ListSubState extends State<ListSub> {
                                         ],
                                       ),
                                       normalfont(
-                                          "오인하게 할 우려가 있고,환자유인행위의 소지가 있어 리뷰를 작성할 수 없습니다.",
+                                          "오인하게 할 우려가 있고, 환자 유인행위의 소지가 있어 리뷰를 작성할 수 없습니다.",
                                           56,
                                           Color.fromRGBO(255, 114, 142, 0.7))
                                     ],

@@ -28,6 +28,7 @@ class _UserModifyState extends State<UserModify> {
   void initState() {
     super.initState();
     userdata = widget.userdata;
+    userdata["nickname"] != "" ? isIdValid = true : isIdValid = false;
   }
 
   TextEditingController yController = TextEditingController();
@@ -279,6 +280,7 @@ class _UserModifyState extends State<UserModify> {
                                   maxLength: 10,
                                   onChanged: (txt) {
                                     setState(() {
+                                      isIdValid = false;
                                       userdata["nickname"] = txt;
                                       print(userdata["nickname"]);
                                     });

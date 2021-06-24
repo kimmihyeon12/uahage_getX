@@ -1,3 +1,4 @@
+import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
@@ -401,6 +402,7 @@ class _MyPageState extends State<MyPage> {
                                                     .addPostFrameCallback(
                                                         (_) async {
                                                   await prefs.clear();
+                                                  FlutterNaverLogin.logOut();
                                                   Get.offNamed("/withdrawal");
                                                 });
                                               } else if (snapshot.hasError) {
