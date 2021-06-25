@@ -7,6 +7,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
 import 'package:uahage/src/Service/users.dart';
 import 'package:uahage/src/Static/Font/font.dart';
+import 'package:uahage/src/Static/Image/mypageImage.dart';
+import 'package:uahage/src/Static/Widget/bottomsheet.dart';
 import 'package:uahage/src/Static/Widget/dialog.dart';
 import 'package:uahage/src/Static/Widget/toast.dart';
 import 'package:uahage/src/Static/Widget/yearpicker.dart';
@@ -36,14 +38,7 @@ class _UserModifyState extends State<UserModify> {
   var ageImage = [false, false, false, false, false, false];
 
   bool isIdValid = false;
-  var boy_image = [
-    './assets/register/boy_grey.png',
-    './assets/register/boy_pink.png'
-  ];
-  var girl_image = [
-    './assets/register/girl_grey.png',
-    './assets/register/girl_pink.png'
-  ];
+
   String _uploadedFileURL = "";
   File _image;
   bool isImage = false;
@@ -53,72 +48,18 @@ class _UserModifyState extends State<UserModify> {
 
   String url = URL;
 
-  void _showPicker(context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return SafeArea(
-            child: Container(
-              child: new Wrap(
-                children: <Widget>[
-                  new ListTile(
-                      leading: new Icon(
-                        Icons.photo_library,
-                        color: Color.fromRGBO(255, 114, 148, 1.0),
-                      ),
-                      title: new Text('갤러리'),
-                      onTap: () async {
-                        await _imgFromGallery();
-                        Navigator.of(context).pop();
-                      }),
-                  new ListTile(
-                    leading: new Icon(
-                      Icons.photo_camera,
-                      color: Color.fromRGBO(255, 114, 148, 1.0),
-                    ),
-                    title: new Text('카메라'),
-                    onTap: () async {
-                      await _imgFromCamera();
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  new ListTile(
-                    leading: new Icon(
-                      Icons.delete_rounded,
-                      color: Color.fromRGBO(255, 114, 148, 1.0),
-                    ),
-                    title: new Text('삭제'),
-                    onTap: () async {
-                      setState(() {
-                        _image = null;
-                        userdata["image_path"] = "";
-                      });
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
-  Future _imgFromCamera() async {
-    var image = await ImagePicker()
-        .getImage(source: ImageSource.camera, imageQuality: 20);
-
-    setState(() {
-      _image = File(image.path);
-    });
-  }
-
-  Future _imgFromGallery() async {
-    var image = await ImagePicker()
-        .getImage(source: ImageSource.gallery, imageQuality: 20);
-
-    setState(() {
-      _image = File(image.path);
-    });
+  void _imageBottomSheet(context) async {
+    Sheet sheet = new Sheet();
+    await sheet.bottomSheet(context, "delete");
+    if (sheet.image != null) {
+      setState(() {
+        _image = sheet.image;
+      });
+    } else {
+      setState(() {
+        userdata["image_path"] = "";
+      });
+    }
   }
 
   Future _formData() async {
@@ -235,11 +176,9 @@ class _UserModifyState extends State<UserModify> {
                         right: -5,
                         bottom: -5,
                         child: Container(
-                          // margin: EdgeInsets.fromLTRB(
-                          //     330 .w, 341 .h, 0, 0),  userSelect();
                           child: InkWell(
                             onTap: () {
-                              _showPicker(context);
+                              _imageBottomSheet(context);
                             },
                             child: Image.asset(
                               "./assets/myPage/camera.png",

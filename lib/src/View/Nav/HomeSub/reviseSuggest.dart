@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:uahage/src/Service/suggestion.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 import 'package:uahage/src/Static/Widget/appbar.dart';
+import 'package:uahage/src/Static/Widget/bottomsheet.dart';
 import 'package:uahage/src/Static/Widget/dialog.dart';
 import 'package:uahage/src/Static/Widget/toast.dart';
 
@@ -23,81 +24,28 @@ class ReviseSuggest extends StatefulWidget {
 class _ReviseSuggestState extends State<ReviseSuggest> {
   int placeId;
   int placeCategoryId;
+  List<dynamic> uploadingImage = [];
+  final myController = TextEditingController();
+  var width = 1500 / 720;
+  var height = 2667 / 1280;
+  bool btnColor = false;
+
   void initState() {
     super.initState();
     placeId = widget.placeId;
     placeCategoryId = widget.placeCategoryId;
   }
 
-  final myController = TextEditingController();
-  var width = 1500 / 720;
-  var height = 2667 / 1280;
-  List<dynamic> uploadingImage = [];
-  void _showPicker(context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return SafeArea(
-            child: Container(
-              child: Wrap(
-                children: <Widget>[
-                  ListTile(
-                      leading: Icon(
-                        Icons.photo_library,
-                        color: Color.fromRGBO(255, 114, 148, 1.0),
-                      ),
-                      title: Text('갤러리'),
-                      onTap: () async {
-                        await _imgFromGallery();
-                        Navigator.of(context).pop();
-                      }),
-                  ListTile(
-                    leading: Icon(
-                      Icons.photo_camera,
-                      color: Color.fromRGBO(255, 114, 148, 1.0),
-                    ),
-                    title: Text('카메라'),
-                    onTap: () async {
-                      await _imgFromCamera();
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
-  Future _imgFromCamera() async {
-    try {
-      var image = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        imageQuality: 20,
-      );
-
+  void _imageBottomSheet(context) async {
+    Sheet sheet = new Sheet();
+    await sheet.bottomSheet(context, "");
+    if (sheet.image != null) {
       setState(() {
-        uploadingImage.add(File(image.path));
+        uploadingImage.add(sheet.image);
       });
-    } catch (err) {
-      print(err);
     }
   }
 
-  Future _imgFromGallery() async {
-    try {
-      var image = await ImagePicker()
-          .getImage(source: ImageSource.gallery, imageQuality: 20);
-
-      setState(() {
-        uploadingImage.add(File(image.path));
-      });
-    } catch (err) {
-      print(err);
-    }
-  }
-
-  bool btnColor = false;
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, width: 1500, height: 2667);
@@ -211,7 +159,7 @@ class _ReviseSuggestState extends State<ReviseSuggest> {
                           dialog(context, "5장이상의 사진을 넣을수 없습니다");
                         } else {
                           FocusScope.of(context).unfocus();
-                          _showPicker(context);
+                          _imageBottomSheet(context);
                         }
                       },
                       child: Image.asset(

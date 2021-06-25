@@ -10,6 +10,7 @@ import 'package:uahage/src/Service/places.restaurant.bookmarks.dart';
 
 import 'package:uahage/src/Service/places.dart';
 import 'package:uahage/src/Static/Font/font.dart';
+import 'package:uahage/src/Static/Image/listImage.dart';
 import 'package:uahage/src/Static/Widget/icon.dart';
 import 'package:uahage/src/Static/Widget/progress.dart';
 import 'package:uahage/src/View/Nav/HomeSub/listMap.dart';
@@ -28,25 +29,6 @@ class PlaceList extends GetView<PlaceController> {
     await place.getPlaceList(placeCode);
   }
 
-  var restaurantListImage = [
-    "https://uahage.s3.ap-northeast-2.amazonaws.com/restaurant_image/image1.png",
-    "https://uahage.s3.ap-northeast-2.amazonaws.com/restaurant_image/image2.png",
-    "https://uahage.s3.ap-northeast-2.amazonaws.com/restaurant_image/image3.png",
-  ];
-  var hospitalListImage = [
-    "https://uahage.s3.ap-northeast-2.amazonaws.com/hospital_image/image1.png",
-    "https://uahage.s3.ap-northeast-2.amazonaws.com/hospital_image/image2.png",
-  ];
-  var kidsCafeListImage = [
-    "https://uahage.s3.ap-northeast-2.amazonaws.com/kids_cafe/image1.png",
-    "https://uahage.s3.ap-northeast-2.amazonaws.com/kids_cafe/image2.png",
-  ];
-  var experienceListImage = [
-    "https://uahage.s3.ap-northeast-2.amazonaws.com/experience_/image1.png",
-    "https://uahage.s3.ap-northeast-2.amazonaws.com/experience_/image2.png",
-    "https://uahage.s3.ap-northeast-2.amazonaws.com/experience_/image3.png",
-    "https://uahage.s3.ap-northeast-2.amazonaws.com/experience_/image4.png",
-  ];
   var width = 1500 / 720;
   var height = 2667 / 1280;
   Widget build(BuildContext context) {

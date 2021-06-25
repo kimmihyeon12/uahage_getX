@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:uahage/src/Static/Font/font.dart';
+import 'package:uahage/src/Static/Image/homeImage.dart';
 import 'package:uahage/src/Static/Widget/appbar.dart';
 import 'package:get/get.dart';
 import 'package:uahage/src/Static/Widget/toast.dart';
@@ -16,17 +17,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   var width = 1500 / 720;
   var height = 2667 / 1280;
-  var homeimage = [
-    "./assets/homePage/restaurant.png",
-    "./assets/homePage/hospital.png",
-    "./assets/homePage/careCenter.png",
-    "./assets/homePage/kindergarten.png",
-    "./assets/homePage/kidsCafe.png",
-    "./assets/homePage/experiencecenter.png",
-    "./assets/homePage/amusementpark.png",
-    "./assets/homePage/craftshop.png",
-    "./assets/homePage/childcareCenter.png"
-  ];
+
   imageView(fileName) {
     return CachedNetworkImage(
       imageUrl:

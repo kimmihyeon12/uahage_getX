@@ -5,6 +5,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:uahage/src/Binding/place.binding.dart';
 import 'package:uahage/src/Binding/user.binding.dart';
 import 'package:uahage/src/Controller/connection.controller.dart';
+
 import 'package:uahage/src/Controller/location.controller.dart';
 import 'package:uahage/src/Controller/place.restaurant.bookmark.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';

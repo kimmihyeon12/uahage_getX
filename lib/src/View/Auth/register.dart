@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
 
 import 'package:uahage/src/Static/Font/font.dart';
+import 'package:uahage/src/Static/Image/mypageImage.dart';
 import 'package:uahage/src/Static/Widget/appbar.dart';
 import 'package:uahage/src/Static/Widget/dialog.dart';
 import 'package:uahage/src/Static/url.dart';
@@ -37,15 +38,6 @@ class _RegisterState extends State<Register> {
 
   TextEditingController yController = TextEditingController();
   var ageImage = [false, false, false, false, false, false];
-
-  var boy_image = [
-    './assets/register/boy_grey.png',
-    './assets/register/boy_pink.png'
-  ];
-  var girl_image = [
-    './assets/register/girl_grey.png',
-    './assets/register/girl_pink.png'
-  ];
 
   @override
   Widget build(BuildContext context) {

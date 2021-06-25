@@ -10,6 +10,7 @@ import 'package:uahage/src/Controller/user.controller.dart';
 import 'package:uahage/src/Service/review.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 import 'package:uahage/src/Static/Widget/appbar.dart';
+import 'package:uahage/src/Static/Widget/bottomsheet.dart';
 import 'package:uahage/src/Static/Widget/dialog.dart';
 import 'package:uahage/src/Static/Widget/popup.dart';
 import 'package:uahage/src/Static/Widget/toast.dart';
@@ -33,7 +34,7 @@ class _ReviewPageState extends State<ReviewPage> {
   List<dynamic> uploadingImage = [];
   List<dynamic> prevImage = [];
   List<dynamic> deleteImage = [];
-
+  List<dynamic> ee = [];
   int index1 = 0, index2 = 0, index3 = 0;
   bool btnColor = false;
   var width = 1500 / 720;
@@ -70,67 +71,13 @@ class _ReviewPageState extends State<ReviewPage> {
     setState(() {});
   }
 
-  void _showPicker(context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return SafeArea(
-            child: Container(
-              child: Wrap(
-                children: <Widget>[
-                  ListTile(
-                      leading: Icon(
-                        Icons.photo_library,
-                        color: Color.fromRGBO(255, 114, 148, 1.0),
-                      ),
-                      title: Text('갤러리'),
-                      onTap: () async {
-                        await _imgFromGallery();
-                        Navigator.of(context).pop();
-                      }),
-                  ListTile(
-                    leading: Icon(
-                      Icons.photo_camera,
-                      color: Color.fromRGBO(255, 114, 148, 1.0),
-                    ),
-                    title: Text('카메라'),
-                    onTap: () async {
-                      await _imgFromCamera();
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
-  Future _imgFromCamera() async {
-    try {
-      var image = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        imageQuality: 20,
-      );
-
+  void _imageBottomSheet(context) async {
+    Sheet sheet = new Sheet();
+    await sheet.bottomSheet(context, "");
+    if (sheet.image != null) {
       setState(() {
-        uploadingImage.add(File(image.path));
+        uploadingImage.add(sheet.image);
       });
-    } catch (err) {
-      print(err);
-    }
-  }
-
-  Future _imgFromGallery() async {
-    try {
-      var image = await ImagePicker()
-          .getImage(source: ImageSource.gallery, imageQuality: 20);
-
-      setState(() {
-        uploadingImage.add(File(image.path));
-      });
-    } catch (err) {
-      print(err);
     }
   }
 
@@ -349,15 +296,13 @@ class _ReviewPageState extends State<ReviewPage> {
               children: [
                 InkWell(
                   onTap: () async {
-                    if ((imageLoad == false
-                            ? 0
-                            : prevImage[0].length + uploadingImage.length) >
+                    if (((imageLoad == false ? 0 : prevImage[0].length) +
+                            uploadingImage.length) >
                         4) {
-                      print("사진 못넣음");
                       dialog(context, "5장이상의 사진을 넣을수 없습니다");
                     } else {
                       FocusScope.of(context).unfocus();
-                      _showPicker(context);
+                      _imageBottomSheet(context);
                     }
                   },
                   child: Image.asset(

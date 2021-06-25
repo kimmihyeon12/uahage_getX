@@ -18,6 +18,7 @@ class ReviewImage extends StatefulWidget {
 
 class _ReviewImageState extends State<ReviewImage> {
   var data;
+  List image = [];
   @override
   void initState() {
     super.initState();
@@ -25,7 +26,6 @@ class _ReviewImageState extends State<ReviewImage> {
     select();
   }
 
-  List image = [];
   select() async {
     image = await reviewSelectImage(data.id);
     setState(() {});

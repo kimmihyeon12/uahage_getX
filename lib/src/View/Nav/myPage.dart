@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:uahage/src/Service/users.dart';
+import 'package:uahage/src/Static/Image/mypageImage.dart';
 import 'package:uahage/src/Static/Widget/progress.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 import 'package:uahage/src/View/Nav/userMotify.dart';
@@ -23,15 +24,6 @@ class _MyPageState extends State<MyPage> {
     var data = await users.select();
     userdata = data;
   }
-
-  var boy_image = [
-    './assets/register/boy_grey.png',
-    './assets/register/boy_pink.png'
-  ];
-  var girl_image = [
-    './assets/register/girl_grey.png',
-    './assets/register/girl_pink.png'
-  ];
 
   @override
   Widget build(BuildContext context) {
