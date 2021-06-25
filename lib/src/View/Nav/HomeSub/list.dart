@@ -141,7 +141,7 @@ class PlaceList extends GetView<PlaceController> {
             child: Container(
                 height: 450.h,
                 padding: EdgeInsets.only(
-                  top: 45.h,
+                  top: 25.h,
                   left: 26.w,
                 ),
                 child: Row(
@@ -197,7 +197,7 @@ class PlaceList extends GetView<PlaceController> {
                                             return controller
                                                 .place[index].image_path[0];
                                           } else {
-                                            return experienceListImage[3];
+                                            return experienceListImage[0];
                                           }
                                         } else {
                                           if (index % 2 == 1)
