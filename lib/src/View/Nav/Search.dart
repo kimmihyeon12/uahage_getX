@@ -41,7 +41,6 @@ class _SearchState extends State<Search> {
         children: [
           WebView(
             onWebResourceError: (e) {
-              print("에러났슴");
               return progress();
             },
             key: key,

@@ -37,7 +37,7 @@ class _ListMapState extends State<ListMap> {
   String test = "";
   Future searchCategory() async {
     await webview.loadUrl(url +
-        "/maps/show-place?userId=${UserController.to.userId.value}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=filter&babyMenu=${grey_image[0]}&babyBed=${grey_image[1]}&babyTableware=${grey_image[2]}&meetingRoom=${grey_image[3]}&diaperChange=${grey_image[4]}&playRoom=${grey_image[5]}&stroller=${grey_image[6]}&nursingRoom=${grey_image[7]}&babyChair=${grey_image[8]}placeName=restaurants&token=${UserController.to.token.value}");
+        "/maps/show-place?userId=${UserController.to.userId.value}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=filter&babyMenu=${grey_image[0]}&babyBed=${grey_image[1]}&babyTableware=${grey_image[2]}&meetingRoom=${grey_image[3]}&diaperChange=${grey_image[4]}&playRoom=${grey_image[5]}&stroller=${grey_image[6]}&nursingRoom=${grey_image[7]}&babyChair=${grey_image[8]}&placeName=restaurants&token=${UserController.to.token.value}");
   }
 
   initState() {
@@ -72,6 +72,7 @@ class _ListMapState extends State<ListMap> {
                   name: 'Print',
                   onMessageReceived: (JavascriptMessage message) async {
                     var messages = jsonDecode(message.message);
+                    print(messages);
                     print('name ${messages["use_bus"]}');
                     if (placeCode == 1) {
                       messages["bookmark"] = 0;

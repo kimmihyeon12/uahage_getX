@@ -127,7 +127,6 @@ class Users extends GetView<UserController> {
   //UPDATE
   Future update(formdata) async {
     try {
-      print(formdata);
       var dio = new Dio();
       dio.options.headers = {
         'Content-Type': 'application/json',
@@ -205,7 +204,7 @@ isNicknameCheck() async {
         'Authorization': '${UserController.to.token.value}'
       },
     );
-    print('jsondecode ${jsonDecode(response.body)["data"]}');
+
     return jsonDecode(response.body)["data"]["nickname"] == null ? false : true;
   } catch (err) {
     print(err);

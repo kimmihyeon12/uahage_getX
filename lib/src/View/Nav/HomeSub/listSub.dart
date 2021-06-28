@@ -138,8 +138,6 @@ class _ListSubState extends State<ListSub> {
 
   @override
   Widget build(BuildContext context) {
-    print("listsub");
-    //
     checkNick();
 
     count = 0;
@@ -920,9 +918,7 @@ class _ListSubState extends State<ListSub> {
                                             padding:
                                                 EdgeInsets.only(top: 30.h)),
                                         GestureDetector(
-                                          onTap: () {
-                                            print("Container clicked");
-                                          },
+                                          onTap: () {},
                                           child: Container(
                                             height: 1100.h,
                                             child: WebView(
@@ -1678,7 +1674,7 @@ class _ListSubState extends State<ListSub> {
                                                                             BorderRadius.all(Radius.circular(20.0)),
                                                                       ),
                                                                       title: normalfont(
-                                                                          "리뷰를 삭제하시겠습니까",
+                                                                          "리뷰를 삭제하시겠습니까?",
                                                                           62.5,
                                                                           Color(
                                                                               0xff4d4d4d)),

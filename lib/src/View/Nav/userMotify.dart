@@ -45,7 +45,6 @@ class _UserModifyState extends State<UserModify> {
   String imageLink = "";
   Users users = new Users();
   dynamic recievedImage;
-
   String url = URL;
 
   void _imageBottomSheet(context) async {
@@ -82,13 +81,12 @@ class _UserModifyState extends State<UserModify> {
       "babyGender": "${userdata['baby_gender']}",
       "babyBirthday": "${userdata["baby_birthday"]}",
     });
-    print(formData);
+
     return formData;
   }
 
   @override
   Widget build(BuildContext context) {
-    print(userdata);
     ScreenUtil.init(context, width: 1500, height: 2667);
     FocusScopeNode currentFocus = FocusScope.of(context);
 
@@ -221,7 +219,6 @@ class _UserModifyState extends State<UserModify> {
                                     setState(() {
                                       isIdValid = false;
                                       userdata["nickname"] = txt;
-                                      print(userdata["nickname"]);
                                     });
                                   },
                                   textAlign: TextAlign.left,
@@ -317,7 +314,6 @@ class _UserModifyState extends State<UserModify> {
                                 userdata['baby_gender'] = "";
                               }
                             });
-                            print(userdata['baby_gender']);
                           },
                         ),
                       ),
@@ -342,7 +338,6 @@ class _UserModifyState extends State<UserModify> {
                                 userdata['baby_gender'] = "";
                               }
                             });
-                            print(userdata['baby_gender']);
                           },
                         ),
                       ),
@@ -566,7 +561,6 @@ class _UserModifyState extends State<UserModify> {
                                       if (snapshot.hasData) {
                                         WidgetsBinding.instance
                                             .addPostFrameCallback((_) {
-                                          print("확인");
                                           Navigator.pop(context, true);
                                           Navigator.pop(context, true);
                                         });

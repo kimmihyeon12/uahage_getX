@@ -13,6 +13,7 @@ import 'package:uahage/src/Static/Widget/popup.dart';
 import 'package:uahage/src/Static/Widget/progress.dart';
 
 import 'package:uahage/src/Static/url.dart';
+import 'package:uahage/src/View/Nav/HomeSub/searchNoneResult.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SearchBar extends StatefulWidget {
@@ -30,7 +31,7 @@ class _SearchBarState extends State<SearchBar> {
   final key = UniqueKey();
   Widget build(BuildContext context) {
     connection();
-    print("searchbarpage");
+
     ScreenUtil.init(context, width: 1500, height: 2667);
     return Scaffold(
       body: SafeArea(
@@ -48,7 +49,6 @@ class _SearchBarState extends State<SearchBar> {
                         final key = UniqueKey();
                         await controller.loadUrl(url +
                             "/maps/show-list?userId=${UserController.to.userId}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&keyword=%27$keyword%27&token=${UserController.to.token.value}");
-                        print(controller.currentUrl().toString());
                       },
                       javascriptMode: JavascriptMode.unrestricted,
                       javascriptChannels: Set.from([
@@ -56,24 +56,28 @@ class _SearchBarState extends State<SearchBar> {
                             name: 'Print',
                             onMessageReceived:
                                 (JavascriptMessage message) async {
-                              var messages = jsonDecode(message.message);
-
-                              messages["bookmark"] = 0;
-                              BookmarkController.to.placeBookmarkInit();
-                              await bookmark
-                                  .bookmarkSelectAll(UserController.to.userId);
-                              for (int i = 0;
-                                  i <
-                                      BookmarkController
-                                          .to.placeBookmark.length;
-                                  i++) {
-                                if (BookmarkController.to.placeBookmark[i].id ==
-                                    messages["id"]) {
-                                  messages["bookmark"] = 1;
-                                }
+                              var messages = message.message;
+                              print("messagessssssssssss");
+                              print(messages);
+                              if (messages == "null") {
+                                Get.off(SearchNoneResult());
                               }
+                              // messages["bookmark"] = 0;
+                              // BookmarkController.to.placeBookmarkInit();
+                              // await bookmark
+                              //     .bookmarkSelectAll(UserController.to.userId);
+                              // for (int i = 0;
+                              //     i <
+                              //         BookmarkController
+                              //             .to.placeBookmark.length;
+                              //     i++) {
+                              //   if (BookmarkController.to.placeBookmark[i].id ==
+                              //       messages["id"]) {
+                              //     messages["bookmark"] = 1;
+                              //   }
+                              // }
 
-                              await placepopup(context, messages, "", 1);
+                              // await placepopup(context, messages, "", 1);
                             }),
                       ]),
                     ),

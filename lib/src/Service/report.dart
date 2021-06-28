@@ -5,12 +5,10 @@ import 'package:uahage/src/Static/url.dart';
 import 'package:http/http.dart' as http;
 
 reviewReport(list, reviewId, desc) async {
-  print("reviewReport");
   String url = URL;
   var currentData;
   List categoryIdList = [];
   for (int i = 0; i < list.length; i++) {
-    print(list[i].toString());
     if (list[i].toString() == true.toString()) {
       categoryIdList.add(i + 1);
     }
@@ -22,8 +20,6 @@ reviewReport(list, reviewId, desc) async {
     "userId": UserController.to.userId.value,
     "desc": desc
   };
-
-  print(jsonData);
 
   try {
     var response = await http.post(

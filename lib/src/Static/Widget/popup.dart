@@ -212,6 +212,7 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                     ),
                     child: InkWell(
                       onTap: () async {
+                        print(Message);
                         var message;
                         if (placeCode == 1) {
                           message = Restaurant.fromJson(Message);
@@ -227,13 +228,7 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                         } else if (placeCode == 8) {
                           message = CraftRooms.fromJson(Message);
                         }
-                        print("message");
-                        print(message);
-                        // // Navigator.push(
-                        // //     context,
-                        // //     MaterialPageRoute(
-                        // //         builder: (context) => ListSub("")) );
-                        // Get.to(Announce());
+
                         var result = await Get.offNamed("/listsub", arguments: {
                           "data": message,
                           "placeCode": placeCode,

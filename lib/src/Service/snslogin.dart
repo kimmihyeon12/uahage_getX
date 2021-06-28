@@ -18,7 +18,6 @@ class SnsLogin extends GetView<UserController> {
       var token = await AuthApi.instance.issueAccessToken(authCode);
       controller.setKakaoToken(token.accessToken);
 
-      print(token.accessToken);
       AccessTokenStore.instance.toStore(token);
       await kakaoGetEmail();
       var isAlreadyRegistered = await users.checkEmail();
@@ -57,14 +56,13 @@ class SnsLogin extends GetView<UserController> {
   neverGetEmail() async {
     NaverAccountResult resAccount = await FlutterNaverLogin.currentAccount();
     controller.setEmail(resAccount.email);
-    print(resAccount.email);
   }
 
   Future naverLogin() async {
     try {
       await FlutterNaverLogin.logIn();
       NaverAccessToken res = await FlutterNaverLogin.currentAccessToken;
-      print(res.accessToken);
+
       controller.setNaverToken(res.accessToken);
 
       await neverGetEmail();

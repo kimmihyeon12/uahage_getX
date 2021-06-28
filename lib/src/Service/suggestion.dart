@@ -18,6 +18,7 @@ revisesuggestion(formdata) async {
       url + "/api/places/propose",
       data: formdata,
     );
+
     return response.statusCode == 200 ? "성공" : "실패";
   } catch (err) {
     return Future.error(err);

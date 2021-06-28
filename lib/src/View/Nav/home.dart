@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:uahage/src/Controller/user.controller.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 import 'package:uahage/src/Static/Image/homeImage.dart';
 import 'package:uahage/src/Static/Widget/appbar.dart';
@@ -30,6 +31,8 @@ class _HomeState extends State<Home> {
   String keyword = "";
   @override
   Widget build(BuildContext context) {
+    print(UserController.to.userId);
+    print(UserController.to.token);
     FocusScopeNode currentFocus = FocusScope.of(context);
     ScreenUtil.init(context, width: 1500, height: 2667);
     return GestureDetector(

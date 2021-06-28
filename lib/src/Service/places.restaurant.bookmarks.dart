@@ -41,7 +41,7 @@ class Bookmark extends GetView<BookmarkController> {
     var currentData;
     for (var data in responseJson) {
       currentData = Restaurant.fromJson(data);
-      print(data);
+
       await controller.setPlaceBookmark(currentData);
     }
   }

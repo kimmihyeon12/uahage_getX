@@ -88,7 +88,7 @@ class Star extends GetView<BookmarkController> {
                                           "placeCode": 1,
                                           "index": index,
                                         });
-                                    print(result);
+
                                     controller.setPlaceBookmarkOne(
                                         index, result);
                                   },

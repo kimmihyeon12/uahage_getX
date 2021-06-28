@@ -28,7 +28,7 @@ class _MyPageState extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
     userSelect();
-    print(userdata);
+
     ScreenUtil.init(context, width: 1500, height: 2667);
     return userdata != null
         ? WillPopScope(

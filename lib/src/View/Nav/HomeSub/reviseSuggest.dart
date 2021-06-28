@@ -209,7 +209,6 @@ class _ReviseSuggestState extends State<ReviseSuggest> {
                                         child: InkWell(
                                           onTap: () {
                                             setState(() {
-                                              print(index);
                                               uploadingImage.removeAt(index);
                                             });
                                           },

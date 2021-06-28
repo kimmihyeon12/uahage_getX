@@ -28,7 +28,6 @@ class Loading extends GetView<UserController> {
   connection() async {
     ConnectivityResult connectResult;
     connectResult = await Connectivity().checkConnectivity();
-    print(connectResult);
   }
 
   @override

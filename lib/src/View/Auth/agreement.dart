@@ -20,7 +20,6 @@ class _AgreementState extends State<Agreement> {
   initKakaoTalkInstalled() async {
     final installed = await isKakaoTalkInstalled();
     setState(() {
-      print('installed $installed');
       kakaoinstalled = installed;
     });
   }
@@ -121,8 +120,9 @@ class _AgreementState extends State<Agreement> {
                         margin: EdgeInsets.only(left: 34.w, right: 0),
                         child: InkWell(
                           onTap: () async {
-                            final result = await Get.toNamed("/announce");
-                            print(result);
+                            final result = await Get.toNamed("/announce",
+                                arguments: "check1");
+
                             if (result == "check")
                               setState(() {
                                 check[1] = true;
@@ -171,9 +171,8 @@ class _AgreementState extends State<Agreement> {
                         margin: EdgeInsets.only(left: 34.w, right: 0),
                         child: InkWell(
                           onTap: () async {
-                            final result = await Get.toNamed(
-                              "/announce",
-                            );
+                            final result = await Get.toNamed("/announce",
+                                arguments: "check2");
 
                             if (result == "check")
                               setState(() {
@@ -224,7 +223,8 @@ class _AgreementState extends State<Agreement> {
                         ),
                         child: InkWell(
                           onTap: () async {
-                            final result = await Get.toNamed("/announce");
+                            final result = await Get.toNamed("/announce",
+                                arguments: "check3");
                             if (result == "check")
                               setState(() {
                                 check[3] = true;

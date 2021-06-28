@@ -174,7 +174,6 @@ class _RegisterState extends State<Register> {
                           if (!girl && !boy) {
                             gender = "A";
                           }
-                          print(gender);
                         });
                       },
                       child: Column(children: <Widget>[
@@ -201,7 +200,6 @@ class _RegisterState extends State<Register> {
                           if (!girl && !boy) {
                             gender = "A";
                           }
-                          print(gender);
                         });
                       },
                       child: Column(children: <Widget>[

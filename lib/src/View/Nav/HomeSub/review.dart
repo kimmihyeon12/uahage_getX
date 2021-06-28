@@ -48,8 +48,7 @@ class _ReviewPageState extends State<ReviewPage> {
 
     data = widget.data;
     reviewData = widget.reviewData;
-    print("reviewData");
-    print(reviewData);
+
     index1 =
         reviewData != null ? double.parse(reviewData.taste_rating).round() : 0;
     taste = reviewData != null ? double.parse(reviewData.taste_rating) : 0;
@@ -356,7 +355,6 @@ class _ReviewPageState extends State<ReviewPage> {
                                           child: InkWell(
                                             onTap: () {
                                               setState(() {
-                                                print(index);
                                                 if (prevImage[0].length >
                                                     index) {
                                                   deleteImage

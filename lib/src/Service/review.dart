@@ -96,10 +96,6 @@ reviewUpdate(reviewId, formdata) async {
 
 reviewUpdateFormdata(uploadingImage, desc, tasteRating, costRating,
     serviceRating, deleteImage) async {
-  print("tasteRating $tasteRating");
-  print("costRating $costRating");
-  print("serviceRating $serviceRating");
-
   FormData formData = FormData.fromMap({
     "desc": desc,
     "tasteRating": tasteRating,

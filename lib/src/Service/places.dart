@@ -56,13 +56,11 @@ class Place extends GetView<PlaceController> {
           'Authorization': '${UserController.to.token.value}'
         },
       );
-      print(pageNumber);
     }
     List responseJson = json.decode(response.body)["data"]["data"];
 
     var currentData;
     for (var data in responseJson) {
-      print(data);
       if (placeCode == 1) {
         currentData = Restaurant.fromJson(data);
       } else if (placeCode == 2) {
