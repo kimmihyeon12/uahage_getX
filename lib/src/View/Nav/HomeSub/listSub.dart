@@ -102,6 +102,7 @@ class _ListSubState extends State<ListSub> {
       responseJson["average"].toString() == "null"
           ? aver = 0
           : aver = double.parse(responseJson["average"].toString());
+
       score = [];
       score.add(responseJson['totalDetailObj']["onePointTotal"]);
       score.add(responseJson['totalDetailObj']["twoPointTotal"]);
@@ -158,7 +159,7 @@ class _ListSubState extends State<ListSub> {
     return WillPopScope(
       onWillPop: () {
         if (placeCode == 1)
-          Get.back(result: data.bookmark);
+          Get.back(result: [data.bookmark, aver]);
         else
           Get.back(result: "");
       },
@@ -170,7 +171,7 @@ class _ListSubState extends State<ListSub> {
               return appBar(
                 context,
                 data.name,
-                data.bookmark,
+                [data.bookmark, aver],
               );
             else
               return appBar(context, data.name, "");

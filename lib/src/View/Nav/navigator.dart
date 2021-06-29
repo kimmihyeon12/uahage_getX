@@ -22,6 +22,7 @@ class _NavigationState extends State<Navigation> {
   @override
   Widget build(BuildContext context) {
     connection();
+    FocusScopeNode currentFocus = FocusScope.of(context);
     ScreenUtil.init(context, width: 1500, height: 2667);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -64,6 +65,7 @@ class _NavigationState extends State<Navigation> {
                 onTap: (value) {
                   setState(() {
                     _selectedTabIndex = value;
+                    currentFocus.unfocus();
                   });
                 },
                 type: BottomNavigationBarType.fixed,

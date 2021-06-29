@@ -49,6 +49,7 @@ class _SearchBarState extends State<SearchBar> {
                         final key = UniqueKey();
                         await controller.loadUrl(url +
                             "/maps/show-list?userId=${UserController.to.userId}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&keyword=%27$keyword%27&token=${UserController.to.token.value}");
+                        //    url +  "/maps/show-list?userId=${UserContr oller.to.userId}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&keyword=%27$keyword%27&token=${UserController.to.token.value}"
                       },
                       javascriptMode: JavascriptMode.unrestricted,
                       javascriptChannels: Set.from([
@@ -57,8 +58,7 @@ class _SearchBarState extends State<SearchBar> {
                             onMessageReceived:
                                 (JavascriptMessage message) async {
                               var messages = message.message;
-                              print("messagessssssssssss");
-                              print(messages);
+
                               if (messages == "null") {
                                 Get.off(SearchNoneResult());
                               }

@@ -10,7 +10,9 @@ import 'package:flutter/services.dart';
 class Loading extends GetView<UserController> {
   Location location = new Location();
   lodingTime() async {
-    await location.setCurrentLocation();
+    var result = await location.setCurrentLocation();
+    if (!result) await lodingTime();
+
     await 1.delay();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -21,7 +23,6 @@ class Loading extends GetView<UserController> {
       Get.offNamed("/navigator");
     } else {
       Get.offNamed("/login");
-      //  Get.offNamed("/withdrawal");
     }
   }
 

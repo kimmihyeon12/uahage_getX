@@ -137,8 +137,9 @@ class PlaceList extends GetView<PlaceController> {
                           "placeCode": placeCode,
                           "index": index,
                         });
-
-                        controller.setPlaceBookmark(index, result);
+                        print("result $result");
+                        controller.setPlaceBookmark(index, result[0]);
+                        controller.setPlacetotal(index, "${result[1]}");
                       },
                       child: Container(
                         width: 1280.w,
@@ -233,8 +234,7 @@ class PlaceList extends GetView<PlaceController> {
                                                 left: 4.7 * width.w),
                                           ),
                                           normalfont(
-                                              controller.place[index].total ??
-                                                  "0.0",
+                                              "${controller.place[index].total ?? 0.0} ",
                                               54,
                                               Color(0xff4d4d4d))
                                         ],

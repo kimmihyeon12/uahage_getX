@@ -37,7 +37,8 @@ class _HomeState extends State<Home> {
     ScreenUtil.init(context, width: 1500, height: 2667);
     return GestureDetector(
       onPanDown: (a) {
-        currentFocus.unfocus();
+        //currentFocus.unfocus();
+        //   myFocusNode.unfocus();
       },
       child: SafeArea(
         child: Scaffold(
@@ -140,14 +141,14 @@ class _HomeState extends State<Home> {
                         suffixIcon: IconButton(
                             onPressed: keyword != ""
                                 ? () {
-                                    FocusScope.of(context).unfocus();
+                                    //  FocusScope.of(context).unfocus();
 
                                     Get.toNamed("/searchbar",
                                         arguments: keyword);
                                   }
                                 : () {
                                     toast(context, "주소를 입력해주세요!", "bottom");
-                                    FocusScope.of(context).unfocus();
+                                    //  FocusScope.of(context).unfocus();
                                   },
                             icon: Image.asset(
                               "./assets/homePage/search.png",
@@ -178,7 +179,7 @@ class _HomeState extends State<Home> {
                             height: 211.h,
                           ),
                           onTap: () {
-                            currentFocus.unfocus();
+                            //  currentFocus.unfocus();
                             Get.toNamed("/list", arguments: 1);
                           },
                         ),
@@ -193,7 +194,7 @@ class _HomeState extends State<Home> {
                             height: 255.h,
                           ),
                           onTap: () {
-                            currentFocus.unfocus();
+                            // currentFocus.unfocus();
                             Get.toNamed("/list", arguments: 2);
                           },
                         ),
@@ -208,7 +209,7 @@ class _HomeState extends State<Home> {
                             height: 264.h,
                           ),
                           onTap: () {
-                            currentFocus.unfocus();
+                            //  currentFocus.unfocus();
                             Get.toNamed("/list", arguments: 3);
                           },
                         ),
@@ -247,7 +248,7 @@ class _HomeState extends State<Home> {
                             height: 251.h,
                           ),
                           onTap: () {
-                            currentFocus.unfocus();
+                            // currentFocus.unfocus();
                             Get.toNamed("/list", arguments: 5);
                           },
                         ),
@@ -262,7 +263,7 @@ class _HomeState extends State<Home> {
                             height: 230.h,
                           ),
                           onTap: () {
-                            currentFocus.unfocus();
+                            //  currentFocus.unfocus();
                             Get.toNamed("/list", arguments: 6);
                           },
                         ),
@@ -292,7 +293,7 @@ class _HomeState extends State<Home> {
                             height: 105.8 * height.h,
                           ),
                           onTap: () {
-                            currentFocus.unfocus();
+                            //   currentFocus.unfocus();
                             Get.toNamed("/list", arguments: 8);
                           },
                         ),

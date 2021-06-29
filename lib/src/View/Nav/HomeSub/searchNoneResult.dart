@@ -31,7 +31,7 @@ class _SearchNoneResultState extends State<SearchNoneResult> {
             ),
             InkWell(
               onTap: () {
-                Get.to(ReviseSuggest(placeId: null, placeCategoryId: null));
+                Get.to(ReviseSuggest(placeId: 0, placeCategoryId: 0));
               },
               child: Container(
                 alignment: Alignment.center,
