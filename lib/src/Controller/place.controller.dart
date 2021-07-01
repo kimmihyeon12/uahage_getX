@@ -15,6 +15,7 @@ class PlaceController extends GetxService {
 
   placeInit() {
     place(<dynamic>[]);
+    indexCount(0);
     placePageNumber(0);
   }
 
@@ -33,6 +34,7 @@ class PlaceController extends GetxService {
   }
 
   setPlacetotal(int index, String value) {
+    print('bookmark index $value');
     place[index].total = value;
     place.refresh();
   }

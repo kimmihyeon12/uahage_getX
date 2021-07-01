@@ -171,6 +171,7 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
   ];
   print(Message["name"]);
   int mark;
+  var total = Message["total"];
   if (placeCode == 1) {
     mark = Message["bookmark"];
   }
@@ -234,10 +235,11 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                           "placeCode": placeCode,
                           "index": 1,
                         });
-                        setState(() {
-                          mark = result;
-                        });
-                        print("result $result");
+                        //print("result ${result}");
+                        // setState(() {
+                        //   mark = result[0];
+                        //   total = result[1];
+                        // });
                       },
                       child: Row(
                         children: [
@@ -364,8 +366,8 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                                           padding: EdgeInsets.only(
                                               left: 4.7 * width.w),
                                         ),
-                                        normalfont(Message["total"] ?? "0.0",
-                                            54, Color(0xff4d4d4d))
+                                        normalfont(total ?? "0.0", 54,
+                                            Color(0xff4d4d4d))
                                       ],
                                     )
                                   : Container(),

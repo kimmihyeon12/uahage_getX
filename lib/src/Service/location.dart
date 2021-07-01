@@ -21,13 +21,14 @@ class Location extends GetView<LocationController> {
     print(permission);
 
     if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
+      await Geolocator.requestPermission();
+      controller.setLocation('35.146076', '126.9231225');
       return false;
     }
 
     if (permission == LocationPermission.deniedForever) {
       //  permission = await Geolocator.checkPermission();
-      permission = await Geolocator.requestPermission();
+      await Geolocator.requestPermission();
       // controller.setLocation('35.146076', '126.9231225');
       return false;
     }

@@ -20,6 +20,12 @@ class BookmarkController extends GetxService {
     placeBookmark.refresh();
   }
 
+  setPlacetotal(int index, String value) {
+    print('bookmark index $value');
+    placeBookmark[index].total = value;
+    placeBookmark.refresh();
+  }
+
   starPlaceBookmarkrefresh(index) {
     placeBookmark.removeAt(index);
     placeBookmark.refresh();

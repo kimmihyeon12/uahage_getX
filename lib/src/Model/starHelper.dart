@@ -16,6 +16,7 @@ class StarList {
     this.chair,
     this.fare,
     this.examination,
+    this.total,
   });
 
   final int id;
@@ -34,6 +35,7 @@ class StarList {
   final String chair;
   final String fare;
   final String examination;
+  final String total;
 
   factory StarList.fromJson(Map<String, dynamic> json) {
     return StarList(
@@ -52,6 +54,7 @@ class StarList {
         nursingroom: json["nursingroom"],
         chair: json["chair"],
         fare: json["fare"],
-        examination: json["examination"]);
+        examination: json["examination"],
+        total: json["total"]);
   }
 }

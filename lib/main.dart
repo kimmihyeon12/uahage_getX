@@ -63,9 +63,13 @@ class MyApp extends StatelessWidget {
         GetPage(name: "/home", page: () => Home(), bindings: [
           PlaceBinding(),
         ]),
-        GetPage(name: "/list", page: () => PlaceList(), bindings: [
-          PlaceBinding(),
-        ]),
+        GetPage(
+            name: "/list",
+            page: () => PlaceList(),
+            bindings: [
+              PlaceBinding(),
+            ],
+            transition: Transition.fadeIn),
         GetPage(name: "/listsub", page: () => ListSub(), bindings: [
           PlaceBinding(),
         ]),

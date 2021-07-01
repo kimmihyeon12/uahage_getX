@@ -11,6 +11,7 @@ import 'package:uahage/src/Controller/place.controller.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
 
 import 'package:uahage/src/Service/places.restaurant.bookmarks.dart';
+import 'package:uahage/src/Static/Font/font.dart';
 import 'package:uahage/src/Static/Widget/appbar.dart';
 import 'package:uahage/src/Static/Widget/icon.dart';
 
@@ -21,6 +22,8 @@ class Star extends GetView<BookmarkController> {
     "./assets/listPage/layer1.png",
     "./assets/listPage/layer2.png",
   ];
+  var width = 1500 / 720;
+  var height = 2667 / 1280;
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
   Bookmark bookmark = new Bookmark();
   ScrollController scrollController = ScrollController();
@@ -88,9 +91,12 @@ class Star extends GetView<BookmarkController> {
                                           "placeCode": 1,
                                           "index": index,
                                         });
+                                    print("result $result");
 
                                     controller.setPlaceBookmarkOne(
-                                        index, result);
+                                        index, result[0]);
+                                    controller.setPlacetotal(
+                                        index, "${result[1]}");
                                   },
                                   child: Container(
                                     width: 1280.w,
@@ -159,25 +165,42 @@ class Star extends GetView<BookmarkController> {
                                                 ),
                                               ],
                                             ),
-                                            Container(
-                                              height: 130.h,
-                                              width: 650.w,
-                                              child: Text(
-                                                controller.placeBookmark[index]
-                                                    .address,
-                                                style: TextStyle(
-                                                  // fontFamily: 'NatoSans',
-                                                  color: Colors.grey,
-                                                  fontSize: 56.sp,
-                                                  fontFamily:
-                                                      'NotoSansCJKkr_Medium',
-                                                  height: 1.3,
+                                            Row(
+                                              children: [
+                                                Image.asset(
+                                                  "./assets/listPage/star_color.png",
+                                                  width: 30 * width.w,
                                                 ),
-                                              ),
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 4.7 * width.w),
+                                                ),
+                                                normalfont(
+                                                    "${controller.placeBookmark[index].total ?? 0.0} ",
+                                                    54,
+                                                    Color(0xff4d4d4d))
+                                              ],
+                                            ),
+                                            Container(
+                                              child: controller
+                                                          .placeBookmark[index]
+                                                          .address
+                                                          .length >
+                                                      18
+                                                  ? normalfont(
+                                                      '${controller.placeBookmark[index].address.substring(0, 18)}...',
+                                                      54,
+                                                      Color(0xffb0b0b0))
+                                                  : normalfont(
+                                                      controller
+                                                          .placeBookmark[index]
+                                                          .address,
+                                                      54,
+                                                      Color(0xffb0b0b0)),
                                             ),
                                             Container(
                                               margin:
-                                                  EdgeInsets.only(top: 15.h),
+                                                  EdgeInsets.only(top: 10.h),
                                               height: 120.h,
                                               width: 650.w,
                                               alignment: Alignment.bottomRight,

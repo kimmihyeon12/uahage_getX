@@ -55,7 +55,11 @@ class _ReviewImageState extends State<ReviewImage> {
                 ),
               ),
               onTap: () {
-                Get.to(ImageBig(image: image[index]["image_path"]));
+                Get.to(ImageBig(), arguments: {
+                  "page": "reviewImage",
+                  "image": image,
+                  "index": index,
+                });
               },
             );
           }),

@@ -1828,10 +1828,16 @@ class _ListSubState extends State<ListSub> {
                                                                     ),
                                                                   ),
                                                                   onTap: () {
-                                                                    Get.to(ImageBig(
-                                                                        image: imageList[index]
-                                                                            [
-                                                                            i]));
+                                                                    Get.to(
+                                                                        ImageBig(),
+                                                                        arguments: {
+                                                                          "page":
+                                                                              "listsub",
+                                                                          "image":
+                                                                              imageList[index],
+                                                                          "index":
+                                                                              i,
+                                                                        });
                                                                   },
                                                                 ),
                                                             ],

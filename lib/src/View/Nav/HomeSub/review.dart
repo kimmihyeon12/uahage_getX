@@ -120,7 +120,6 @@ class _ReviewPageState extends State<ReviewPage> {
             margin: EdgeInsets.only(
                 top: 36 * height.sp,
                 bottom: 35.7 * height.sp,
-                right: 77 * width.sp,
                 left: 90 * width.sp),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,

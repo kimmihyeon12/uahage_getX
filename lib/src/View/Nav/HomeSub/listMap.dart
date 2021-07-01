@@ -73,7 +73,7 @@ class _ListMapState extends State<ListMap> {
                   onMessageReceived: (JavascriptMessage message) async {
                     var messages = jsonDecode(message.message);
                     print(messages);
-                    print('name ${messages["use_bus"]}');
+
                     if (placeCode == 1) {
                       messages["bookmark"] = 0;
                       BookmarkController.to.placeBookmarkInit();
