@@ -518,10 +518,10 @@ class Announce extends StatelessWidget {
                               55,
                               Color(0xff979797)),
                         ),
-                        boldfont("\n부 칙(시행일)", 55, Colors.black),
+                        boldfont("\n부 칙", 55, Colors.black),
                         Container(
                           margin: EdgeInsets.only(left: 0.w),
-                          child: normalfont("""본 약관은 2021년 0월 0일부터 적용합니다.""",
+                          child: normalfont("""본 약관은 2021년 7월 5일부터 적용합니다.""",
                               55, Color(0xff979797)),
                         ),
                       ],
@@ -774,9 +774,9 @@ class Announce extends StatelessWidget {
                         ),
                         Container(
                           margin: EdgeInsets.only(left: 90.w),
-                          child: normalfont("""   공지일자 : 2021년 0월 0일
-시행일자 : 2021년 0월 0일
-(배포일)""", 55, Color(0xff979797)),
+                          child: normalfont("""   공지일자 : 2021년 7월 5일
+시행일자 : 2021년 7월 5일
+""", 55, Color(0xff979797)),
                         ),
                         Container(
                           margin: EdgeInsets.only(left: 90.w),
@@ -1240,7 +1240,7 @@ class Announce extends StatelessWidget {
 2) 대표전화 : 061-331-3116""", 55, Color(0xff979797)),
                         ),
                         boldfont("\n부 칙\n", 55, Colors.black),
-                        normalfont("""본 약관은 2021년 0월 0일부터 시행됩니다.(배포일)""", 55,
+                        normalfont("""본 약관은 2021년 7월 5일부터 시행됩니다.""", 55,
                             Color(0xff979797)),
                       ],
                     ),

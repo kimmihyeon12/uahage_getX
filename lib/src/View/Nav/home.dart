@@ -21,6 +21,8 @@ class _HomeState extends State<Home> {
 
   imageView(fileName) {
     return CachedNetworkImage(
+      fadeInDuration: Duration(microseconds: 10),
+      fadeOutDuration: Duration(microseconds: 10),
       imageUrl:
           "https://uahage.s3.ap-northeast-2.amazonaws.com/homepage/$fileName.png",
       fit: BoxFit.fill,
@@ -36,10 +38,7 @@ class _HomeState extends State<Home> {
     FocusScopeNode currentFocus = FocusScope.of(context);
     ScreenUtil.init(context, width: 1500, height: 2667);
     return GestureDetector(
-      onPanDown: (a) {
-        //currentFocus.unfocus();
-        //   myFocusNode.unfocus();
-      },
+      onPanDown: (a) {},
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.white,
