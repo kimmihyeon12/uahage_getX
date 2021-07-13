@@ -33,7 +33,7 @@ class PlaceList extends GetView<PlaceController> {
   var height = 2667 / 1280;
   Widget build(BuildContext context) {
     connection();
-    ScreenUtil.init(context, width: 1500, height: 2667);
+    ScreenUtil.init(context, width: 1125, height: 2436);
     controller.placeInit();
     getList();
     scrollController.addListener(() {
@@ -44,71 +44,69 @@ class PlaceList extends GetView<PlaceController> {
       }
     });
 
-    return SafeArea(
-      child: Obx(
-        () => Scaffold(
-            key: _scaffoldKey,
-            backgroundColor: Colors.white,
-            appBar: appBar(
-                context,
-                (() {
-                  if (placeCode == 1) {
-                    return "식당·카페";
-                  } else if (placeCode == 2) {
-                    return "영유아 건강검진 병원";
-                  } else if (placeCode == 3) {
-                    return "어린이집";
-                  } else if (placeCode == 5) {
-                    return "키즈카페";
-                  } else if (placeCode == 6) {
-                    return "키즈카페";
-                  } else if (placeCode == 8) {
-                    return "공방";
-                  } else {
-                    return "기타";
-                  }
-                }()),
-                ""),
-            body: Stack(
-              children: [
-                ConnectionController.to.connectionstauts !=
-                        "ConnectivityResult.none"
-                    ? IndexedStack(
-                        index: controller.indexCount.value,
-                        children: <Widget>[
-                            ListViews(),
-                            ListMap(placeCode: placeCode),
-                          ])
-                    : progress(),
-                Container(
-                  margin: EdgeInsets.only(left: 1100.w, top: 2300.w),
-                  child: controller.indexCount.value == 1
-                      ? GestureDetector(
-                          onTap: () {
-                            controller.changeindexCount(0);
-                            controller.placeInit();
-                            getList();
-                          },
-                          child: Image.asset(
-                            './assets/on.png',
-                            width: 284.w,
-                            height: 133.h,
-                          ),
-                        )
-                      : GestureDetector(
-                          onTap: () {
-                            controller.changeindexCount(1);
-                          },
-                          child: Image.asset(
-                            './assets/off.png',
-                            width: 284.w,
-                            height: 133.h,
-                          ),
+    return Obx(
+      () => Scaffold(
+          key: _scaffoldKey,
+          backgroundColor: Colors.white,
+          appBar: appBar(
+              context,
+              (() {
+                if (placeCode == 1) {
+                  return "식당·카페";
+                } else if (placeCode == 2) {
+                  return "영유아 건강검진 병원";
+                } else if (placeCode == 3) {
+                  return "어린이집";
+                } else if (placeCode == 5) {
+                  return "키즈카페";
+                } else if (placeCode == 6) {
+                  return "키즈카페";
+                } else if (placeCode == 8) {
+                  return "공방";
+                } else {
+                  return "기타";
+                }
+              }()),
+              ""),
+          body: Stack(
+            children: [
+              ConnectionController.to.connectionstauts !=
+                      "ConnectivityResult.none"
+                  ? IndexedStack(
+                      index: controller.indexCount.value,
+                      children: <Widget>[
+                          ListViews(),
+                          ListMap(placeCode: placeCode),
+                        ])
+                  : progress(),
+              Container(
+                margin: EdgeInsets.only(left: 950.w*0.84, top: 2250.w*0.84),
+                child: controller.indexCount.value == 1
+                    ? GestureDetector(
+                        onTap: () {
+                          controller.changeindexCount(0);
+                          controller.placeInit();
+                          getList();
+                        },
+                        child: Image.asset(
+                          './assets/on.png',
+                          width: 284.w*0.84,
+                          height: 133.h*0.9,
                         ),
-                ),
-              ],
-            )),
-      ),
+                      )
+                    : GestureDetector(
+                        onTap: () {
+                          controller.changeindexCount(1);
+                        },
+                        child: Image.asset(
+                          './assets/off.png',
+                          width: 284.w*0.84,
+                          height: 133.h*0.9,
+                        ),
+                      ),
+              ),
+            ],
+          )),
     );
   }
 
@@ -125,10 +123,10 @@ class PlaceList extends GetView<PlaceController> {
               return Card(
                 elevation: 0.3,
                 child: Container(
-                    height: 450.h,
+                    height: 450.h*0.9,
                     padding: EdgeInsets.only(
-                      top: 25.h,
-                      left: 26.w,
+                      top: 25.h*0.9,
+                      left: 26.w*0.84,
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,7 +145,7 @@ class PlaceList extends GetView<PlaceController> {
                             controller.setPlacetotal(index, "${result[1]}");
                           },
                           child: Container(
-                            width: 1280.w,
+                            width: 1150.w*0.84,
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -199,33 +197,41 @@ class PlaceList extends GetView<PlaceController> {
                                       ),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(10.0))),
-                                  height: 413.w,
-                                  width: 413.w,
+                                  height: 413.w*0.84,
+                                  width: 413.w*0.84,
                                 ),
                                 Padding(
                                     padding: EdgeInsets.only(
-                                  left: 53.w,
+                                  left: 53.w*0.84,
                                 )),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    // Padding(padding: EdgeInsets.only(top: 10.h)),
+                                    // Padding(padding: EdgeInsets.only(top: 10.g)),
                                     Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
                                         Container(
-                                          //margin: EdgeInsets.only(top: 20.h),
-                                          width: 700.w,
-                                          height: 82.h,
-                                          child: Text(
-                                            '${controller.place[index].name}',
-                                            style: TextStyle(
-                                              fontSize: 60.sp,
-                                              fontFamily:
-                                                  'NotoSansCJKkr_Medium',
-                                            ),
-                                          ),
+                                          //margin: EdgeInsets.only(top: 20.h*0.9),
+                                         // width: 600.w*0.84,
+                                          height: 82.h*0.9,
+                                          child:
+                                            controller.place[index]
+                                                .name.length >
+                                                10
+                                                ? normalfont(
+                                                '${controller.place[index].name.substring(0, 10)}...',
+                                                50,
+                                                Colors.black)
+                                                : normalfont(
+                                                controller
+                                                    .place[index].name,
+                                                50,
+                                               Colors.black),
+
+
+
                                         ),
                                       ],
                                     ),
@@ -234,60 +240,60 @@ class PlaceList extends GetView<PlaceController> {
                                             children: [
                                               Image.asset(
                                                 "./assets/listPage/star_color.png",
-                                                width: 30 * width.w,
+                                                width: 30 * width.w*0.84,
                                               ),
                                               Padding(
                                                 padding: EdgeInsets.only(
-                                                    left: 4.7 * width.w),
+                                                    left: 4.7 * width.w*0.84),
                                               ),
                                               normalfont(
                                                   "${controller.place[index].total ?? 0.0} ",
-                                                  54,
+                                                  46,
                                                   Color(0xff4d4d4d))
                                             ],
                                           )
                                         : Container(),
                                     placeCode == 1
                                         ? Container(
-                                            margin: EdgeInsets.only(top: 10.h),
+                                            margin: EdgeInsets.only(top: 10.h*0.9),
                                             child: controller.place[index]
                                                         .address.length >
-                                                    18
+                                                    14
                                                 ? normalfont(
-                                                    '${controller.place[index].address.substring(0, 18)}...',
-                                                    54,
+                                                    '${controller.place[index].address.substring(0, 14)}...',
+                                                    46,
                                                     Color(0xffb0b0b0))
                                                 : normalfont(
                                                     controller
                                                         .place[index].address,
-                                                    54,
+                                                    46,
                                                     Color(0xffb0b0b0)),
                                           )
                                         : Container(
-                                            width: 750.w,
-                                            margin: EdgeInsets.only(top: 10.h),
+                                            width: 750.w*0.84,
+                                            margin: EdgeInsets.only(top: 10.h*0.9),
                                             child: controller.place[index]
                                                         .address.length >
                                                     32
                                                 ? normalfont(
                                                     '${controller.place[index].address.substring(0, 32)}...',
-                                                    54,
+                                                    46,
                                                     Color(0xffb0b0b0))
                                                 : normalfont(
                                                     controller
                                                         .place[index].address,
-                                                    54,
+                                                    46,
                                                     Color(0xffb0b0b0)),
                                           ),
                                     // Container(
-                                    //   height: 130.h,
-                                    //   width: 650.w,
+                                    //   height: 130.h*0.9,
+                                    //   width: 650.w*0.84,
                                     //   child: Text(
                                     //     controller.place[index].address,
                                     //     style: TextStyle(
                                     //       // fontFamily: 'NatoSans',
                                     //       color: Colors.grey,
-                                    //       fontSize: 56.sp,
+                                    //       fontSize: 46.sp,
                                     //       fontFamily: 'NotoSansCJKkr_Medium',
                                     //       height: 1.3,
                                     //     ),
@@ -295,9 +301,9 @@ class PlaceList extends GetView<PlaceController> {
                                     // ),
                                     placeCode == 1
                                         ? Container(
-                                            margin: EdgeInsets.only(top: 5.h),
-                                            height: 120.h,
-                                            width: 650.w,
+                                            margin: EdgeInsets.only(top: 5.h*0.9),
+                                            height: 120.h*0.9,
+                                           width: 650.w*0.84,
                                             alignment: Alignment.bottomRight,
                                             child: Row(
                                               children: [
@@ -338,18 +344,18 @@ class PlaceList extends GetView<PlaceController> {
                         placeCode == 1
                             ? Obx(
                                 () => Container(
-                                  margin: EdgeInsets.only(left: 8.w, top: 25.h),
+                                  margin: EdgeInsets.only(left: 8.w*0.84, top: 25.h*0.9),
                                   child: InkWell(
                                     child: Container(
                                       padding: EdgeInsets.only(
-                                          left: 30.w,
-                                          right: 30.w,
-                                          bottom: 10.h),
+                                          left: 30.w*0.84,
+                                          right: 30.w*0.84,
+                                          bottom: 10.h*0.9),
                                       child: Image.asset(
                                         controller.place[index].bookmark == 0
                                             ? "./assets/listPage/love_grey.png"
                                             : "./assets/listPage/love_color.png",
-                                        height: 55.h,
+                                        height: 46.h*0.9,
                                       ),
                                     ),
                                     onTap: () async {

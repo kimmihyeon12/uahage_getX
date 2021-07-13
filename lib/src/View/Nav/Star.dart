@@ -34,7 +34,7 @@ class Star extends GetView<BookmarkController> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, width: 1500, height: 2667);
+    ScreenUtil.init(context, width: 1125, height: 2436);
     controller.placeBookmarkInit();
     bookselect();
     scrollController.addListener(() {
@@ -56,11 +56,11 @@ class Star extends GetView<BookmarkController> {
                   children: [
                     Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.only(top: 803.h),
+                      margin: EdgeInsets.only(top: 746.h*0.9),
                       child: Image.asset(
                         './assets/starPage/group.png',
-                        height: 600.h,
-                        width: 800.w,
+                        height: 400.h*0.9,
+                        width: 700.w*0.84,
                       ),
                     ),
                   ],
@@ -73,10 +73,10 @@ class Star extends GetView<BookmarkController> {
                       return Card(
                         elevation: 0.3,
                         child: Container(
-                            height: 450.h,
+                            height: 450.h*0.9,
                             padding: EdgeInsets.only(
-                              top: 1.h,
-                              left: 26.w,
+                              top: 1.h*0.9,
+                              left: 26.w*0.84,
                             ),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,8 +99,9 @@ class Star extends GetView<BookmarkController> {
                                         index, "${result[1]}");
                                   },
                                   child: Container(
-                                    width: 1280.w,
+                                    width: 1150.w*0.84,
                                     //     color:Colors.pink,
+                                    margin: EdgeInsets.only(top:15.h),
                                     child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -109,59 +110,59 @@ class Star extends GetView<BookmarkController> {
                                           if (index % 4 == 1) {
                                             return Image.asset(
                                               listimage[0],
-                                              height: 414.h,
-                                              width: 413.w,
+                                              height: 413.w*0.84,
+                                              width: 413.w*0.84,
                                             );
                                           } else if (index % 4 == 2) {
                                             return Image.asset(
                                               listimage[1],
-                                              height: 414.h,
-                                              width: 413.w,
+                                              height: 413.w*0.84,
+                                              width: 413.w*0.84,
                                             );
                                           } else if (index % 4 == 3) {
                                             return Image.asset(
                                               listimage[2],
-                                              height: 414.h,
-                                              width: 413.w,
+                                              height: 413.w*0.84,
+                                              width: 413.w*0.84,
                                             );
                                           } else {
                                             return Image.asset(
                                               listimage[3],
-                                              height: 414.h,
-                                              width: 413.w,
+                                              height: 413.w*0.84,
+                                              width: 413.w*0.84,
                                             );
                                           }
                                         }()),
                                         Padding(
                                             padding: EdgeInsets.only(
-                                          left: 53.w,
+                                          left: 53.w*0.84,
                                         )),
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Padding(
-                                                padding:
-                                                    EdgeInsets.only(top: 10.h)),
+
                                             Row(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Container(
                                                   margin: EdgeInsets.only(
-                                                      top: 20.h),
-                                                  width: 700.w,
-                                                  height: 82.h,
-                                                  child: Text(
-                                                    controller
-                                                        .placeBookmark[index]
-                                                        .name,
-                                                    style: TextStyle(
-                                                      fontSize: 56.sp,
-                                                      fontFamily:
-                                                          'NotoSansCJKkr_Medium',
-                                                    ),
-                                                  ),
+                                                      top: 5.h*0.9),
+                                                 // width: 700.w*0.84,
+                                                  height: 82.h*0.9,
+                                                  child: controller.placeBookmark[index]
+                                                      .name.length >
+                                                      10
+                                                      ? normalfont(
+                                                      '${controller.placeBookmark[index].name.substring(0, 10)}...',
+                                                      50,
+                                                      Colors.black)
+                                                      : normalfont(
+                                                      controller
+                                                          .placeBookmark[index].name,
+                                                      50,
+                                                      Colors.black),
                                                 ),
                                               ],
                                             ),
@@ -169,15 +170,15 @@ class Star extends GetView<BookmarkController> {
                                               children: [
                                                 Image.asset(
                                                   "./assets/listPage/star_color.png",
-                                                  width: 30 * width.w,
+                                                  width: 30 * width.w*0.84,
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsets.only(
-                                                      left: 4.7 * width.w),
+                                                      left: 4.7 * width.w*0.84),
                                                 ),
                                                 normalfont(
                                                     "${controller.placeBookmark[index].total ?? 0.0} ",
-                                                    54,
+                                                    46,
                                                     Color(0xff4d4d4d))
                                               ],
                                             ),
@@ -186,23 +187,23 @@ class Star extends GetView<BookmarkController> {
                                                           .placeBookmark[index]
                                                           .address
                                                           .length >
-                                                      18
+                                                      14
                                                   ? normalfont(
-                                                      '${controller.placeBookmark[index].address.substring(0, 18)}...',
-                                                      54,
+                                                      '${controller.placeBookmark[index].address.substring(0, 14)}...',
+                                                      46,
                                                       Color(0xffb0b0b0))
                                                   : normalfont(
                                                       controller
                                                           .placeBookmark[index]
                                                           .address,
-                                                      54,
+                                                      46,
                                                       Color(0xffb0b0b0)),
                                             ),
                                             Container(
                                               margin:
-                                                  EdgeInsets.only(top: 10.h),
-                                              height: 120.h,
-                                              width: 650.w,
+                                                  EdgeInsets.only(top: 10.h*0.9),
+                                              height: 120.h*0.9,
+                                              width: 650.w*0.84,
                                               alignment: Alignment.bottomRight,
                                               child: Row(
                                                 children: [
@@ -251,20 +252,20 @@ class Star extends GetView<BookmarkController> {
                                 Obx(
                                   () => Container(
                                     margin:
-                                        EdgeInsets.only(left: 8.w, top: 25.h),
+                                        EdgeInsets.only(left: 8.w*0.84, top: 40.h*0.9),
                                     child: InkWell(
                                       child: Container(
                                         padding: EdgeInsets.only(
-                                            left: 30.w,
-                                            right: 30.w,
-                                            bottom: 10.h),
+                                            left: 30.w*0.84,
+                                            right: 30.w*0.84,
+                                            bottom: 10.h*0.9),
                                         child: Image.asset(
                                           controller.placeBookmark[index]
                                                       .bookmark ==
                                                   0
                                               ? "./assets/listPage/love_grey.png"
                                               : "./assets/listPage/love_color.png",
-                                          height: 55.h,
+                                          height: 46.h*0.9,
                                         ),
                                       ),
                                       onTap: () async {

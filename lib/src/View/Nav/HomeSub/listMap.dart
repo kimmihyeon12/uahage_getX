@@ -50,7 +50,7 @@ class _ListMapState extends State<ListMap> {
   @override
   Widget build(BuildContext context) {
     Get.put(PlaceController());
-    ScreenUtil.init(context, width: 1500, height: 2667);
+    ScreenUtil.init(context, width: 1125, height: 2436);
     return Scaffold(
       body: SafeArea(
         child: Stack(children: [

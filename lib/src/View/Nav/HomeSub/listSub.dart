@@ -155,7 +155,7 @@ class _ListSubState extends State<ListSub> {
     }
     connection();
 
-    ScreenUtil.init(context, width: 1500, height: 2667);
+    ScreenUtil.init(context, width: 1125, height: 2436);
     return WillPopScope(
       onWillPop: () {
         if (placeCode == 1)
@@ -163,1723 +163,1719 @@ class _ListSubState extends State<ListSub> {
         else
           Get.back(result: "");
       },
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: (() {
-            if (placeCode == 1)
-              return appBar(
-                context,
-                data.name,
-                [data.bookmark, aver],
-              );
-            else
-              return appBar(context, data.name, "");
-          }()),
-          body: Stack(
-            children: [
-              ListView(
-                controller: _scrollController,
-                children: [
-                  Stack(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            children: [
-                              Container(
-                                width: 1500.w,
-                                child: (() {
-                                  if (placeCode == 1) {
-                                    if (index % 3 == 1) {
-                                      return mainImage(
-                                          restaurantListImage[0], 1500.w);
-                                    } else if (index % 3 == 2) {
-                                      return mainImage(
-                                          restaurantListImage[1], 1500.w);
-                                    } else
-                                      return mainImage(
-                                          restaurantListImage[2], 1500.w);
-                                  } else if (placeCode == 2) {
-                                    if (index % 2 == 1)
-                                      return mainImage(
-                                          hospitalListImage[0], 1500.w);
-                                    else
-                                      return mainImage(
-                                          hospitalListImage[1], 1500.w);
-                                  } else if (placeCode == 5) {
-                                    if (index % 2 == 1)
-                                      return mainImage(
-                                          kidsCafeListImage[0], 1500.w);
-                                    else
-                                      return mainImage(
-                                          kidsCafeListImage[1], 1500.w);
-                                  } else if (placeCode == 8) {
-                                    if (data.image_path == null) {
-                                      return mainImage(
-                                          experienceListImage[0], 1500.w);
-                                    } else {
-                                      return Container(
-                                        color: Colors.black,
-                                        child: SizedBox(
-                                          height: 870.w,
-                                          child: PageView.builder(
-                                            itemCount: data.image_path.length,
-                                            itemBuilder: (context, index) {
-                                              return Image.network(
-                                                  data.image_path[index],
-                                                  fit: BoxFit.cover);
-                                            },
-                                          ),
-                                        ),
-                                      );
-                                    }
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: (() {
+          if (placeCode == 1)
+            return appBar(
+              context,
+              data.name,
+              [data.bookmark, aver],
+            );
+          else
+            return appBar(context, data.name, "");
+        }()),
+        body: Stack(
+          children: [
+            ListView(
+              controller: _scrollController,
+              children: [
+                Stack(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          children: [
+                            Container(
+                              width: 1500.w*0.75,
+                              child: (() {
+                                if (placeCode == 1) {
+                                  if (index % 3 == 1) {
+                                    return mainImage(
+                                        restaurantListImage[0], 1500.w*0.75);
+                                  } else if (index % 3 == 2) {
+                                    return mainImage(
+                                        restaurantListImage[1], 1500.w*0.75);
+                                  } else
+                                    return mainImage(
+                                        restaurantListImage[2], 1500.w*0.75);
+                                } else if (placeCode == 2) {
+                                  if (index % 2 == 1)
+                                    return mainImage(
+                                        hospitalListImage[0], 1500.w*0.75);
+                                  else
+                                    return mainImage(
+                                        hospitalListImage[1], 1500.w*0.75);
+                                } else if (placeCode == 5) {
+                                  if (index % 2 == 1)
+                                    return mainImage(
+                                        kidsCafeListImage[0], 1500.w*0.75);
+                                  else
+                                    return mainImage(
+                                        kidsCafeListImage[1], 1500.w*0.75);
+                                } else if (placeCode == 8) {
+                                  if (data.image_path == null) {
+                                    return mainImage(
+                                        experienceListImage[0], 1500.w*0.75);
                                   } else {
-                                    if (index % 4 == 1)
-                                      return mainImage(
-                                          experienceListImage[0], 1500.w);
-                                    else if (index % 4 == 2)
-                                      return mainImage(
-                                          experienceListImage[1], 1500.w);
-                                    else if (index % 4 == 3)
-                                      return mainImage(
-                                          experienceListImage[2], 1500.w);
-                                    else
-                                      return mainImage(
-                                          experienceListImage[3], 1500.w);
+                                    return Container(
+                                      color: Colors.black,
+                                      child: SizedBox(
+                                        height: 870.w*0.75,
+                                        child: PageView.builder(
+                                          itemCount: data.image_path.length,
+                                          itemBuilder: (context, index) {
+                                            return Image.network(
+                                                data.image_path[index],
+                                                fit: BoxFit.cover);
+                                          },
+                                        ),
+                                      ),
+                                    );
                                   }
-                                }()),
-                              ),
-                            ],
-                          ),
-                          Container(
-                            child: Container(
-                              padding: EdgeInsets.only(
-                                  left: 75.w, top: 45.h, bottom: 45.h),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: 1250.w,
-                                        child: boldfont(
-                                            data.name, 77, Colors.black),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                          left: 20.w,
-                                        ),
-                                      ),
-                                      (() {
-                                        if (placeCode == 1) {
-                                          return IconButton(
-                                            padding: EdgeInsets.all(0),
-                                            constraints: BoxConstraints(
-                                                maxWidth: 170.w,
-                                                maxHeight: 170.h),
-                                            icon: Image.asset(
-                                                data.bookmark == 0
-                                                    ? "./assets/listPage/love_grey.png"
-                                                    : "./assets/listPage/love_color.png",
-                                                height: 60.h),
-                                            onPressed: () async {
-                                              if (data.bookmark == 0) {
-                                                await bookmark.bookmarkToogle(
-                                                    UserController
-                                                        .to.userId.value,
-                                                    data.id);
-                                                setState(() {
-                                                  data.bookmark = 1;
-                                                });
-                                              } else {
-                                                await bookmark.bookmarkToogle(
-                                                    UserController
-                                                        .to.userId.value,
-                                                    data.id);
-                                                setState(() {
-                                                  data.bookmark = 0;
-                                                });
-                                              }
-                                            },
-                                          );
-                                        } else
-                                          return Container();
-                                      }())
-                                    ],
-                                  ),
-                                  Padding(
-                                      padding: EdgeInsets.only(
-                                    top: 3.3 * height.h,
-                                  )),
-                                  placeCode == 1
-                                      ? Row(
-                                          children: [
-                                            for (int i = 0;
-                                                i < averStar.toInt();
-                                                i++)
-                                              Container(
-                                                margin: EdgeInsets.only(
-                                                    right: 12 * width.w),
-                                                child: Image.asset(
-                                                  "./assets/listPage/star_color.png",
-                                                  width: 38 * width.w,
-                                                ),
-                                              ),
-                                            (averStar - averStar.toInt() == 0.5)
-                                                ? Container(
-                                                    margin: EdgeInsets.only(
-                                                        right: 12 * width.w),
-                                                    child: Image.asset(
-                                                      "./assets/listPage/star_half.png",
-                                                      width: 38 * width.w,
-                                                    ),
-                                                  )
-                                                : Container(),
-                                            for (int i = 0;
-                                                i < 5 - averStar.ceil().toInt();
-                                                i++)
-                                              Container(
-                                                child: Image.asset(
-                                                  "./assets/listPage/star_grey.png",
-                                                  width: 38 * width.w,
-                                                ),
-                                                margin: EdgeInsets.only(
-                                                    right: 12 * width.w),
-                                              ),
-                                            // Padding(
-                                            //     padding: EdgeInsets.only(
-                                            //         left: 12 * width.w)),
-                                            Text('${aver}',
-                                                style: TextStyle(
-                                                  color: Color(0xff4d4d4d),
-                                                  fontSize: 30 * width.sp,
-                                                  fontFamily:
-                                                      "NotoSansCJKkr_Medium",
-                                                )),
-                                            Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 12 * width.w)),
-                                            Text(
-                                                '${reviewData.length}명이 평가에 참여했습니다',
-                                                style: TextStyle(
-                                                  color: Color(0xffc6c6c6),
-                                                  fontSize: 25 * width.sp,
-                                                  fontFamily:
-                                                      "NotoSansCJKkr_Medium",
-                                                ))
-                                          ],
-                                        )
-                                      : Container()
-                                ],
-                              ),
+                                } else {
+                                  if (index % 4 == 1)
+                                    return mainImage(
+                                        experienceListImage[0], 1500.w*0.75);
+                                  else if (index % 4 == 2)
+                                    return mainImage(
+                                        experienceListImage[1], 1500.w*0.75);
+                                  else if (index % 4 == 3)
+                                    return mainImage(
+                                        experienceListImage[2], 1500.w*0.75);
+                                  else
+                                    return mainImage(
+                                        experienceListImage[3], 1500.w*0.75);
+                                }
+                              }()),
                             ),
-                          ),
-                          Container(
-                            height: 2.h,
-                            color: Color(0xfff7f7f7),
-                          ),
-                          Container(
-                            child: Container(
-                              padding: EdgeInsets.only(
-                                left: 75.w,
-                              ),
-                              width: MediaQuery.of(context).size.width,
-                              // alignment: Alignment.center,
-                              //  height: 520 .h,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
+                          ],
+                        ),
+                        Container(
+                          child: Container(
+                            padding: EdgeInsets.only(
+                                left: 75.w*0.75, top: 45.h*0.779, bottom: 45.h*0.779),
+                            child: Column(
+                              children: [
+                                Row(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 1250.w*0.75,
+                                      child: boldfont(
+                                          data.name, 60, Colors.black),
+                                    ),
+                                    Padding(
                                       padding: EdgeInsets.only(
-                                    top: 50.w,
-                                  )),
-                                  normalfont("주소", 58, Color(0xff4d4d4d)),
-                                  Padding(padding: EdgeInsets.only(top: 10.w)),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width: 965.w,
-                                        child: normalfont("${data.address}", 58,
-                                            Color(0xff808080)),
+                                        left: 20.w*0.75,
                                       ),
-                                      Padding(
-                                          padding:
-                                              EdgeInsets.only(left: 100.w)),
-                                      GestureDetector(
-                                        child: Row(
-                                          children: [
-                                            Image.asset(
-                                              "./assets/sublistPage/copy.png",
-                                              width: 250.w,
-                                              height: 56.h,
-                                            ),
-                                          ],
-                                        ),
-                                        onTap: () {
-                                          FlutterClipboard.copy(data.address);
-                                          toast(
-                                              context, "주소가 복사되었습니다", "bottom");
-                                        },
-                                      )
-                                    ],
-                                  ),
-                                  Padding(padding: EdgeInsets.only(top: 30.w)),
-                                  normalfont("연락처", 58, Color(0xff4d4d4d)),
-                                  Padding(
-                                      padding: EdgeInsets.only(
-                                    top: 10.w,
-                                  )),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width: 955.w,
-                                        child: normalfont("${data.phone}", 58,
-                                            Color(0xff808080)),
-                                      ),
-                                      Padding(
-                                          padding:
-                                              EdgeInsets.only(left: 100.w)),
-                                      GestureDetector(
-                                        child: Row(
-                                          children: [
-                                            Image.asset(
-                                              "./assets/sublistPage/call.png",
-                                              width: 250.w,
-                                              height: 76.h,
-                                            ),
-                                          ],
-                                        ),
-                                        onTap: () async {
-                                          // FlutterClipboard.copy(data.phone);
-
-                                          if (await canLaunch(
-                                              'tel:${data.phone}')) {
-                                            await launch('tel:${data.phone}');
-                                          } else {
-                                            throw 'error call';
-                                          }
-                                          //       toast(
-                                          //          context, "번호가 복사되었습니다", "bottom");
-                                        },
-                                      )
-                                    ],
-                                  ),
-                                  placeCode == 8
-                                      ? Container(
-                                          child: Container(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            padding: EdgeInsets.only(
-                                              top: 30.h,
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                normalfont("영업시간", 58,
-                                                    Color(0xff4d4d4d)),
-                                                Padding(
-                                                    padding: EdgeInsets.only(
-                                                        top: 10.h)),
-                                                normalfont(
-                                                    data.worked_at ==
-                                                            "undefined"
-                                                        ? '문의'
-                                                        : '${data.worked_at}',
-                                                    58,
-                                                    Color(0xff808080)),
-                                                Padding(
-                                                    padding: EdgeInsets.only(
-                                                        top: 50.h)),
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                      : Container(),
-                                  // placeCode == 1
-                                  //     ? Padding(
-                                  //         padding: EdgeInsets.only(top: 30.w))
-                                  //     : Padding(
-                                  //         padding: EdgeInsets.only(top: 0.w)),
-                                  // placeCode == 1
-                                  //     ? normalfont("영업시간", 58, Color(0xff4d4d4d))
-                                  //     : Container(),
-                                  // placeCode == 1
-                                  //     ? Padding(
-                                  //         padding: EdgeInsets.only(top: 10.w))
-                                  //     : Padding(
-                                  //         padding: EdgeInsets.only(top: 0.w)),
-                                  // placeCode == 1
-                                  //     ? Container(
-                                  //         width: 500 * width.w,
-                                  //         child: normalfont(
-                                  //             "오전 11:30 ~ 21:00(샐러드바 마감 20:30) 브레이크타임 15:00~17:00",
-                                  //             58,
-                                  //             Color(0xff808080)),
-                                  //       )
-                                  //     : Container(),
-                                  Padding(padding: EdgeInsets.only(top: 30.w))
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            height: 26 * height.h,
-                            color: Color(0xfff7f7f7),
-                          ),
-                          // placeCode == 1
-                          //     ? Container(
-                          //         child: Container(
-                          //           padding: EdgeInsets.only(
-                          //             left: 75.w,
-                          //           ),
-                          //           width: MediaQuery.of(context).size.width,
-                          //           // alignment: Alignment.center,
-                          //           //  height: 520 .h,
-                          //           child: Column(
-                          //             crossAxisAlignment:
-                          //                 CrossAxisAlignment.start,
-                          //             children: [
-                          //               Padding(
-                          //                   padding: EdgeInsets.only(top: 30.h)),
-                          //               normalfont("매장정보", 58, Color(0xff4d4d4d)),
-                          //               Padding(
-                          //                   padding: EdgeInsets.only(top: 6.h)),
-                          //               Row(
-                          //                 children: [
-                          //                   Container(
-                          //                     width: 530.w,
-                          //                     child: normalfont("OO 평일런치", 58,
-                          //                         Color(0xff808080)),
-                          //                   ),
-                          //                   Container(
-                          //                     child: normalfont("15,900원", 58,
-                          //                         Color(0xffc6c6c6)),
-                          //                   ),
-                          //                 ],
-                          //               ),
-                          //               Padding(
-                          //                   padding: EdgeInsets.only(top: 6.h)),
-                          //               Row(
-                          //                 children: [
-                          //                   Container(
-                          //                     width: 530.w,
-                          //                     child: normalfont("OO 평일디너", 58,
-                          //                         Color(0xff808080)),
-                          //                   ),
-                          //                   Container(
-                          //                     child: normalfont("22,900원", 58,
-                          //                         Color(0xffc6c6c6)),
-                          //                   ),
-                          //                 ],
-                          //               ),
-                          //               Padding(
-                          //                   padding: EdgeInsets.only(top: 6.h)),
-                          //               Row(
-                          //                 children: [
-                          //                   Row(
-                          //                     children: [
-                          //                       Container(
-                          //                         width: 530.w,
-                          //                         child: normalfont("OO 주말/공휴일",
-                          //                             58, Color(0xff808080)),
-                          //                       ),
-                          //                       Container(
-                          //                         child: normalfont("25,900원", 58,
-                          //                             Color(0xffc6c6c6)),
-                          //                       ),
-                          //                     ],
-                          //                   ),
-                          //                 ],
-                          //               ),
-                          //               Padding(
-                          //                   padding: EdgeInsets.only(top: 30.h)),
-                          //             ],
-                          //           ),
-                          //         ),
-                          //       )
-                          //     : Container(),
-
-                          (() {
-                            if (placeCode == 1) {
-                              return Container(
-                                child: Container(
-                                  height: 928.h,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(
-                                          left: 75.w,
-                                          top: 50.h,
-                                        ),
-                                        child: normalfont(
-                                            "편의시설", 58, Color(0xff4d4d4d)),
-                                      ),
-                                      Padding(
-                                          padding: EdgeInsets.only(top: 50.h)),
-                                      Row(
-                                          // crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 67.w)),
-                                            data.baby_menu == true
-                                                ? Image.asset(
-                                                    imagecolor[0],
-                                                    width: 218.w,
-                                                    height: 292.h,
-                                                  )
-                                                : Image.asset(
-                                                    imagegrey[0],
-                                                    width: 218.w,
-                                                    height: 292.h,
-                                                  ),
-                                            Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 59.w)),
-                                            data.baby_bed == true
-                                                ? Image.asset(
-                                                    imagecolor[1],
-                                                    width: 218.w,
-                                                    height: 292.h,
-                                                  )
-                                                : Image.asset(
-                                                    imagegrey[1],
-                                                    width: 218.w,
-                                                    height: 292.h,
-                                                  ),
-                                            Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 59.w)),
-                                            data.baby_tableware == true
-                                                ? Image.asset(
-                                                    imagecolor[2],
-                                                    width: 218.w,
-                                                    height: 292.h,
-                                                  )
-                                                : Image.asset(
-                                                    imagegrey[2],
-                                                    width: 218.w,
-                                                    height: 292.h,
-                                                  ),
-                                            Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 59.w)),
-                                            data.meeting_room == true
-                                                ? Image.asset(
-                                                    imagecolor[3],
-                                                    width: 218.w,
-                                                    height: 292.h,
-                                                  )
-                                                : Image.asset(
-                                                    imagegrey[3],
-                                                    width: 218.w,
-                                                    height: 292.h,
-                                                  ),
-                                            Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 59.w)),
-                                            data.diaper_change == true
-                                                ? Image.asset(
-                                                    imagecolor[4],
-                                                    width: 231.w,
-                                                    height: 284.h,
-                                                  )
-                                                : Image.asset(
-                                                    imagegrey[4],
-                                                    width: 231.w,
-                                                    height: 284.h,
-                                                  ),
-                                            Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 59.w)),
-                                          ]),
-                                      Padding(
-                                          padding: EdgeInsets.only(top: 50.h)),
-                                      Row(
+                                    ),
+                                    (() {
+                                      if (placeCode == 1) {
+                                        return IconButton(
+                                          padding: EdgeInsets.all(0),
+                                          constraints: BoxConstraints(
+                                              maxWidth: 170.w*0.75,
+                                              maxHeight: 170.h*0.779),
+                                          icon: Image.asset(
+                                              data.bookmark == 0
+                                                  ? "./assets/listPage/love_grey.png"
+                                                  : "./assets/listPage/love_color.png",
+                                              height: 60.h*0.779),
+                                          onPressed: () async {
+                                            if (data.bookmark == 0) {
+                                              await bookmark.bookmarkToogle(
+                                                  UserController
+                                                      .to.userId.value,
+                                                  data.id);
+                                              setState(() {
+                                                data.bookmark = 1;
+                                              });
+                                            } else {
+                                              await bookmark.bookmarkToogle(
+                                                  UserController
+                                                      .to.userId.value,
+                                                  data.id);
+                                              setState(() {
+                                                data.bookmark = 0;
+                                              });
+                                            }
+                                          },
+                                        );
+                                      } else
+                                        return Container();
+                                    }())
+                                  ],
+                                ),
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                  top: 3.3 * height.h*0.779,
+                                )),
+                                placeCode == 1
+                                    ? Row(
                                         children: [
+                                          for (int i = 0;
+                                              i < averStar.toInt();
+                                              i++)
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                  right: 12 * width.w*0.75),
+                                              child: Image.asset(
+                                                "./assets/listPage/star_color.png",
+                                                width: 38 * width.w*0.75,
+                                              ),
+                                            ),
+                                          (averStar - averStar.toInt() == 0.5)
+                                              ? Container(
+                                                  margin: EdgeInsets.only(
+                                                      right: 12 * width.w*0.75),
+                                                  child: Image.asset(
+                                                    "./assets/listPage/star_half.png",
+                                                    width: 38 * width.w*0.75,
+                                                  ),
+                                                )
+                                              : Container(),
+                                          for (int i = 0;
+                                              i < 5 - averStar.ceil().toInt();
+                                              i++)
+                                            Container(
+                                              child: Image.asset(
+                                                "./assets/listPage/star_grey.png",
+                                                width: 38 * width.w*0.75,
+                                              ),
+                                              margin: EdgeInsets.only(
+                                                  right: 12 * width.w*0.75),
+                                            ),
+                                          // Padding(
+                                          //     padding: EdgeInsets.only(
+                                          //         left: 12 * width.w*0.75)),
+                                          Text('${aver}',
+                                              style: TextStyle(
+                                                color: Color(0xff4d4d4d),
+                                                fontSize: 55.sp,
+                                                fontFamily:
+                                                    "NotoSansCJKkr_Medium",
+                                              )),
                                           Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 67.w)),
-                                          data.play_room == true
-                                              ? Image.asset(
-                                                  imagecolor[5],
-                                                  width: 218.w,
-                                                  height: 292.h,
-                                                )
-                                              : Image.asset(
-                                                  imagegrey[5],
-                                                  width: 218.w,
-                                                  height: 292.h,
-                                                ),
-                                          Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 59.w)),
-                                          data.stroller == true
-                                              ? Image.asset(
-                                                  imagecolor[6],
-                                                  width: 218.w,
-                                                  height: 292.h,
-                                                )
-                                              : Image.asset(
-                                                  imagegrey[6],
-                                                  width: 218.w,
-                                                  height: 292.h,
-                                                ),
-                                          Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 59.w)),
-                                          data.nursing_room == true
-                                              ? Image.asset(
-                                                  imagecolor[7],
-                                                  width: 218.w,
-                                                  height: 292.h,
-                                                )
-                                              : Image.asset(
-                                                  imagegrey[7],
-                                                  width: 218.w,
-                                                  height: 292.h,
-                                                ),
-                                          Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 59.w)),
-                                          data.baby_chair == true
-                                              ? Image.asset(
-                                                  imagecolor[8],
-                                                  width: 218.w,
-                                                  height: 292.h,
-                                                )
-                                              : Image.asset(
-                                                  imagegrey[8],
-                                                  width: 218.w,
-                                                  height: 292.h,
-                                                )
+                                              padding: EdgeInsets.only(
+                                                  left: 12 * width.w*0.75)),
+                                          Text(
+                                              '${reviewData.length}명이 평가에 참여했습니다',
+                                              style: TextStyle(
+                                                color: Color(0xffc6c6c6),
+                                                fontSize: 46.sp,
+                                                fontFamily:
+                                                    "NotoSansCJKkr_Medium",
+                                              ))
+                                        ],
+                                      )
+                                    : Container()
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 2.h*0.779,
+                          color: Color(0xfff7f7f7),
+                        ),
+                        Container(
+                          child: Container(
+                            padding: EdgeInsets.only(
+                              left: 75.w*0.75,
+                            ),
+                            width: MediaQuery.of(context).size.width,
+                            // alignment: Alignment.center,
+                            //  height: 520 .h*0.779,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                  top: 50.w*0.75,
+                                )),
+                                normalfont("주소", 46, Color(0xff4d4d4d)),
+                                Padding(padding: EdgeInsets.only(top: 10.w*0.75)),
+                                Row(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 965.w*0.75,
+                                      child: normalfont("${data.address}", 46,
+                                          Color(0xff808080)),
+                                    ),
+                                    Padding(
+                                        padding:
+                                            EdgeInsets.only(left: 100.w*0.75)),
+                                    GestureDetector(
+                                      child: Row(
+                                        children: [
+                                          Image.asset(
+                                            "./assets/sublistPage/copy.png",
+                                            width: 250.w*0.75,
+                                            height: 56.h*0.779,
+                                          ),
                                         ],
                                       ),
-                                    ],
-                                  ),
+                                      onTap: () {
+                                        FlutterClipboard.copy(data.address);
+                                        toast(
+                                            context, "주소가 복사되었습니다", "bottom");
+                                      },
+                                    )
+                                  ],
                                 ),
-                              );
-                            } else if (placeCode == 2) {
-                              return Container(
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  padding: EdgeInsets.only(
-                                    left: 75.w,
-                                    top: 50.h,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      normalfont("검진항목", 58, Color(0xff4d4d4d)),
-                                      Padding(
-                                          padding: EdgeInsets.only(top: 10.h)),
-                                      normalfont("${data.examination_items}",
-                                          58, Color(0xff808080)),
-                                      Padding(
-                                          padding: EdgeInsets.only(top: 50.h)),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            } else if (placeCode == 3) {
-                              return Container(
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  padding: EdgeInsets.only(
-                                    left: 75.w,
-                                    top: 50.h,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      normalfont("정보", 58, Color(0xff4d4d4d)),
-                                      Padding(
-                                          padding: EdgeInsets.only(top: 10.h)),
-                                      normalfont(
-                                          data.use_bus == true
-                                              ? "버스 : 운행"
-                                              : "버스 : 미운행",
-                                          58,
+                                Padding(padding: EdgeInsets.only(top: 30.w*0.75)),
+                                normalfont("연락처", 46, Color(0xff4d4d4d)),
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                  top: 10.w*0.75,
+                                )),
+                                Row(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 955.w*0.75,
+                                      child: normalfont("${data.phone}", 46,
                                           Color(0xff808080)),
-                                      Padding(
-                                          padding: EdgeInsets.only(top: 50.h)),
-                                    ],
-                                  ),
+                                    ),
+                                    Padding(
+                                        padding:
+                                            EdgeInsets.only(left: 100.w*0.75)),
+                                    GestureDetector(
+                                      child: Row(
+                                        children: [
+                                          Image.asset(
+                                            "./assets/sublistPage/call.png",
+                                            width: 250.w*0.75,
+                                            height: 76.h*0.779,
+                                          ),
+                                        ],
+                                      ),
+                                      onTap: () async {
+                                        // FlutterClipboard.copy(data.phone);
+
+                                        if (await canLaunch(
+                                            'tel:${data.phone}')) {
+                                          await launch('tel:${data.phone}');
+                                        } else {
+                                          throw 'error call';
+                                        }
+                                        //       toast(
+                                        //          context, "번호가 복사되었습니다", "bottom");
+                                      },
+                                    )
+                                  ],
                                 ),
-                              );
-                            } else if (placeCode == 8) {
-                              return Container(
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  padding: EdgeInsets.only(
-                                    left: 75.w,
-                                    top: 50.h,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      normalfont("매장정보", 58, Color(0xff4d4d4d)),
-                                      Padding(
-                                          padding: EdgeInsets.only(top: 10.h)),
-                                      normalfont(
-                                          data.store_info == "undefined"
+                                placeCode == 8
+                                    ? Container(
+                                        child: Container(
+                                          width: MediaQuery.of(context)
+                                              .size
+                                              .width,
+                                          padding: EdgeInsets.only(
+                                            top: 30.h*0.779,
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              normalfont("영업시간", 46,
+                                                  Color(0xff4d4d4d)),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: 10.h*0.779)),
+                                              normalfont(
+                                                  data.worked_at ==
+                                                          "undefined"
+                                                      ? '문의'
+                                                      : '${data.worked_at}',
+                                                  46,
+                                                  Color(0xff808080)),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: 50.h*0.779)),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    : Container(),
+                                // placeCode == 1
+                                //     ? Padding(
+                                //         padding: EdgeInsets.only(top: 30.w*0.75))
+                                //     : Padding(
+                                //         padding: EdgeInsets.only(top: 0.w*0.75)),
+                                // placeCode == 1
+                                //     ? normalfont("영업시간", 46, Color(0xff4d4d4d))
+                                //     : Container(),
+                                // placeCode == 1
+                                //     ? Padding(
+                                //         padding: EdgeInsets.only(top: 10.w*0.75))
+                                //     : Padding(
+                                //         padding: EdgeInsets.only(top: 0.w*0.75)),
+                                // placeCode == 1
+                                //     ? Container(
+                                //         width: 500 * width.w*0.75,
+                                //         child: normalfont(
+                                //             "오전 11:30 ~ 21:00(샐러드바 마감 20:30) 브레이크타임 15:00~17:00",
+                                //             46,
+                                //             Color(0xff808080)),
+                                //       )
+                                //     : Container(),
+                                Padding(padding: EdgeInsets.only(top: 30.w*0.75))
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 26 * height.h*0.779,
+                          color: Color(0xfff7f7f7),
+                        ),
+                        // placeCode == 1
+                        //     ? Container(
+                        //         child: Container(
+                        //           padding: EdgeInsets.only(
+                        //             left: 75.w*0.75,
+                        //           ),
+                        //           width: MediaQuery.of(context).size.width,
+                        //           // alignment: Alignment.center,
+                        //           //  height: 520 .h*0.779,
+                        //           child: Column(
+                        //             crossAxisAlignment:
+                        //                 CrossAxisAlignment.start,
+                        //             children: [
+                        //               Padding(
+                        //                   padding: EdgeInsets.only(top: 30.h*0.779)),
+                        //               normalfont("매장정보", 46, Color(0xff4d4d4d)),
+                        //               Padding(
+                        //                   padding: EdgeInsets.only(top: 6.h*0.779)),
+                        //               Row(
+                        //                 children: [
+                        //                   Container(
+                        //                     width: 530.w*0.75,
+                        //                     child: normalfont("OO 평일런치", 46,
+                        //                         Color(0xff808080)),
+                        //                   ),
+                        //                   Container(
+                        //                     child: normalfont("15,900원", 46,
+                        //                         Color(0xffc6c6c6)),
+                        //                   ),
+                        //                 ],
+                        //               ),
+                        //               Padding(
+                        //                   padding: EdgeInsets.only(top: 6.h*0.779)),
+                        //               Row(
+                        //                 children: [
+                        //                   Container(
+                        //                     width: 530.w*0.75,
+                        //                     child: normalfont("OO 평일디너", 46,
+                        //                         Color(0xff808080)),
+                        //                   ),
+                        //                   Container(
+                        //                     child: normalfont("22,900원", 46,
+                        //                         Color(0xffc6c6c6)),
+                        //                   ),
+                        //                 ],
+                        //               ),
+                        //               Padding(
+                        //                   padding: EdgeInsets.only(top: 6.h*0.779)),
+                        //               Row(
+                        //                 children: [
+                        //                   Row(
+                        //                     children: [
+                        //                       Container(
+                        //                         width: 530.w*0.75,
+                        //                         child: normalfont("OO 주말/공휴일",
+                        //                             46, Color(0xff808080)),
+                        //                       ),
+                        //                       Container(
+                        //                         child: normalfont("25,900원", 46,
+                        //                             Color(0xffc6c6c6)),
+                        //                       ),
+                        //                     ],
+                        //                   ),
+                        //                 ],
+                        //               ),
+                        //               Padding(
+                        //                   padding: EdgeInsets.only(top: 30.h*0.779)),
+                        //             ],
+                        //           ),
+                        //         ),
+                        //       )
+                        //     : Container(),
+
+                        (() {
+                          if (placeCode == 1) {
+                            return Container(
+                              child: Container(
+                                height: 928.h*0.779,
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                        left: 75.w*0.75,
+                                        top: 50.h*0.779,
+                                      ),
+                                      child: normalfont(
+                                          "편의시설", 46, Color(0xff4d4d4d)),
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(top: 50.h*0.779)),
+                                    Row(
+                                        // crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 67.w*0.75)),
+                                          data.baby_menu == true
+                                              ? Image.asset(
+                                                  imagecolor[0],
+                                                  width: 218.w*0.75,
+                                                  height: 292.h*0.779,
+                                                )
+                                              : Image.asset(
+                                                  imagegrey[0],
+                                                  width: 218.w*0.75,
+                                                  height: 292.h*0.779,
+                                                ),
+                                          Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 59.w*0.75)),
+                                          data.baby_bed == true
+                                              ? Image.asset(
+                                                  imagecolor[1],
+                                                  width: 218.w*0.75,
+                                                  height: 292.h*0.779,
+                                                )
+                                              : Image.asset(
+                                                  imagegrey[1],
+                                                  width: 218.w*0.75,
+                                                  height: 292.h*0.779,
+                                                ),
+                                          Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 59.w*0.75)),
+                                          data.baby_tableware == true
+                                              ? Image.asset(
+                                                  imagecolor[2],
+                                                  width: 218.w*0.75,
+                                                  height: 292.h*0.779,
+                                                )
+                                              : Image.asset(
+                                                  imagegrey[2],
+                                                  width: 218.w*0.75,
+                                                  height: 292.h*0.779,
+                                                ),
+                                          Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 59.w*0.75)),
+                                          data.meeting_room == true
+                                              ? Image.asset(
+                                                  imagecolor[3],
+                                                  width: 218.w*0.75,
+                                                  height: 292.h*0.779,
+                                                )
+                                              : Image.asset(
+                                                  imagegrey[3],
+                                                  width: 218.w*0.75,
+                                                  height: 292.h*0.779,
+                                                ),
+                                          Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 59.w*0.75)),
+                                          data.diaper_change == true
+                                              ? Image.asset(
+                                                  imagecolor[4],
+                                                  width: 231.w*0.75,
+                                                  height: 284.h*0.779,
+                                                )
+                                              : Image.asset(
+                                                  imagegrey[4],
+                                                  width: 231.w*0.75,
+                                                  height: 284.h*0.779,
+                                                ),
+                                          Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 59.w*0.75)),
+                                        ]),
+                                    Padding(
+                                        padding: EdgeInsets.only(top: 50.h*0.779)),
+                                    Row(
+                                      children: [
+                                        Padding(
+                                            padding:
+                                                EdgeInsets.only(left: 67.w*0.75)),
+                                        data.play_room == true
+                                            ? Image.asset(
+                                                imagecolor[5],
+                                                width: 218.w*0.75,
+                                                height: 292.h*0.779,
+                                              )
+                                            : Image.asset(
+                                                imagegrey[5],
+                                                width: 218.w*0.75,
+                                                height: 292.h*0.779,
+                                              ),
+                                        Padding(
+                                            padding:
+                                                EdgeInsets.only(left: 59.w*0.75)),
+                                        data.stroller == true
+                                            ? Image.asset(
+                                                imagecolor[6],
+                                                width: 218.w*0.75,
+                                                height: 292.h*0.779,
+                                              )
+                                            : Image.asset(
+                                                imagegrey[6],
+                                                width: 218.w*0.75,
+                                                height: 292.h*0.779,
+                                              ),
+                                        Padding(
+                                            padding:
+                                                EdgeInsets.only(left: 59.w*0.75)),
+                                        data.nursing_room == true
+                                            ? Image.asset(
+                                                imagecolor[7],
+                                                width: 218.w*0.75,
+                                                height: 292.h*0.779,
+                                              )
+                                            : Image.asset(
+                                                imagegrey[7],
+                                                width: 218.w*0.75,
+                                                height: 292.h*0.779,
+                                              ),
+                                        Padding(
+                                            padding:
+                                                EdgeInsets.only(left: 59.w*0.75)),
+                                        data.baby_chair == true
+                                            ? Image.asset(
+                                                imagecolor[8],
+                                                width: 218.w*0.75,
+                                                height: 292.h*0.779,
+                                              )
+                                            : Image.asset(
+                                                imagegrey[8],
+                                                width: 218.w*0.75,
+                                                height: 292.h*0.779,
+                                              )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          } else if (placeCode == 2) {
+                            return Container(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                padding: EdgeInsets.only(
+                                  left: 75.w*0.75,
+                                  top: 50.h*0.779,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    normalfont("검진항목", 46, Color(0xff4d4d4d)),
+                                    Padding(
+                                        padding: EdgeInsets.only(top: 10.h*0.779)),
+                                    normalfont("${data.examination_items}",
+                                        46, Color(0xff808080)),
+                                    Padding(
+                                        padding: EdgeInsets.only(top: 50.h*0.779)),
+                                  ],
+                                ),
+                              ),
+                            );
+                          } else if (placeCode == 3) {
+                            return Container(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                padding: EdgeInsets.only(
+                                  left: 75.w*0.75,
+                                  top: 50.h*0.779,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    normalfont("정보", 46, Color(0xff4d4d4d)),
+                                    Padding(
+                                        padding: EdgeInsets.only(top: 10.h*0.779)),
+                                    normalfont(
+                                        data.use_bus == true
+                                            ? "버스 : 운행"
+                                            : "버스 : 미운행",
+                                        46,
+                                        Color(0xff808080)),
+                                    Padding(
+                                        padding: EdgeInsets.only(top: 50.h*0.779)),
+                                  ],
+                                ),
+                              ),
+                            );
+                          } else if (placeCode == 8) {
+                            return Container(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                padding: EdgeInsets.only(
+                                  left: 75.w*0.75,
+                                  top: 50.h*0.779,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    normalfont("매장정보", 46, Color(0xff4d4d4d)),
+                                    Padding(
+                                        padding: EdgeInsets.only(top: 10.h*0.779)),
+                                    normalfont(
+                                        data.store_info == "undefined"
+                                            ? '준비 중입니다.'
+                                            : "${data.store_info}",
+                                        46,
+                                        Color(0xff808080)),
+                                    Padding(
+                                        padding: EdgeInsets.only(top: 30.h*0.779)),
+                                    normalfont("홈페이지", 46, Color(0xff4d4d4d)),
+                                    Padding(
+                                        padding: EdgeInsets.only(top: 10.h*0.779)),
+                                    InkWell(
+                                      child: normalfont(
+                                          data.url == "undefined"
                                               ? '준비 중입니다.'
-                                              : "${data.store_info}",
-                                          58,
+                                              : "${data.url}",
+                                          46,
                                           Color(0xff808080)),
-                                      Padding(
-                                          padding: EdgeInsets.only(top: 30.h)),
-                                      normalfont("홈페이지", 58, Color(0xff4d4d4d)),
-                                      Padding(
-                                          padding: EdgeInsets.only(top: 10.h)),
-                                      InkWell(
+                                      onTap: () async {
+                                        if (await canLaunch(data.url)) {
+                                          await launch(data.url);
+                                        } else {
+                                          throw 'Could not launch $url';
+                                        }
+                                      },
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(top: 50.h*0.779)),
+                                  ],
+                                ),
+                              ),
+                            );
+                          } else {
+                            return Container(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                padding: EdgeInsets.only(
+                                  left: 75.w*0.75,
+                                  top: 50.h*0.779,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    normalfont(
+                                        "관람 / 체험료", 46, Color(0xff4d4d4d)),
+                                    Padding(
+                                        padding: EdgeInsets.only(top: 10.h*0.779)),
+                                    normalfont("${data.admission_fee}", 46,
+                                        Color(0xff808080)),
+                                    Padding(
+                                        padding: EdgeInsets.only(top: 50.h*0.779)),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+                        }()),
+                        Container(
+                          height: 26 * height.h*0.779,
+                          color: Color(0xfff7f7f7),
+                        ),
+                        ConnectionController.to.connectionstauts !=
+                                "ConnectivityResult.none"
+                            ? Container(
+                                child: Container(
+                                //  height: 1300 .h*0.779,
+                                width: 1500.w*0.75,
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.only(
+                                          left: 75.w*0.75,
+                                          top: 50.h*0.779,
+                                        ),
                                         child: normalfont(
-                                            data.url == "undefined"
-                                                ? '준비 중입니다.'
-                                                : "${data.url}",
-                                            58,
-                                            Color(0xff808080)),
-                                        onTap: () async {
-                                          if (await canLaunch(data.url)) {
-                                            await launch(data.url);
-                                          } else {
-                                            throw 'Could not launch $url';
-                                          }
-                                        },
+                                            "위치", 46, Color(0xff4d4d4d)),
                                       ),
                                       Padding(
-                                          padding: EdgeInsets.only(top: 50.h)),
-                                    ],
-                                  ),
+                                          padding:
+                                              EdgeInsets.only(top: 30.h*0.779)),
+                                      GestureDetector(
+                                        onTap: () {},
+                                        child: Container(
+                                          height: 1100.h*0.779,
+                                          child: WebView(
+                                            gestureRecognizers: Set()
+                                              ..add(
+                                                Factory<
+                                                    VerticalDragGestureRecognizer>(
+                                                  () =>
+                                                      VerticalDragGestureRecognizer(),
+                                                ),
+                                              ),
+                                            onWebViewCreated:
+                                                (WebViewController
+                                                    webViewController) {
+                                              _controller = webViewController;
+                                              _controller.loadUrl(url +
+                                                  '/maps/show-place-name?placeName=${data.name}&placeAddress=${data.address}');
+                                            },
+                                            javascriptMode:
+                                                JavascriptMode.unrestricted,
+                                          ),
+                                        ),
+                                      ),
+                                    ]),
+                              ))
+                            : progress(),
+                        InkWell(
+                          onTap: () {
+                            Get.to(ReviseSuggest(
+                                placeId: data.id,
+                                placeCategoryId: placeCode));
+                          },
+                          child: Container(
+                            child: Container(
+                              height: 170.h*0.779,
+                              child: Center(
+                                child: Image.asset(
+                                  "./assets/sublistPage/modify.png",
+                                  height: 80.h*0.779,
                                 ),
-                              );
-                            } else {
-                              return Container(
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  padding: EdgeInsets.only(
-                                    left: 75.w,
-                                    top: 50.h,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      normalfont(
-                                          "관람 / 체험료", 58, Color(0xff4d4d4d)),
-                                      Padding(
-                                          padding: EdgeInsets.only(top: 10.h)),
-                                      normalfont("${data.admission_fee}", 58,
-                                          Color(0xff808080)),
-                                      Padding(
-                                          padding: EdgeInsets.only(top: 50.h)),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }
-                          }()),
-                          Container(
-                            height: 26 * height.h,
-                            color: Color(0xfff7f7f7),
+                              ),
+                            ),
                           ),
-                          ConnectionController.to.connectionstauts !=
-                                  "ConnectivityResult.none"
-                              ? Container(
-                                  child: Container(
-                                  //  height: 1300 .h,
-                                  width: 1500.w,
-                                  child: Column(
+                        ),
+                        Container(
+                          height: 26 * height.h*0.779,
+                          color: Color(0xfff7f7f7),
+                        ),
+                        placeCode == 2
+                            ? Container(
+                                margin: EdgeInsets.only(
+                                    top: 36 * height.h*0.779,
+                                    left: 35 * width.w*0.75,
+                                    right: 35 * width.w*0.75,
+                                    bottom: 253 * height.h*0.779),
+                                padding: EdgeInsets.all(18 * width.w*0.75),
+                                decoration: BoxDecoration(
+                                    color: Color.fromRGBO(255, 114, 142, 0.1),
+                                    border: Border.all(
+                                      color:
+                                          Color.fromRGBO(255, 114, 142, 0.7),
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10))),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        boldfont(
+                                            "특정의료기관에 대한 리뷰",
+                                            46,
+                                            Color.fromRGBO(
+                                                255, 114, 142, 0.7)),
+                                        normalfont(
+                                            "는 의료법에 따라 치료 효과로",
+                                            46,
+                                            Color.fromRGBO(
+                                                255, 114, 142, 0.7))
+                                      ],
+                                    ),
+                                    normalfont(
+                                        "오인하게 할 우려가 있고, 환자 유인행위의 소지가 있어 리뷰를 작성할 수 없습니다.",
+                                        46,
+                                        Color.fromRGBO(255, 114, 142, 0.7))
+                                  ],
+                                ))
+                            : Container(),
+
+                        placeCode == 1
+                            ? Container(
+                                margin: EdgeInsets.only(
+                                  left: 87 * width.w*0.75,
+                                  top: 36 * height.h*0.779,
+                                ),
+                                child: Column(
+                                  children: [
+                                    Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
                                         Container(
-                                          padding: EdgeInsets.only(
-                                            left: 75.w,
-                                            top: 50.h,
-                                          ),
-                                          child: normalfont(
-                                              "위치", 58, Color(0xff4d4d4d)),
-                                        ),
-                                        Padding(
-                                            padding:
-                                                EdgeInsets.only(top: 30.h)),
-                                        GestureDetector(
-                                          onTap: () {},
-                                          child: Container(
-                                            height: 1100.h,
-                                            child: WebView(
-                                              gestureRecognizers: Set()
-                                                ..add(
-                                                  Factory<
-                                                      VerticalDragGestureRecognizer>(
-                                                    () =>
-                                                        VerticalDragGestureRecognizer(),
-                                                  ),
-                                                ),
-                                              onWebViewCreated:
-                                                  (WebViewController
-                                                      webViewController) {
-                                                _controller = webViewController;
-                                                _controller.loadUrl(url +
-                                                    '/maps/show-place-name?placeName=${data.name}&placeAddress=${data.address}');
-                                              },
-                                              javascriptMode:
-                                                  JavascriptMode.unrestricted,
+                                            width: 210 * height.h*0.779,
+                                            child: RichText(
+                                              textAlign: TextAlign.center,
+                                              text: TextSpan(
+                                                style: TextStyle(
+                                                    color: Color(0xff939393),
+                                                    fontWeight:
+                                                        FontWeight.w500,
+                                                    fontFamily:
+                                                        "NotoSansCJKkr_Medium",
+                                                    fontStyle:
+                                                        FontStyle.normal,
+                                                    fontSize: 46.sp),
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                      text: '${data.name}',
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontFamily:
+                                                              "NotoSansCJKkr_Bold",
+                                                          fontStyle: FontStyle
+                                                              .normal,
+                                                          fontSize: 46.sp)),
+                                                  TextSpan(text: '에'),
+                                                  data.name.length < 5
+                                                      ? TextSpan(text: '\n')
+                                                      : TextSpan(text: ''),
+                                                  TextSpan(text: ' 다녀오셨나요?'),
+                                                ],
+                                              ),
+                                            )
+                                            // child: Column(
+                                            //   children: [
+                                            //     Row(
+                                            //       children: [
+                                            //         normalfont("${data.name}",
+                                            //             46, Colors.black),
+                                            //         normalfont("에", 46,
+                                            //             Color(0xff939393)),
+                                            //         normalfont("다녀오셨나요?", 46,
+                                            //             Color(0xff939393)),
+                                            //       ],
+                                            //     ),
+                                            //   ],
+                                            // )
                                             ),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                            left: 44 * width.w*0.75,
                                           ),
                                         ),
-                                      ]),
-                                ))
-                              : progress(),
-                          InkWell(
-                            onTap: () {
-                              Get.to(ReviseSuggest(
-                                  placeId: data.id,
-                                  placeCategoryId: placeCode));
-                            },
-                            child: Container(
-                              child: Container(
-                                height: 170.h,
-                                child: Center(
-                                  child: Image.asset(
-                                    "./assets/sublistPage/modify.png",
-                                    height: 80.h,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            height: 26 * height.h,
-                            color: Color(0xfff7f7f7),
-                          ),
-                          placeCode == 2
-                              ? Container(
-                                  margin: EdgeInsets.only(
-                                      top: 36 * height.h,
-                                      left: 35 * width.w,
-                                      right: 35 * width.w,
-                                      bottom: 253 * height.h),
-                                  padding: EdgeInsets.all(18 * width.w),
-                                  decoration: BoxDecoration(
-                                      color: Color.fromRGBO(255, 114, 142, 0.1),
-                                      border: Border.all(
-                                        color:
-                                            Color.fromRGBO(255, 114, 142, 0.7),
-                                      ),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10))),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          boldfont(
-                                              "특정의료기관에 대한 리뷰",
-                                              56,
-                                              Color.fromRGBO(
-                                                  255, 114, 142, 0.7)),
-                                          normalfont(
-                                              "는 의료법에 따라 치료 효과로",
-                                              56,
-                                              Color.fromRGBO(
-                                                  255, 114, 142, 0.7))
-                                        ],
-                                      ),
-                                      normalfont(
-                                          "오인하게 할 우려가 있고, 환자 유인행위의 소지가 있어 리뷰를 작성할 수 없습니다.",
-                                          56,
-                                          Color.fromRGBO(255, 114, 142, 0.7))
-                                    ],
-                                  ))
-                              : Container(),
+                                        isMyId
+                                            ? InkWell(
+                                                child: Image.asset(
+                                                  "./assets/sublistPage/reviewrevisebutton.png",
+                                                  height: 54 * height.h*0.779,
+                                                ),
+                                                onTap: () async {
+                                                  if (_isnickname == true) {
+                                                    var result = await Get.to(
+                                                        ReviewPage(
+                                                            reviewData: datas,
+                                                            data: data));
 
-                          placeCode == 1
-                              ? Container(
-                                  margin: EdgeInsets.only(
-                                    left: 87 * width.w,
-                                    top: 36 * height.h,
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                              width: 210 * height.h,
-                                              child: RichText(
-                                                textAlign: TextAlign.center,
-                                                text: TextSpan(
-                                                  style: TextStyle(
-                                                      color: Color(0xff939393),
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontFamily:
-                                                          "NotoSansCJKkr_Medium",
-                                                      fontStyle:
-                                                          FontStyle.normal,
-                                                      fontSize: 62.sp),
-                                                  children: <TextSpan>[
-                                                    TextSpan(
-                                                        text: '${data.name}',
-                                                        style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontFamily:
-                                                                "NotoSansCJKkr_Bold",
-                                                            fontStyle: FontStyle
-                                                                .normal,
-                                                            fontSize: 62.sp)),
-                                                    TextSpan(text: '에'),
-                                                    data.name.length < 5
-                                                        ? TextSpan(text: '\n')
-                                                        : TextSpan(text: ''),
-                                                    TextSpan(text: ' 다녀오셨나요?'),
+                                                    if (result == "ok") {
+                                                      await select(option);
+                                                      setState(() {});
+                                                    }
+                                                  } else {
+                                                    dialog(context,
+                                                        "회원정보 수정해주세요");
+                                                  }
+                                                },
+                                              )
+                                            : InkWell(
+                                                child: Image.asset(
+                                                  "./assets/sublistPage/reviewbutton.png",
+                                                  height: 54 * height.h*0.779,
+                                                ),
+                                                onTap: () async {
+                                                  if (_isnickname == true) {
+                                                    var result = await Get.to(
+                                                        ReviewPage(
+                                                            reviewData: null,
+                                                            data: data));
+
+                                                    if (result == "ok") {
+                                                      await select(option);
+                                                      setState(() {});
+                                                    }
+                                                  } else {
+                                                    dialog(context,
+                                                        "회원정보 수정해주세요");
+                                                  }
+                                                },
+                                              ),
+                                      ],
+                                    ),
+                                  ],
+                                ))
+                            : Container(),
+
+                        placeCode == 1
+                            ? Container(
+                                margin: EdgeInsets.only(
+                                    left: 36 * width.w*0.75, top: 36 * width.h*0.779),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey
+                                                    .withOpacity(0.4),
+                                                offset:
+                                                    Offset(2.0, 4.0), //(x,y)
+                                                blurRadius: 7.0,
+                                                spreadRadius: 1,
+                                              ),
+                                            ],
+                                            border: Border.all(
+                                              color: Colors.white,
+                                            ),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20))),
+                                        height: 193 * height.h*0.779,
+                                        width: 648 * width.w*0.75),
+                                    score.length > 0
+                                        ? Container(
+                                            margin:
+                                                EdgeInsets.only(top: 35.h*0.779),
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 22 * height.h*0.779),
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .center,
+                                                  children: [
+                                                    normalfont(
+                                                        "고객만족도",
+                                                        46,
+                                                        Color(0xff939393)),
+                                                    boldfont(
+                                                        '${aver}',
+                                                        70,
+                                                        Color(0xff3a3939)),
+                                                    Row(
+                                                      children: [
+                                                        for (int i = 0;
+                                                            i <
+                                                                averStar
+                                                                    .toInt();
+                                                            i++)
+                                                          Container(
+                                                            margin: EdgeInsets
+                                                                .only(
+                                                                    right: 12 *
+                                                                        width
+                                                                            .w*0.75),
+                                                            child:
+                                                                Image.asset(
+                                                              "./assets/listPage/star_color.png",
+                                                              width: 38 *
+                                                                  width.w*0.75,
+                                                            ),
+                                                          ),
+                                                        (averStar -
+                                                                    averStar
+                                                                        .toInt() ==
+                                                                0.5)
+                                                            ? Container(
+                                                                margin: EdgeInsets.only(
+                                                                    right: 12 *
+                                                                        width
+                                                                            .w*0.75),
+                                                                child: Image
+                                                                    .asset(
+                                                                  "./assets/listPage/star_half.png",
+                                                                  width: 38 *
+                                                                      width.w*0.75,
+                                                                ),
+                                                              )
+                                                            : Container(),
+                                                        for (int i = 0;
+                                                            i <
+                                                                5 -
+                                                                    averStar
+                                                                        .ceil()
+                                                                        .toInt();
+                                                            i++)
+                                                          Container(
+                                                            child:
+                                                                Image.asset(
+                                                              "./assets/listPage/star_grey.png",
+                                                              width: 38 *
+                                                                  width.w*0.75,
+                                                            ),
+                                                            margin: EdgeInsets
+                                                                .only(
+                                                                    right: 12 *
+                                                                        width
+                                                                            .w*0.75),
+                                                          ),
+                                                      ],
+                                                    ),
                                                   ],
                                                 ),
-                                              )
-                                              // child: Column(
-                                              //   children: [
-                                              //     Row(
-                                              //       children: [
-                                              //         normalfont("${data.name}",
-                                              //             58, Colors.black),
-                                              //         normalfont("에", 58,
-                                              //             Color(0xff939393)),
-                                              //         normalfont("다녀오셨나요?", 58,
-                                              //             Color(0xff939393)),
-                                              //       ],
-                                              //     ),
-                                              //   ],
-                                              // )
+                                                Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 30 * width.w*0.75)),
+                                                Column(
+                                                  children: [
+                                                    Image.asset(
+                                                      "./assets/sublistPage/line.png",
+                                                      height: 146 * height.h*0.779,
+                                                    ),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 35 * width.w*0.75)),
+                                                Column(
+                                                  children: [
+                                                    normalfont(
+                                                        '${score[4]}',
+                                                        40,
+                                                        Color(0xffa9a9a9)),
+                                                    scoreImage(4),
+                                                    normalfont("5점", 40,
+                                                        Color(0xffa9a9a9)),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 21 * width.w*0.75)),
+                                                Column(
+                                                  children: [
+                                                    normalfont(
+                                                        '${score[3]}',
+                                                        40,
+                                                        Color(0xffa9a9a9)),
+                                                    scoreImage(3),
+                                                    normalfont("4점", 40,
+                                                        Color(0xffa9a9a9)),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 21 * width.w*0.75)),
+                                                Column(
+                                                  children: [
+                                                    normalfont(
+                                                        '${score[2]}',
+                                                        40,
+                                                        Color(0xffa9a9a9)),
+                                                    scoreImage(2),
+                                                    normalfont("3점", 40,
+                                                        Color(0xffa9a9a9)),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 21 * width.w*0.75)),
+                                                Column(
+                                                  children: [
+                                                    normalfont(
+                                                        '${score[1]}',
+                                                        40,
+                                                        Color(0xffa9a9a9)),
+                                                    scoreImage(1),
+                                                    normalfont("2점", 40,
+                                                        Color(0xffa9a9a9)),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 21 * width.w*0.75)),
+                                                Column(
+                                                  children: [
+                                                    normalfont(
+                                                        '${score[0]}',
+                                                        40,
+                                                        Color(0xffa9a9a9)),
+                                                    scoreImage(0),
+                                                    normalfont("1점", 40,
+                                                        Color(0xffa9a9a9)),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 21 * width.w*0.75)),
+                                              ],
+                                            ),
+                                          )
+                                        : Container()
+                                  ],
+                                ),
+                              )
+                            : Container(),
+
+                        placeCode == 1
+                            ? Padding(
+                                padding: EdgeInsets.only(top: 36 * width.w*0.75))
+                            : Padding(
+                                padding: EdgeInsets.only(top: 0 * width.w*0.75)),
+
+                        // 4 images
+
+                        placeCode == 1
+                            ? Row(
+                                children: [
+                                  Padding(
+                                      padding: EdgeInsets.only(left: 36.w*0.75)),
+                                  for (int i = 0; i < prevImage.length; i++)
+                                    i < 3
+                                        ? Container(
+                                            margin: EdgeInsets.only(
+                                                left: 18 * width.w*0.75),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              child: SizedBox(
+                                                width: 148 * width.w*0.75,
+                                                height: 148 * height.w*0.75,
+                                                child: Image.network(
+                                                  prevImage[i],
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                              left: 44 * width.w,
+                                            ),
+                                          )
+                                        : InkWell(
+                                            onTap: () {
+                                              Get.to(ReviewImage(data: data));
+                                            },
+                                            child: Container(
+                                              margin: EdgeInsets.only(
+                                                  left: 18 * width.w*0.75),
+                                              child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                  child: Stack(
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 148 * width.w*0.75,
+                                                        height:
+                                                            148 * height.w*0.75,
+                                                        child: Image.network(
+                                                          prevImage[i],
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        width: 148 * width.w*0.75,
+                                                        height:
+                                                            148 * height.w*0.75,
+                                                        color: Colors.black
+                                                            .withOpacity(0.5),
+                                                      ),
+                                                      Container(
+                                                        width: 148 * width.w*0.75,
+                                                        height: 148 * width.w*0.75,
+                                                        child: Center(
+                                                          child: Image.asset(
+                                                            "./assets/reviewPage/plus.png",
+                                                            color:
+                                                                Colors.white,
+                                                            width:
+                                                                38 * width.w*0.75,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )),
                                             ),
                                           ),
-                                          isMyId
-                                              ? InkWell(
-                                                  child: Image.asset(
-                                                    "./assets/sublistPage/reviewrevisebutton.png",
-                                                    height: 54 * height.h,
-                                                  ),
-                                                  onTap: () async {
-                                                    if (_isnickname == true) {
-                                                      var result = await Get.to(
-                                                          ReviewPage(
-                                                              reviewData: datas,
-                                                              data: data));
+                                ],
+                              )
+                            : Container(),
+                        placeCode == 1
+                            ? Padding(
+                                padding: EdgeInsets.only(top: 36 * width.w*0.75))
+                            : Padding(
+                                padding: EdgeInsets.only(top: 0 * width.w*0.75)),
+                        placeCode == 1
+                            ? Container(
+                                height: 26 * height.h*0.779,
+                                color: Color(0xfff7f7f7),
+                              )
+                            : Container(),
 
-                                                      if (result == "ok") {
-                                                        await select(option);
-                                                        setState(() {});
-                                                      }
-                                                    } else {
-                                                      dialog(context,
-                                                          "회원정보 수정해주세요");
-                                                    }
-                                                  },
-                                                )
-                                              : InkWell(
-                                                  child: Image.asset(
-                                                    "./assets/sublistPage/reviewbutton.png",
-                                                    height: 54 * height.h,
-                                                  ),
-                                                  onTap: () async {
-                                                    if (_isnickname == true) {
-                                                      var result = await Get.to(
-                                                          ReviewPage(
-                                                              reviewData: null,
-                                                              data: data));
-
-                                                      if (result == "ok") {
-                                                        await select(option);
-                                                        setState(() {});
-                                                      }
-                                                    } else {
-                                                      dialog(context,
-                                                          "회원정보 수정해주세요");
-                                                    }
-                                                  },
-                                                ),
+                        //Sorting condition
+                        placeCode == 1
+                            ? Container(
+                                // height: 20.h*0.779,
+                                width: double.infinity,
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                        padding: EdgeInsets.only(
+                                            top: 80 * height.h*0.779,
+                                            left: 35 * width.w*0.75)),
+                                    normalfont(
+                                        "리뷰 ",46, Color(0xff4d4d4d)),
+                                    normalfont(reviewData.length.toString(),
+                                       46, Color(0xffe9718d)),
+                                    Spacer(),
+                                    Container(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              option = "DATE";
+                                              select(option);
+                                            },
+                                            child: normalfont(
+                                                "최신순",
+                                                46,
+                                                option == "DATE"
+                                                    ? Color(0xff4d4d4d)
+                                                    : Color(0xff939393)),
+                                          ),
+                                          normalfont(" | ", 26 * width,
+                                              Color(0xffdddddd)),
+                                          InkWell(
+                                            onTap: () {
+                                              option = "TOP";
+                                              select(option);
+                                            },
+                                            child: normalfont(
+                                                "평점높은순",
+                                                46,
+                                                option == "TOP"
+                                                    ? Color(0xff4d4d4d)
+                                                    : Color(0xff939393)),
+                                          ),
+                                          normalfont(" | ", 26 * width,
+                                              Color(0xffdddddd)),
+                                          InkWell(
+                                            onTap: () {
+                                              option = "LOW";
+                                              select(option);
+                                            },
+                                            child: normalfont(
+                                                "평점낮은순",
+                                                46,
+                                                option == "LOW"
+                                                    ? Color(0xff4d4d4d)
+                                                    : Color(0xff939393)),
+                                          ),
                                         ],
                                       ),
-                                    ],
-                                  ))
-                              : Container(),
-
-                          placeCode == 1
-                              ? Container(
-                                  margin: EdgeInsets.only(
-                                      left: 36 * width.w, top: 36 * width.h),
-                                  child: Stack(
+                                    ),
+                                    Padding(
+                                        padding:
+                                            EdgeInsets.only(right: 38.w*0.75)),
+                                  ],
+                                ),
+                              )
+                            : Container(),
+                        (() {
+                          return Container(
+                            child: ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: reviewData.length,
+                              itemBuilder: (context, index) {
+                                if (reviewData.length == 0) {
+                                  return Container(
+                                    child: Text(" 로딩중 "),
+                                  );
+                                }
+                                return Container(
+                                  width: double.infinity,
+                                  color: Colors.white,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.start,
                                     children: [
                                       Container(
-                                          decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.grey
-                                                      .withOpacity(0.4),
-                                                  offset:
-                                                      Offset(2.0, 4.0), //(x,y)
-                                                  blurRadius: 7.0,
-                                                  spreadRadius: 1,
-                                                ),
-                                              ],
-                                              border: Border.all(
-                                                color: Colors.white,
-                                              ),
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20))),
-                                          height: 193 * height.h,
-                                          width: 648 * width.w),
-                                      score.length > 0
-                                          ? Container(
-                                              margin:
-                                                  EdgeInsets.only(top: 35.h),
-                                              child: Row(
-                                                children: [
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 22 * height.h),
-                                                  ),
-                                                  Column(
+                                        margin: EdgeInsets.fromLTRB(
+                                            40 * width.w*0.75,
+                                            30.h*0.779,
+                                            40 * width.w*0.75,
+                                            33.h*0.779),
+                                        width: double.infinity,
+                                        child: Column(
+                                          children: [
+                                            // first container
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                reviewData[index].profile !=
+                                                        null
+                                                    ? CircleAvatar(
+                                                        radius: 40 * width.w*0.75,
+                                                        child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            shape: BoxShape
+                                                                .circle,
+                                                            image: DecorationImage(
+                                                                image: NetworkImage(
+                                                                    reviewData[
+                                                                            index]
+                                                                        .profile),
+                                                                fit: BoxFit
+                                                                    .cover),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : CircleAvatar(
+                                                        radius: 40 * width.w*0.75,
+                                                        child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            shape: BoxShape
+                                                                .circle,
+                                                            image: DecorationImage(
+                                                                image: AssetImage(
+                                                                    "./assets/myPage/avatar.png"),
+                                                                fit: BoxFit
+                                                                    .cover),
+                                                          ),
+                                                        ),
+                                                      ),
+
+                                                // Container after avatar image
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                      left: 15 * width.w*0.75),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
-                                                            .center,
+                                                            .start,
                                                     children: [
-                                                      normalfont(
-                                                          "고객만족도",
-                                                          24 * width,
-                                                          Color(0xff939393)),
-                                                      boldfont(
-                                                          '${aver}',
-                                                          55 * width,
-                                                          Color(0xff3a3939)),
+                                                      // userName
                                                       Row(
                                                         children: [
-                                                          for (int i = 0;
-                                                              i <
-                                                                  averStar
-                                                                      .toInt();
-                                                              i++)
-                                                            Container(
-                                                              margin: EdgeInsets
+                                                          boldfont(
+                                                              "${reviewData[index].nickname} ",
+                                                              46,
+                                                              Colors.black),
+                                                          Padding(
+                                                              padding: EdgeInsets.only(
+                                                                  left: 5 *
+                                                                      width
+                                                                          .w*0.75)),
+                                                          normalfont(
+                                                              "${reviewData[index].created_at} ",
+                                                              46,
+                                                              Color(
+                                                                  0xff808080)),
+                                                        ],
+                                                      ),
+                                                      // 3 Rating buttons
+                                                      Row(
+                                                        children: [
+                                                          average('맛',
+                                                              "${reviewData[index].taste_rating}"),
+                                                          Padding(
+                                                              padding: EdgeInsets.only(
+                                                                  left: 8 *
+                                                                      width
+                                                                          .w*0.75)),
+                                                          average('가격',
+                                                              "${reviewData[index].cost_rating}"),
+                                                          Padding(
+                                                              padding: EdgeInsets
                                                                   .only(
-                                                                      right: 12 *
-                                                                          width
-                                                                              .w),
-                                                              child:
-                                                                  Image.asset(
-                                                                "./assets/listPage/star_color.png",
-                                                                width: 38 *
-                                                                    width.w,
-                                                              ),
-                                                            ),
-                                                          (averStar -
-                                                                      averStar
-                                                                          .toInt() ==
-                                                                  0.5)
-                                                              ? Container(
-                                                                  margin: EdgeInsets.only(
-                                                                      right: 12 *
-                                                                          width
-                                                                              .w),
-                                                                  child: Image
-                                                                      .asset(
-                                                                    "./assets/listPage/star_half.png",
-                                                                    width: 38 *
-                                                                        width.w,
-                                                                  ),
-                                                                )
-                                                              : Container(),
-                                                          for (int i = 0;
-                                                              i <
-                                                                  5 -
-                                                                      averStar
-                                                                          .ceil()
-                                                                          .toInt();
-                                                              i++)
-                                                            Container(
-                                                              child:
-                                                                  Image.asset(
-                                                                "./assets/listPage/star_grey.png",
-                                                                width: 38 *
-                                                                    width.w,
-                                                              ),
-                                                              margin: EdgeInsets
-                                                                  .only(
-                                                                      right: 12 *
-                                                                          width
-                                                                              .w),
-                                                            ),
+                                                                      left: 8
+                                                                          .w*0.75)),
+                                                          average('서비스',
+                                                              "${reviewData[index].service_rating}"),
                                                         ],
                                                       ),
                                                     ],
                                                   ),
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 30 * width.w)),
-                                                  Column(
-                                                    children: [
-                                                      Image.asset(
-                                                        "./assets/sublistPage/line.png",
-                                                        height: 158 * height.h,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 35 * width.w)),
-                                                  Column(
-                                                    children: [
-                                                      normalfont(
-                                                          '${score[4]}',
-                                                          50,
-                                                          Color(0xffa9a9a9)),
-                                                      scoreImage(4),
-                                                      normalfont("5점", 50,
-                                                          Color(0xffa9a9a9)),
-                                                    ],
-                                                  ),
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 21 * width.w)),
-                                                  Column(
-                                                    children: [
-                                                      normalfont(
-                                                          '${score[3]}',
-                                                          50,
-                                                          Color(0xffa9a9a9)),
-                                                      scoreImage(3),
-                                                      normalfont("4점", 50,
-                                                          Color(0xffa9a9a9)),
-                                                    ],
-                                                  ),
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 21 * width.w)),
-                                                  Column(
-                                                    children: [
-                                                      normalfont(
-                                                          '${score[2]}',
-                                                          50,
-                                                          Color(0xffa9a9a9)),
-                                                      scoreImage(2),
-                                                      normalfont("3점", 50,
-                                                          Color(0xffa9a9a9)),
-                                                    ],
-                                                  ),
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 21 * width.w)),
-                                                  Column(
-                                                    children: [
-                                                      normalfont(
-                                                          '${score[1]}',
-                                                          50,
-                                                          Color(0xffa9a9a9)),
-                                                      scoreImage(1),
-                                                      normalfont("2점", 50,
-                                                          Color(0xffa9a9a9)),
-                                                    ],
-                                                  ),
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 21 * width.w)),
-                                                  Column(
-                                                    children: [
-                                                      normalfont(
-                                                          '${score[0]}',
-                                                          50,
-                                                          Color(0xffa9a9a9)),
-                                                      scoreImage(0),
-                                                      normalfont("1점", 50,
-                                                          Color(0xffa9a9a9)),
-                                                    ],
-                                                  ),
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 21 * width.w)),
-                                                ],
-                                              ),
-                                            )
-                                          : Container()
-                                    ],
-                                  ),
-                                )
-                              : Container(),
-
-                          placeCode == 1
-                              ? Padding(
-                                  padding: EdgeInsets.only(top: 36 * width.w))
-                              : Padding(
-                                  padding: EdgeInsets.only(top: 0 * width.w)),
-
-                          // 4 images
-
-                          placeCode == 1
-                              ? Row(
-                                  children: [
-                                    Padding(
-                                        padding: EdgeInsets.only(left: 36.w)),
-                                    for (int i = 0; i < prevImage.length; i++)
-                                      i < 3
-                                          ? Container(
-                                              margin: EdgeInsets.only(
-                                                  left: 18 * width.w),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                                child: SizedBox(
-                                                  width: 148 * width.w,
-                                                  height: 148 * height.w,
-                                                  child: Image.network(
-                                                    prevImage[i],
-                                                    fit: BoxFit.cover,
-                                                  ),
                                                 ),
-                                              ),
-                                            )
-                                          : InkWell(
-                                              onTap: () {
-                                                Get.to(ReviewImage(data: data));
-                                              },
-                                              child: Container(
-                                                margin: EdgeInsets.only(
-                                                    left: 18 * width.w),
-                                                child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.0),
-                                                    child: Stack(
-                                                      children: [
-                                                        SizedBox(
-                                                          width: 148 * width.w,
-                                                          height:
-                                                              148 * height.w,
-                                                          child: Image.network(
-                                                            prevImage[i],
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          width: 148 * width.w,
-                                                          height:
-                                                              148 * height.w,
-                                                          color: Colors.black
-                                                              .withOpacity(0.5),
-                                                        ),
-                                                        Container(
-                                                          width: 148 * width.w,
-                                                          height: 148 * width.w,
-                                                          child: Center(
-                                                            child: Image.asset(
-                                                              "./assets/reviewPage/plus.png",
-                                                              color:
-                                                                  Colors.white,
-                                                              width:
-                                                                  38 * width.w,
+                                                Spacer(),
+                                                UserController.to.userId ==
+                                                        reviewData[index]
+                                                            .user_id
+                                                            .toString()
+                                                    ? Row(
+                                                        children: [
+                                                          InkWell(
+                                                            onTap: () async {
+                                                              var result = await Get
+                                                                  .to(ReviewPage(
+                                                                      reviewData:
+                                                                          datas,
+                                                                      data:
+                                                                          data));
+                                                              if (result ==
+                                                                  "ok") {
+                                                                await select(
+                                                                    option);
+                                                                setState(
+                                                                    () {});
+                                                              }
+                                                            },
+                                                            child: Text(
+                                                              "수정",
+                                                              style: TextStyle(
+                                                                  fontSize: 46
+                                                                          .sp,
+                                                                  fontFamily:
+                                                                      "NotoSansCJKkr_Medium",
+                                                                  color: Color
+                                                                      .fromRGBO(
+                                                                          147,
+                                                                          147,
+                                                                          147,
+                                                                          1.0)),
                                                             ),
                                                           ),
-                                                        )
-                                                      ],
-                                                    )),
+                                                          Padding(
+                                                              padding: EdgeInsets.only(
+                                                                  left: 20 *
+                                                                      width
+                                                                          .w*0.75)),
+                                                          InkWell(
+                                                            onTap: () {
+                                                              return showDialog(
+                                                                context:
+                                                                    context,
+                                                                barrierDismissible:
+                                                                    false, // user must tap button!
+                                                                builder:
+                                                                    (BuildContext
+                                                                        context) {
+                                                                  return AlertDialog(
+                                                                    shape:
+                                                                        RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.all(Radius.circular(20.0)),
+                                                                    ),
+                                                                    title: normalfont(
+                                                                        "리뷰를 삭제하시겠습니까?",
+                                                                        46,
+                                                                        Color(
+                                                                            0xff4d4d4d)),
+                                                                    actions: <
+                                                                        Widget>[
+                                                                      FlatButton(
+                                                                        child: normalfont(
+                                                                            "예",
+                                                                            46,
+                                                                            Color(0xffff7292)),
+                                                                        onPressed:
+                                                                            () async {
+                                                                          Navigator.pop(context,
+                                                                              "OK");
+                                                                          await delete(reviewData[index].id);
+                                                                          datas =
+                                                                              null;
+                                                                          isMyId =
+                                                                              false;
+                                                                          await select(option);
+                                                                        },
+                                                                      ),
+                                                                      FlatButton(
+                                                                        child: normalfont(
+                                                                            "아니오",
+                                                                            46,
+                                                                            Color(0xffff7292)),
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.pop(context,
+                                                                              "Cancel");
+                                                                        },
+                                                                      ),
+                                                                    ],
+                                                                  );
+                                                                },
+                                                              );
+                                                            },
+                                                            child: Text(
+                                                              "삭제",
+                                                              style: TextStyle(
+                                                                  fontSize: 46
+
+                                                                          .sp,
+                                                                  fontFamily:
+                                                                      "NotoSansCJKkr_Medium",
+                                                                  color: Color
+                                                                      .fromRGBO(
+                                                                          147,
+                                                                          147,
+                                                                          147,
+                                                                          1.0)),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      )
+                                                    : InkWell(
+                                                        onTap: () {
+                                                          report(
+                                                              context,
+                                                              reviewData[
+                                                                      index]
+                                                                  .id);
+                                                        },
+                                                        child: Text(
+                                                          "신고",
+                                                          style: TextStyle(
+                                                              fontSize: 46.sp,
+                                                              fontFamily:
+                                                                  "NotoSansCJKkr_Medium",
+                                                              color: Color
+                                                                  .fromRGBO(
+                                                                      147,
+                                                                      147,
+                                                                      147,
+                                                                      1.0)),
+                                                        ),
+                                                      ),
+                                              ],
+                                            ),
+                                            //text message
+                                            Container(
+                                              width: double.infinity,
+                                              margin: EdgeInsets.only(
+                                                  top: 16 * width.w*0.75),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 13 * width.w*0.75,
+                                                  vertical: 19 * width.w*0.75),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.all(
+                                                  Radius.circular(10),
+                                                ),
+                                                color: Color.fromRGBO(
+                                                    248, 248, 248, 1.0),
+                                              ),
+                                              child: Text(
+                                                "${reviewData[index].description} ", //
+                                                style: TextStyle(
+                                                    color: Color.fromRGBO(
+                                                        0, 0, 0, 0.77),
+                                                    fontSize: 46.sp,
+                                                    fontFamily:
+                                                        "NotoSansCJKkr_Medium"),
                                               ),
                                             ),
-                                  ],
-                                )
-                              : Container(),
-                          placeCode == 1
-                              ? Padding(
-                                  padding: EdgeInsets.only(top: 36 * width.w))
-                              : Padding(
-                                  padding: EdgeInsets.only(top: 0 * width.w)),
-                          placeCode == 1
-                              ? Container(
-                                  height: 26 * height.h,
-                                  color: Color(0xfff7f7f7),
-                                )
-                              : Container(),
-
-                          //Sorting condition
-                          placeCode == 1
-                              ? Container(
-                                  // height: 20.h,
-                                  width: double.infinity,
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                          padding: EdgeInsets.only(
-                                              top: 80 * height.h,
-                                              left: 35 * width.w)),
-                                      normalfont(
-                                          "리뷰 ", 30 * width, Color(0xff4d4d4d)),
-                                      normalfont(reviewData.length.toString(),
-                                          30 * width, Color(0xffe9718d)),
-                                      Spacer(),
-                                      Container(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            InkWell(
-                                              onTap: () {
-                                                option = "DATE";
-                                                select(option);
-                                              },
-                                              child: normalfont(
-                                                  "최신순",
-                                                  26 * width,
-                                                  option == "DATE"
-                                                      ? Color(0xff4d4d4d)
-                                                      : Color(0xff939393)),
-                                            ),
-                                            normalfont(" | ", 26 * width,
-                                                Color(0xffdddddd)),
-                                            InkWell(
-                                              onTap: () {
-                                                option = "TOP";
-                                                select(option);
-                                              },
-                                              child: normalfont(
-                                                  "평점높은순",
-                                                  26 * width,
-                                                  option == "TOP"
-                                                      ? Color(0xff4d4d4d)
-                                                      : Color(0xff939393)),
-                                            ),
-                                            normalfont(" | ", 26 * width,
-                                                Color(0xffdddddd)),
-                                            InkWell(
-                                              onTap: () {
-                                                option = "LOW";
-                                                select(option);
-                                              },
-                                              child: normalfont(
-                                                  "평점낮은순",
-                                                  26 * width,
-                                                  option == "LOW"
-                                                      ? Color(0xff4d4d4d)
-                                                      : Color(0xff939393)),
-                                            ),
+                                            //Images
+                                            Stack(
+                                              children: [
+                                                imageList[index] == null
+                                                    ? Container()
+                                                    : Container(
+                                                        height:
+                                                            236 * height.h*0.779,
+                                                        child: ListView(
+                                                          scrollDirection:
+                                                              Axis.horizontal,
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  top: 16 *
+                                                                      height
+                                                                          .h*0.779),
+                                                          children: <Widget>[
+                                                            for (int i = 0;
+                                                                i <
+                                                                    imageList[
+                                                                            index]
+                                                                        .length;
+                                                                i++)
+                                                              InkWell(
+                                                                child:
+                                                                    Container(
+                                                                  margin: EdgeInsets.only(
+                                                                      right: 10 *
+                                                                          width.w*0.75),
+                                                                  width: 308 *
+                                                                      width.w*0.75,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.all(
+                                                                            Radius.circular(10)),
+                                                                    image: DecorationImage(
+                                                                        image: NetworkImage(imageList[index]
+                                                                            [
+                                                                            i]),
+                                                                        fit: BoxFit
+                                                                            .fitWidth),
+                                                                  ),
+                                                                ),
+                                                                onTap: () {
+                                                                  Get.to(
+                                                                      ImageBig(),
+                                                                      arguments: {
+                                                                        "page":
+                                                                            "listsub",
+                                                                        "image":
+                                                                            imageList[index],
+                                                                        "index":
+                                                                            i,
+                                                                      });
+                                                                },
+                                                              ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                              ],
+                                            )
                                           ],
                                         ),
                                       ),
-                                      Padding(
-                                          padding:
-                                              EdgeInsets.only(right: 38.w)),
+                                      Divider(
+                                        color: Color.fromRGBO(
+                                            212, 212, 212, 1.0),
+                                      )
                                     ],
                                   ),
-                                )
-                              : Container(),
-                          (() {
-                            return Container(
-                              child: ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: reviewData.length,
-                                itemBuilder: (context, index) {
-                                  if (reviewData.length == 0) {
-                                    return Container(
-                                      child: Text(" 로딩중 "),
-                                    );
-                                  }
-                                  return Container(
-                                    width: double.infinity,
-                                    color: Colors.white,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.fromLTRB(
-                                              40 * width.w,
-                                              30.h,
-                                              40 * width.w,
-                                              33.h),
-                                          width: double.infinity,
-                                          child: Column(
-                                            children: [
-                                              // first container
-                                              Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  reviewData[index].profile !=
-                                                          null
-                                                      ? CircleAvatar(
-                                                          radius: 40 * width.w,
-                                                          child: Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              shape: BoxShape
-                                                                  .circle,
-                                                              image: DecorationImage(
-                                                                  image: NetworkImage(
-                                                                      reviewData[
-                                                                              index]
-                                                                          .profile),
-                                                                  fit: BoxFit
-                                                                      .cover),
-                                                            ),
-                                                          ),
-                                                        )
-                                                      : CircleAvatar(
-                                                          radius: 40 * width.w,
-                                                          child: Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              shape: BoxShape
-                                                                  .circle,
-                                                              image: DecorationImage(
-                                                                  image: AssetImage(
-                                                                      "./assets/myPage/avatar.png"),
-                                                                  fit: BoxFit
-                                                                      .cover),
-                                                            ),
-                                                          ),
-                                                        ),
-
-                                                  // Container after avatar image
-                                                  Container(
-                                                    margin: EdgeInsets.only(
-                                                        left: 15 * width.w),
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        // userName
-                                                        Row(
-                                                          children: [
-                                                            boldfont(
-                                                                "${reviewData[index].nickname} ",
-                                                                58,
-                                                                Colors.black),
-                                                            Padding(
-                                                                padding: EdgeInsets.only(
-                                                                    left: 5 *
-                                                                        width
-                                                                            .w)),
-                                                            normalfont(
-                                                                "${reviewData[index].created_at} ",
-                                                                58,
-                                                                Color(
-                                                                    0xff808080)),
-                                                          ],
-                                                        ),
-                                                        // 3 Rating buttons
-                                                        Row(
-                                                          children: [
-                                                            average('맛',
-                                                                "${reviewData[index].taste_rating}"),
-                                                            Padding(
-                                                                padding: EdgeInsets.only(
-                                                                    left: 8 *
-                                                                        width
-                                                                            .w)),
-                                                            average('가격',
-                                                                "${reviewData[index].cost_rating}"),
-                                                            Padding(
-                                                                padding: EdgeInsets
-                                                                    .only(
-                                                                        left: 8
-                                                                            .w)),
-                                                            average('서비스',
-                                                                "${reviewData[index].service_rating}"),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Spacer(),
-                                                  UserController.to.userId ==
-                                                          reviewData[index]
-                                                              .user_id
-                                                              .toString()
-                                                      ? Row(
-                                                          children: [
-                                                            InkWell(
-                                                              onTap: () async {
-                                                                var result = await Get
-                                                                    .to(ReviewPage(
-                                                                        reviewData:
-                                                                            datas,
-                                                                        data:
-                                                                            data));
-                                                                if (result ==
-                                                                    "ok") {
-                                                                  await select(
-                                                                      option);
-                                                                  setState(
-                                                                      () {});
-                                                                }
-                                                              },
-                                                              child: Text(
-                                                                "수정",
-                                                                style: TextStyle(
-                                                                    fontSize: 24 *
-                                                                        width
-                                                                            .sp,
-                                                                    fontFamily:
-                                                                        "NotoSansCJKkr_Medium",
-                                                                    color: Color
-                                                                        .fromRGBO(
-                                                                            147,
-                                                                            147,
-                                                                            147,
-                                                                            1.0)),
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                                padding: EdgeInsets.only(
-                                                                    left: 20 *
-                                                                        width
-                                                                            .w)),
-                                                            InkWell(
-                                                              onTap: () {
-                                                                return showDialog(
-                                                                  context:
-                                                                      context,
-                                                                  barrierDismissible:
-                                                                      false, // user must tap button!
-                                                                  builder:
-                                                                      (BuildContext
-                                                                          context) {
-                                                                    return AlertDialog(
-                                                                      shape:
-                                                                          RoundedRectangleBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.all(Radius.circular(20.0)),
-                                                                      ),
-                                                                      title: normalfont(
-                                                                          "리뷰를 삭제하시겠습니까?",
-                                                                          62.5,
-                                                                          Color(
-                                                                              0xff4d4d4d)),
-                                                                      actions: <
-                                                                          Widget>[
-                                                                        FlatButton(
-                                                                          child: normalfont(
-                                                                              "예",
-                                                                              62.5,
-                                                                              Color(0xffff7292)),
-                                                                          onPressed:
-                                                                              () async {
-                                                                            Navigator.pop(context,
-                                                                                "OK");
-                                                                            await delete(reviewData[index].id);
-                                                                            datas =
-                                                                                null;
-                                                                            isMyId =
-                                                                                false;
-                                                                            await select(option);
-                                                                          },
-                                                                        ),
-                                                                        FlatButton(
-                                                                          child: normalfont(
-                                                                              "아니오",
-                                                                              62.5,
-                                                                              Color(0xffff7292)),
-                                                                          onPressed:
-                                                                              () {
-                                                                            Navigator.pop(context,
-                                                                                "Cancel");
-                                                                          },
-                                                                        ),
-                                                                      ],
-                                                                    );
-                                                                  },
-                                                                );
-                                                              },
-                                                              child: Text(
-                                                                "삭제",
-                                                                style: TextStyle(
-                                                                    fontSize: 24 *
-                                                                        width
-                                                                            .sp,
-                                                                    fontFamily:
-                                                                        "NotoSansCJKkr_Medium",
-                                                                    color: Color
-                                                                        .fromRGBO(
-                                                                            147,
-                                                                            147,
-                                                                            147,
-                                                                            1.0)),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        )
-                                                      : InkWell(
-                                                          onTap: () {
-                                                            report(
-                                                                context,
-                                                                reviewData[
-                                                                        index]
-                                                                    .id);
-                                                          },
-                                                          child: Text(
-                                                            "신고",
-                                                            style: TextStyle(
-                                                                fontSize: 24 *
-                                                                    width.sp,
-                                                                fontFamily:
-                                                                    "NotoSansCJKkr_Medium",
-                                                                color: Color
-                                                                    .fromRGBO(
-                                                                        147,
-                                                                        147,
-                                                                        147,
-                                                                        1.0)),
-                                                          ),
-                                                        ),
-                                                ],
-                                              ),
-                                              //text message
-                                              Container(
-                                                width: double.infinity,
-                                                margin: EdgeInsets.only(
-                                                    top: 16 * width.w),
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 13 * width.w,
-                                                    vertical: 19 * width.w),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                    Radius.circular(10),
-                                                  ),
-                                                  color: Color.fromRGBO(
-                                                      248, 248, 248, 1.0),
-                                                ),
-                                                child: Text(
-                                                  "${reviewData[index].description} ", //
-                                                  style: TextStyle(
-                                                      color: Color.fromRGBO(
-                                                          0, 0, 0, 0.8),
-                                                      fontSize: 58.sp,
-                                                      fontFamily:
-                                                          "NotoSansCJKkr_Medium"),
-                                                ),
-                                              ),
-                                              //Images
-                                              Stack(
-                                                children: [
-                                                  imageList[index] == null
-                                                      ? Container()
-                                                      : Container(
-                                                          height:
-                                                              236 * height.h,
-                                                          child: ListView(
-                                                            scrollDirection:
-                                                                Axis.horizontal,
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                    top: 16 *
-                                                                        height
-                                                                            .h),
-                                                            children: <Widget>[
-                                                              for (int i = 0;
-                                                                  i <
-                                                                      imageList[
-                                                                              index]
-                                                                          .length;
-                                                                  i++)
-                                                                InkWell(
-                                                                  child:
-                                                                      Container(
-                                                                    margin: EdgeInsets.only(
-                                                                        right: 10 *
-                                                                            width.w),
-                                                                    width: 308 *
-                                                                        width.w,
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.all(
-                                                                              Radius.circular(10)),
-                                                                      image: DecorationImage(
-                                                                          image: NetworkImage(imageList[index]
-                                                                              [
-                                                                              i]),
-                                                                          fit: BoxFit
-                                                                              .fitWidth),
-                                                                    ),
-                                                                  ),
-                                                                  onTap: () {
-                                                                    Get.to(
-                                                                        ImageBig(),
-                                                                        arguments: {
-                                                                          "page":
-                                                                              "listsub",
-                                                                          "image":
-                                                                              imageList[index],
-                                                                          "index":
-                                                                              i,
-                                                                        });
-                                                                  },
-                                                                ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        Divider(
-                                          color: Color.fromRGBO(
-                                              212, 212, 212, 1.0),
-                                        )
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
-                            );
-                          }()),
-                          Container(
-                            height: 300.h,
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Container(
-                margin: EdgeInsets.only(left: 1150.w, top: 2100.h),
-                child: InkWell(
-                  onTap: () {
-                    _scrollController.jumpTo(1);
-                  },
-                  child:
-                      Image.asset("./assets/sublistPage/top.png", width: 350.w),
+                                );
+                              },
+                            ),
+                          );
+                        }()),
+                        Container(
+                          height: 300.h*0.779,
+                        )
+                      ],
+                    ),
+                  ],
                 ),
+              ],
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 1150.w*0.75, top: 2100.h*0.779),
+              child: InkWell(
+                onTap: () {
+                  _scrollController.jumpTo(1);
+                },
+                child:
+                    Image.asset("./assets/sublistPage/top.png", width: 350.w*0.75),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -1889,35 +1885,35 @@ class _ListSubState extends State<ListSub> {
     if (maxScore == score[i] && score[i] != 0) {
       return Image.asset(
         "./assets/sublistPage/bar6.png",
-        height: 89 * height.h,
+        height: 89 * height.h*0.779,
       );
     } else {
       if (score[i] == 0) {
         return Image.asset(
           "./assets/sublistPage/bar1.png",
-          height: 89 * height.h,
+          height: 89 * height.h*0.779,
         );
       } else if (0 <= score[i] || score[i] <= maxScore * (1 / 4).ceil()) {
         return Image.asset(
           "./assets/sublistPage/bar2.png",
-          height: 89 * height.h,
+          height: 89 * height.h*0.779,
         );
       } else if (maxScore * (1 / 4).ceil() < score[i] ||
           score[i] <= maxScore * (2 / 4).ceil()) {
         return Image.asset(
           "./assets/sublistPage/bar3.png",
-          height: 89 * height.h,
+          height: 89 * height.h*0.779,
         );
       } else if (maxScore * (2 / 4).ceil() < score[i] ||
           score[i] <= maxScore * (3 / 4).ceil()) {
         return Image.asset(
           "./assets/sublistPage/bar4.png",
-          height: 89 * height.h,
+          height: 89 * height.h*0.779,
         );
       } else {
         return Image.asset(
           "./assets/sublistPage/bar5.png",
-          height: 89 * height.h,
+          height: 89 * height.h*0.779,
         );
       }
     }

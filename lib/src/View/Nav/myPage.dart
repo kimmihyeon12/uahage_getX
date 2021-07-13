@@ -29,7 +29,7 @@ class _MyPageState extends State<MyPage> {
   Widget build(BuildContext context) {
     userSelect();
 
-    ScreenUtil.init(context, width: 1500, height: 2667);
+    ScreenUtil.init(context, width: 1125, height: 2436);
     return userdata != null
         ? WillPopScope(
             onWillPop: () async => false,
@@ -40,14 +40,14 @@ class _MyPageState extends State<MyPage> {
                   children: [
                     //Center avatar
                     Padding(
-                      padding: EdgeInsets.only(top: 150.h),
+                      padding: EdgeInsets.only(top: 315.h),
                     ),
                     Center(
                       child: Stack(
                         children: [
                           SizedBox(
-                            height: 439.h,
-                            width: 439.w,
+                            height: 330.h,
+                            width: 330.h,
                             child: CircleAvatar(
                               backgroundImage:
                                   AssetImage("./assets/myPage/avatar.png"),
@@ -82,14 +82,14 @@ class _MyPageState extends State<MyPage> {
 
                     // Nickname
                     Container(
-                      margin: EdgeInsets.only(top: 31.h),
+                      margin: EdgeInsets.only(top: 36.h),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
                             child: userdata["nickname"] == ''
-                                ? boldfont("우아하게", 70, Color(0xff3a3939))
-                                : boldfont(userdata["nickname"], 70,
+                                ? boldfont("우아하게", 56, Color(0xff3a3939))
+                                : boldfont(userdata["nickname"], 56,
                                     Color(0xff3a3939)),
                           ),
                           Container(
@@ -110,8 +110,8 @@ class _MyPageState extends State<MyPage> {
                               },
                               child: Image.asset(
                                 "./assets/myPage/button1_pink.png",
-                                width: 361.w,
-                                height: 147.h,
+                                width: 252.w,
+                                height: 100.h,
                               ),
                             ),
                           )
@@ -121,18 +121,18 @@ class _MyPageState extends State<MyPage> {
 
                     //Gender
                     Container(
-                      margin: EdgeInsets.fromLTRB(99.w, 35.h, 0, 0),
+                      margin: EdgeInsets.fromLTRB(81.w, 90.h, 0, 0),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // 아이성별
                           normalfont(
-                              "아이성별", 58, Color.fromARGB(255, 255, 114, 148)),
+                              "아이성별", 46, Color.fromARGB(255, 255, 114, 148)),
 
                           Container(
-                            margin: EdgeInsets.fromLTRB(99.w, 0.h, 0, 0),
-                            height: 362.h,
-                            width: 262.w,
+                            margin: EdgeInsets.fromLTRB(41.w, 0.h, 0, 0),
+                            height: 282.h,
+                            width: 195.w,
                             child: InkWell(
                               child: Image.asset(
                                   userdata['baby_gender'] != "F" &&
@@ -142,9 +142,9 @@ class _MyPageState extends State<MyPage> {
                             ),
                           ),
                           Container(
-                            height: 362.h,
-                            width: 262.w,
-                            margin: EdgeInsets.only(left: 98.w),
+                            height: 283.h,
+                            width: 195.w,
+                            margin: EdgeInsets.only(left: 74.w),
                             child: InkWell(
                               child: Image.asset(
                                   userdata['baby_gender'] != "M" &&
@@ -159,16 +159,16 @@ class _MyPageState extends State<MyPage> {
 
                     // Birthday
                     Container(
-                      margin: EdgeInsets.fromLTRB(99.w, 5.h, 0, 0),
+                      margin: EdgeInsets.fromLTRB(81.w, 50.h, 0, 0),
                       child: Row(
                         children: [
                           // 아이생일
                           normalfont(
-                              "아이생일", 58, Color.fromARGB(255, 255, 114, 148)),
+                              "아이생일", 46, Color.fromARGB(255, 255, 114, 148)),
                           Expanded(
                             flex: 1,
                             child: Container(
-                              margin: EdgeInsets.fromLTRB(82.w, 0, 121.w, 0),
+                              margin: EdgeInsets.fromLTRB(58.w, 0, 81.w, 0),
                               child: Stack(
                                 children: [
                                   AbsorbPointer(
@@ -177,7 +177,7 @@ class _MyPageState extends State<MyPage> {
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
                                           color: Color(0xffff7292),
-                                          fontSize: 57.sp,
+                                          fontSize: 46.sp,
                                           fontFamily: 'NotoSansCJKkr_Medium',
                                           fontStyle: FontStyle.normal,
                                           letterSpacing: -1.0),
@@ -202,7 +202,7 @@ class _MyPageState extends State<MyPage> {
                                                     ? Color(0xffd4d4d4)
                                                     : Color(0xffff7292),
                                             fontFamily: "NotoSansCJKkr_Medium",
-                                            fontSize: 57.0.sp),
+                                            fontSize: 46.0.sp),
                                       ),
                                     ),
                                   ),
@@ -215,12 +215,12 @@ class _MyPageState extends State<MyPage> {
                     ),
                     // Ages
                     Container(
-                      margin: EdgeInsets.fromLTRB(155.w, 91.h, 0, 0),
+                      margin: EdgeInsets.fromLTRB(125.w, 91.h, 0, 0),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // 보호자 연령대
-                          normalfont("보호자\n연령대", 58,
+                          normalfont("보호자\n연령대", 46,
                               Color.fromARGB(255, 255, 114, 148)),
 
                           Container(
@@ -229,33 +229,33 @@ class _MyPageState extends State<MyPage> {
                                 Row(
                                   children: [
                                     Padding(
-                                      padding: EdgeInsets.only(left: 59.w),
+                                      padding: EdgeInsets.only(left: 44.w),
                                       child: Image.asset(
                                         userdata["age_group_type"] == 1
                                             ? './assets/register/10_pink.png'
                                             : './assets/register/10_grey.png',
-                                        height: 194.h,
-                                        width: 249.w,
+                                        height: 145.h,
+                                        width: 185.w,
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.only(left: 55.w),
+                                      padding: EdgeInsets.only(left: 44.w),
                                       child: Image.asset(
                                         userdata["age_group_type"] == 2
                                             ? './assets/register/20_pink.png'
                                             : './assets/register/20_grey.png',
-                                        height: 194.h,
-                                        width: 249.w,
+                                        height: 145.h,
+                                        width: 185.w,
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.only(left: 55.w),
+                                      padding: EdgeInsets.only(left: 44.w),
                                       child: Image.asset(
                                         userdata["age_group_type"] == 3
                                             ? './assets/register/30_pink.png'
                                             : './assets/register/30_grey.png',
-                                        height: 194.h,
-                                        width: 249.w,
+                                        height: 145.h,
+                                        width: 185.w,
                                       ),
                                     ),
                                   ],
@@ -264,35 +264,35 @@ class _MyPageState extends State<MyPage> {
                                   children: [
                                     Padding(
                                       padding: EdgeInsets.only(
-                                          left: 59.w, top: 45.h),
+                                          left: 44.w, top: 35.h),
                                       child: Image.asset(
                                         userdata["age_group_type"] == 4
                                             ? './assets/register/40_pink.png'
                                             : './assets/register/40_grey.png',
-                                        height: 194.h,
-                                        width: 249.w,
+                                        height: 145.h,
+                                        width: 185.w,
                                       ),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(
-                                          left: 55.w, top: 45.h),
+                                          left: 44.w, top: 35.h),
                                       child: Image.asset(
                                         userdata["age_group_type"] == 5
                                             ? './assets/register/50_pink.png'
                                             : './assets/register/50_grey.png',
-                                        height: 194.h,
-                                        width: 249.w,
+                                        height: 145.h,
+                                        width: 185.w,
                                       ),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(
-                                          left: 55.w, top: 45.h),
+                                          left: 44.w, top: 35.h),
                                       child: Image.asset(
                                         userdata["age_group_type"] == 6
                                             ? './assets/register/others_pink.png'
                                             : './assets/register/others_grey.png',
-                                        height: 194.h,
-                                        width: 249.w,
+                                        height: 145.h,
+                                        width: 185.w,
                                       ),
                                     ),
                                   ],
@@ -308,7 +308,7 @@ class _MyPageState extends State<MyPage> {
 
                     //logout
                     Container(
-                      margin: EdgeInsets.fromLTRB(931.w, 370.h, 0, 71.h),
+                      margin: EdgeInsets.fromLTRB(698.w, 221.h, 0, 0),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -323,14 +323,14 @@ class _MyPageState extends State<MyPage> {
                                   ),
                                   title: // 로그아웃 하시겠습니까?
                                       normalfont(
-                                          "로그아웃 하시겠습니까?", 58, Colors.black),
+                                          "로그아웃 하시겠습니까?", 46, Colors.black),
                                   actions: [
                                     FlatButton(
                                       onPressed: () {
                                         Navigator.pop(context);
                                       },
                                       child: normalfont(
-                                          "아니요", 55, Color(0xffff7292)),
+                                          "아니요", 46, Color(0xffff7292)),
                                     ),
                                     FlatButton(
                                       onPressed: () async {
@@ -342,18 +342,18 @@ class _MyPageState extends State<MyPage> {
                                         Get.offAllNamed('/login');
                                       },
                                       child: normalfont(
-                                          "네", 55, Color(0xffff7292)),
+                                          "네", 46, Color(0xffff7292)),
                                     ),
                                   ],
                                 ),
                               );
                             },
                             child: // 로그아웃
-                                normalfont("로그아웃", 52, Color(0xffb1b1b1)),
+                                normalfont("로그아웃", 39, Color(0xffb1b1b1)),
                           ),
                           Container(
                             margin: EdgeInsets.only(left: 15.w, right: 15.w),
-                            child: normalfont("|", 52, Color(0xffb1b1b1)),
+                            child: normalfont("|", 39, Color(0xffb1b1b1)),
                           ),
                           InkWell(
                             onTap: () {
@@ -366,7 +366,7 @@ class _MyPageState extends State<MyPage> {
                                   ),
                                   title: normalfont(
                                       "탈퇴하시겠습니까? 탈퇴 시 기존 데이터를 복구할 수 없습니다.",
-                                      55,
+                                      46,
                                       Color(0xff4d4d4d)),
                                   actions: [
                                     FlatButton(
@@ -374,7 +374,7 @@ class _MyPageState extends State<MyPage> {
                                         Navigator.pop(context);
                                       },
                                       child: normalfont(
-                                          "아니요", 55, Color(0xffff7292)),
+                                          "아니요", 46, Color(0xffff7292)),
                                     ),
                                     FlatButton(
                                       onPressed: () async {
@@ -416,13 +416,13 @@ class _MyPageState extends State<MyPage> {
                                       },
                                       child: // 네
                                           normalfont(
-                                              "예", 55, Color(0xffff7292)),
+                                              "예", 46, Color(0xffff7292)),
                                     ),
                                   ],
                                 ),
                               );
                             },
-                            child: normalfont("회원탈퇴", 55, Color(0xffb1b1b1)),
+                            child: normalfont("회원탈퇴", 39, Color(0xffb1b1b1)),
                           ),
                         ],
                       ),

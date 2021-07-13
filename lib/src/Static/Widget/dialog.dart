@@ -19,13 +19,13 @@ dialog(context, text) {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(20.0)),
       ),
-      title: normalfont(text, 62.5, Color(0xff4d4d4d)),
+      title: normalfont(text, 46.5, Color(0xff4d4d4d)),
       actions: [
         FlatButton(
           onPressed: () {
             Get.back();
           },
-          child: normalfont("확인", 62.5, Color(0xffff7292)),
+          child: normalfont("확인", 46.5, Color(0xffff7292)),
         ),
       ],
     ),
@@ -53,7 +53,7 @@ Future awaitdialog(var function, BuildContext context, var heightSize,
                   fontWeight: FontWeight.w500,
                   fontFamily: "NotoSansCJKkr_Medium",
                   fontStyle: FontStyle.normal,
-                  fontSize: 55.sp),
+                  fontSize: 46.sp),
             ),
             actions: [
               FlatButton(
@@ -61,7 +61,7 @@ Future awaitdialog(var function, BuildContext context, var heightSize,
                   Navigator.pop(context);
                 },
                 child: // 확인
-                    normalfont("확인", 62.5, Color(0xffff7292)),
+                    normalfont("확인", 46.5, Color(0xffff7292)),
               ),
             ],
           );
@@ -74,7 +74,7 @@ Future awaitdialog(var function, BuildContext context, var heightSize,
                   fontWeight: FontWeight.w500,
                   fontFamily: "NotoSansCJKkr_Medium",
                   fontStyle: FontStyle.normal,
-                  fontSize: 55.sp),
+                  fontSize: 46.sp),
             ),
             actions: [
               FlatButton(
@@ -82,7 +82,7 @@ Future awaitdialog(var function, BuildContext context, var heightSize,
                   Navigator.pop(context);
                 },
                 child: // 확인
-                    normalfont("확인", 62.5, Color(0xffff7292)),
+                    normalfont("확인", 46.5, Color(0xffff7292)),
               ),
             ],
           );

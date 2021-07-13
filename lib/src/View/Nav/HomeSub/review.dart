@@ -82,13 +82,14 @@ class _ReviewPageState extends State<ReviewPage> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, width: 1500, height: 2667);
+    ScreenUtil.init(context, width: 1125, height: 2436);
     if (myController.text.length >= 10) {
       setState(() {
         btnColor = true;
       });
     }
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: appBar(
         context,
         data.name,
@@ -98,38 +99,39 @@ class _ReviewPageState extends State<ReviewPage> {
           child: Column(
         children: [
           Container(
+
             width: double.infinity,
             margin:
-                EdgeInsets.only(top: 36 * height.h, bottom: 27.5 * height.h),
+                EdgeInsets.only(top: 36 * height.h*0.9, bottom: 27.5 * height.h*0.9),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                normalfont("${data.name}", 58, Colors.black),
-                normalfont("방문하셨나요?", 58, Color(0xff939393)),
+                normalfont("${data.name}", 46, Colors.black),
+                normalfont("방문하셨나요?", 46, Color(0xff939393)),
               ],
             ),
           ),
           Divider(
-            thickness: 2.h,
+            thickness: 2.h*0.9,
           ),
 
           // 3 stars
           Container(
-            height: 207 * height.h,
+            height: 207 * height.h*0.9,
             width: double.infinity,
             margin: EdgeInsets.only(
                 top: 36 * height.sp,
                 bottom: 35.7 * height.sp,
-                left: 90 * width.sp),
+                left: 70 * width.sp),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Row(
                   children: [
                     Container(
-                        margin: EdgeInsets.only(left: 50.w),
-                        child: boldfont("맛", 58, Colors.black)),
-                    Padding(padding: EdgeInsets.only(left: 39.3 * width.w)),
+                        margin: EdgeInsets.only(left: 50.w*0.71),
+                        child: boldfont("맛", 46, Colors.black)),
+                    Padding(padding: EdgeInsets.only(left: 39.3 * width.w*0.71)),
                     Rating(
                         initrating: taste,
                         changed: (v) {
@@ -150,10 +152,10 @@ class _ReviewPageState extends State<ReviewPage> {
                             taste = v;
                           });
                         }),
-                    Padding(padding: EdgeInsets.only(left: 22.3 * width.w)),
+                    Padding(padding: EdgeInsets.only(left: 22.3 * width.w*0.71)),
                     Container(
-                      width: 160 * width.w,
-                      child: normalfont("${ratingLabel[index1]}", 58,
+                      width: 160 * width.w*0.71,
+                      child: normalfont("${ratingLabel[index1]}", 46,
                           index1 == 0 ? Color(0xffefefef) : Color(0xff4d4d4d)),
                     )
                   ],
@@ -161,10 +163,10 @@ class _ReviewPageState extends State<ReviewPage> {
                 Row(
                   children: [
                     Container(
-                      margin: EdgeInsets.only(left: 25.w),
-                      child: boldfont("가격", 58, Colors.black),
+                      margin: EdgeInsets.only(left: 25.w*0.71),
+                      child: boldfont("가격", 46, Colors.black),
                     ),
-                    Padding(padding: EdgeInsets.only(left: 26.3 * width.w)),
+                    Padding(padding: EdgeInsets.only(left: 26.3 * width.w*0.71)),
                     Rating(
                       initrating: cost,
                       changed: (v) {
@@ -186,10 +188,10 @@ class _ReviewPageState extends State<ReviewPage> {
                         });
                       },
                     ),
-                    Padding(padding: EdgeInsets.only(left: 22.3 * width.w)),
+                    Padding(padding: EdgeInsets.only(left: 22.3 * width.w*0.71)),
                     Container(
-                      width: 160 * width.w,
-                      child: normalfont("${ratingLabel[index2]}", 58,
+                      width: 160 * width.w*0.71,
+                      child: normalfont("${ratingLabel[index2]}", 46,
                           index2 == 0 ? Color(0xffefefef) : Color(0xff4d4d4d)),
                     )
                   ],
@@ -197,9 +199,9 @@ class _ReviewPageState extends State<ReviewPage> {
                 Row(
                   children: [
                     Container(
-                      child: boldfont("서비스", 58, Colors.black),
+                      child: boldfont("서비스", 46, Colors.black),
                     ),
-                    Padding(padding: EdgeInsets.only(left: 12.3 * width.w)),
+                    Padding(padding: EdgeInsets.only(left: 12.3 * width.w*0.71)),
                     Rating(
                       initrating: service,
                       changed: (v) {
@@ -221,10 +223,10 @@ class _ReviewPageState extends State<ReviewPage> {
                         });
                       },
                     ),
-                    Padding(padding: EdgeInsets.only(left: 22.3 * width.w)),
+                    Padding(padding: EdgeInsets.only(left: 22.3 * width.w*0.71)),
                     Container(
-                      width: 160 * width.w,
-                      child: normalfont("${ratingLabel[index3]}", 58,
+                      width: 160 * width.w*0.71,
+                      child: normalfont("${ratingLabel[index3]}", 46,
                           index3 == 0 ? Color(0xffefefef) : Color(0xff4d4d4d)),
                     )
                   ],
@@ -236,13 +238,13 @@ class _ReviewPageState extends State<ReviewPage> {
           // Text input
           Container(
             margin: EdgeInsets.only(
-              // top: 25.7.w,
-              right: 36 * width.w,
-              left: 36 * width.w,
+              // top: 25.7.w*0.71,
+              right: 36 * width.w*0.71,
+              left: 36 * width.w*0.71,
             ),
             padding: EdgeInsets.only(bottom: 15.sp),
             width: double.infinity,
-            height: 330 * width.w,
+            height: 330 * width.w*0.71,
             decoration: BoxDecoration(
               color: Color.fromRGBO(255, 114, 142, 0.05),
               borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -286,9 +288,9 @@ class _ReviewPageState extends State<ReviewPage> {
           // image upload
           Container(
             margin: EdgeInsets.only(
-                top: 20 * height.h, right: 36 * width.w, left: 36 * width.w),
+                top: 20 * height.h*0.9, right: 36 * width.w*0.71, left: 36 * width.w*0.71),
             width: double.infinity,
-            height: 130 * width.w,
+            height: 130 * width.w*0.71,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -307,7 +309,7 @@ class _ReviewPageState extends State<ReviewPage> {
                     "assets/reviewPage/camera_button.png",
                   ),
                 ),
-                Padding(padding: EdgeInsets.only(left: 17 * width.w)),
+                Padding(padding: EdgeInsets.only(left: 17 * width.w*0.71)),
                 Expanded(
                   flex: 1,
                   child: ListView.builder(
@@ -325,8 +327,8 @@ class _ReviewPageState extends State<ReviewPage> {
                                     child: Stack(
                                       children: [
                                         SizedBox(
-                                          width: 130 * width.w,
-                                          height: 130 * height.w,
+                                          width: 130 * width.w*0.71,
+                                          height: 130 * height.w*0.71,
                                           child: Image.network(
                                             prevImage[0][index],
                                             fit: BoxFit.cover,
@@ -344,8 +346,8 @@ class _ReviewPageState extends State<ReviewPage> {
                                           ),
                                         ),
                                         Container(
-                                          width: 130 * width.w,
-                                          height: 130 * height.w,
+                                          width: 130 * width.w*0.71,
+                                          height: 130 * height.w*0.71,
                                           color: Colors.grey.withOpacity(0.3),
                                         ),
                                         Positioned(
@@ -364,7 +366,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                             },
                                             child: Image.asset(
                                               "assets/reviewPage/x_button.png",
-                                              height: 27.3 * width.w,
+                                              height: 27.3 * width.w*0.71,
                                             ),
                                           ),
                                         ),
@@ -376,8 +378,8 @@ class _ReviewPageState extends State<ReviewPage> {
                                     child: Stack(
                                       children: [
                                         SizedBox(
-                                          width: 130 * width.w,
-                                          height: 130 * height.w,
+                                          width: 130 * width.w*0.71,
+                                          height: 130 * height.w*0.71,
                                           child: Image.file(
                                             uploadingImage[index -
                                                 (imageLoad == false
@@ -402,8 +404,8 @@ class _ReviewPageState extends State<ReviewPage> {
                                           ),
                                         ),
                                         Container(
-                                          width: 130 * width.w,
-                                          height: 130 * height.w,
+                                          width: 130 * width.w*0.71,
+                                          height: 130 * height.w*0.71,
                                           color: Colors.grey.withOpacity(0.3),
                                         ),
                                         Positioned(
@@ -421,7 +423,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                             },
                                             child: Image.asset(
                                               "assets/reviewPage/x_button.png",
-                                              height: 27.3 * width.w,
+                                              height: 27.3 * width.w*0.71,
                                             ),
                                           ),
                                         ),
@@ -429,7 +431,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                     ),
                                   ),
                             Padding(
-                                padding: EdgeInsets.only(left: 17 * width.w)),
+                                padding: EdgeInsets.only(left: 17 * width.w*0.71)),
                           ],
                         );
                       }),
@@ -440,12 +442,12 @@ class _ReviewPageState extends State<ReviewPage> {
           //  Bottom button
           Container(
             margin: EdgeInsets.only(
-                top: 36 * height.w,
-                right: 110 * width.w,
-                left: 110 * width.w,
-                bottom: 65 * height.w),
+                top: 36 * height.w*0.71,
+                right: 110 * width.w*0.71,
+                left: 110 * width.w*0.71,
+                bottom: 65 * height.w*0.71),
             width: double.infinity,
-            height: 93 * width.w,
+            height: 93 * width.w*0.71,
             child: RaisedButton(
               elevation: 0,
               hoverElevation: 0,
@@ -457,8 +459,8 @@ class _ReviewPageState extends State<ReviewPage> {
               child: Text(
                 "리뷰 남기기",
                 style: TextStyle(
-                    letterSpacing: -0.75.h,
-                    fontSize: 58.sp,
+                    letterSpacing: -0.71.h*0.9,
+                    fontSize: 46.sp,
                     fontFamily: "NotoSansCJKkr_Bold",
                     color: Colors.white),
               ),
@@ -514,19 +516,19 @@ class Rating extends StatelessWidget {
       direction: Axis.horizontal,
       allowHalfRating: true,
       itemCount: 5,
-      itemSize: 45.3 * width.w,
+      itemSize: 45.3 * width.w*0.71,
       ratingWidget: RatingWidget(
         full: Image.asset(
           'assets/listPage/star_color.png',
-          // width: 1.3.h,
+          // width: 1.3.h*0.9,
         ),
         half: Image.asset(
           'assets/listPage/star_half.png',
-          // width: 1.3.h,
+          // width: 1.3.h*0.9,
         ),
         empty: Image.asset(
           'assets/listPage/star_grey.png',
-          // width: 1.3.h,
+          // width: 1.3.h*0.9,
         ),
       ),
       itemPadding: EdgeInsets.symmetric(horizontal: 3.0),
