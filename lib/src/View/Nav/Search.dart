@@ -35,7 +35,7 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, width: 1500, height: 2667);
+    ScreenUtil.init(context, width: 1125, height: 2436);
     return Scaffold(
       body: Stack(
         children: [
@@ -90,21 +90,21 @@ class _SearchState extends State<Search> {
                 borderRadius: BorderRadius.circular(8),
                 color: Colors.white,
               ),
-              margin: EdgeInsets.fromLTRB(51.w, 161.h, 51.w, 0),
-              height: 196.h,
+              margin: EdgeInsets.fromLTRB(51.w*0.75, 161.h*0.9, 51.w*0.75, 0),
+              height: 196.h*0.9,
               child: Row(
                 // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(left: 53.w),
+                    margin: EdgeInsets.only(left: 53.w*0.75),
                     child: Image.asset(
                       "./assets/searchPage/arrow.png",
-                      height: 68.h,
+                      height: 68.h*0.9,
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(left: 41.w),
-                    width: 1200.w,
+                    margin: EdgeInsets.only(left: 41.w*0.75),
+                    width: 1200.w*0.75,
                     child: // 검색 조건을 설정해주세요
                         Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -115,12 +115,12 @@ class _SearchState extends State<Search> {
                                 fontWeight: FontWeight.w500,
                                 fontFamily: "NotoSansCJKkr_Medium",
                                 fontStyle: FontStyle.normal,
-                                fontSize: 65.sp),
+                                fontSize: 50.sp),
                             textAlign: TextAlign.left),
                         InkWell(
                           child: Image.asset(
                             "./assets/searchPage/cat_btn.png",
-                            height: 158.h,
+                            height: 158.h*0.9,
                           ),
                         ),
                       ],

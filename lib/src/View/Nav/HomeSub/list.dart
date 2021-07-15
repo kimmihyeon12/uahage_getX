@@ -72,10 +72,11 @@ class PlaceList extends GetView<PlaceController> {
             children: [
               ConnectionController.to.connectionstauts !=
                       "ConnectivityResult.none"
-                  ? IndexedStack(
-                      index: controller.indexCount.value,
+                  ? Stack(
+                    //  index: controller.indexCount.value,
                       children: <Widget>[
-                          ListViews(),
+                        controller.indexCount.value==0?
+                          ListViews():
                           ListMap(placeCode: placeCode),
                         ])
                   : progress(),
@@ -270,7 +271,7 @@ class PlaceList extends GetView<PlaceController> {
                                                     Color(0xffb0b0b0)),
                                           )
                                         : Container(
-                                            width: 750.w*0.84,
+                                            width: 630.w*0.84,
                                             margin: EdgeInsets.only(top: 10.h*0.9),
                                             child: controller.place[index]
                                                         .address.length >

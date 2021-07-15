@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -932,10 +933,26 @@ class _ListSubState extends State<ListSub> {
                                               ),
                                             onWebViewCreated:
                                                 (WebViewController
-                                                    webViewController) {
+                                                    webViewController) async{
+                                              print(data.name);
                                               _controller = webViewController;
-                                              _controller.loadUrl(url +
-                                                  '/maps/show-place-name?placeName=${data.name}&placeAddress=${data.address}');
+
+                                              var _url = '/maps/show-place-name';
+                                              Map<String, String> queryParams = {
+                                                'placeName': '${data.name}',
+                                                'placeAddress': '${data.address}'
+                                              };
+                                              var headers = {
+                                                HttpHeaders.contentTypeHeader: 'application/json',
+                                                HttpHeaders.acceptCharsetHeader: "UTF-8"
+                                              };
+                                              String queryString =
+                                                  Uri(queryParameters: queryParams).query;
+                                              var requestUrl = url+_url + '?' + queryString;
+                                              print(requestUrl);
+                                              await _controller.loadUrl(
+                                                requestUrl,
+                                              );
                                             },
                                             javascriptMode:
                                                 JavascriptMode.unrestricted,

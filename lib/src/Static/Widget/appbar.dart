@@ -5,27 +5,54 @@ import 'package:uahage/src/Controller/place.restaurant.bookmark.controller.dart'
 import 'package:uahage/src/Static/Font/font.dart';
 
 appBar(context, text, bookmarkColor) {
-  return AppBar(
-    title: new Text(
-      text,
-      style: TextStyle(
-          fontSize: 55.sp,
-          fontFamily: 'NotoSansCJKkr_Medium',
-          color: Color.fromRGBO(255, 114, 148, 1.0)),
-    ),
-    centerTitle: true,
-    backgroundColor: Colors.white,
-    leading: IconButton(
-        icon: Icon(Icons.arrow_back_ios, color: Color(0xffff7292)),
-        onPressed: () {
-          Get.back(result: bookmarkColor);
-        }),
-  );
+  return  PreferredSize(
+      preferredSize: Size.fromHeight(130.h),
+      child: Container(
+        decoration: BoxDecoration(
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Colors.black38,
+                  blurRadius: 5.0,
+                  offset: Offset(0.0, 0.75)
+              )
+            ],
+          color: Colors.white,
+        ),
+
+
+        height: 270.h,
+        child: Stack(
+          children: [
+            Container(
+              margin:EdgeInsets.only(top:105.h,left:30.w),
+              child: IconButton(
+                  icon: Icon(Icons.arrow_back_ios, color: Color(0xffff7292)),
+                  onPressed: () {
+                    Get.back(result: bookmarkColor);
+                  }),
+            ),
+            Container(
+              width: 1125.w,
+              child: Center(
+                child: Container(
+                  margin: EdgeInsets.only(top:90.h),
+                  child: normalfont(text, 55,Color(0xffff7292))
+                  ,),
+              ),
+            )
+
+
+          ],
+        ),
+      ));
+
+
+
 }
 
 imageAppbar(context, text) {
   return PreferredSize(
-      preferredSize: Size.fromHeight(140.h),
+      preferredSize: Size.fromHeight(130.h),
       child: Container(
         child: Stack(
           children: [
@@ -35,20 +62,13 @@ imageAppbar(context, text) {
               height: 400.h,
 
             ),
-            Container(
-              margin: EdgeInsets.only(top:135.h,left:20.w),
-              child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-                  onPressed: () {
-                    Get.back();
-                  }),
-            ),
+
 text != "우아하게"?
             Container(
               width: 1125.w,
               child: Center(
                 child: Container(
-                  margin: EdgeInsets.only(top:120.h),
+                  margin: EdgeInsets.only(top:90.h),
                   child: normalfont(text, 55,Colors.white)
                   ,),
               ),
@@ -56,7 +76,7 @@ text != "우아하게"?
 
             Container(
               width:1125.w,
-              margin: EdgeInsets.only(top:120.h),
+              margin: EdgeInsets.only(top:95.h),
               child: Center(
                 child: Image.asset(
                   './assets/homePage/uahage.png',

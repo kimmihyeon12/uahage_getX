@@ -46,9 +46,9 @@ Future<Object> popup(context, grey_image) {
                 children: [
                   Container(
                     margin: EdgeInsets.only(
-                        top: 600.h, bottom: 0.h, left: 190.w, right: 0.w),
-                    width: 1100.w,
-                    height: 1060.h,
+                        top: 600.h*0.93, bottom: 0.h*0.93, left: 190.w*0.78, right: 0.w*0.78),
+                    width: 1100.w*0.78,
+                    height: 1060.h*0.93,
                     child: Card(
                       shadowColor: Colors.black54,
                       elevation: 1,
@@ -58,7 +58,7 @@ Future<Object> popup(context, grey_image) {
                       ),
                       child: Container(
                         margin:
-                            EdgeInsets.only(top: 85.h, left: 50.w, right: 50.w),
+                            EdgeInsets.only(top: 85.h*0.93, left: 50.w*0.78, right: 50.w*0.78),
                         child: SizedBox(
                           child: GridView.count(
                             crossAxisCount: 3,
@@ -81,15 +81,15 @@ Future<Object> popup(context, grey_image) {
                                             "./assets/searchPage/image" +
                                                 (index + 1).toString() +
                                                 "_grey.png",
-                                            height: 293.h,
-                                            width: 218.w,
+                                            height: 293.h*0.93,
+                                            width: 218.w*0.78,
                                           )
                                         : Image.asset(
                                             "./assets/searchPage/image" +
                                                 (index + 1).toString() +
                                                 ".png",
-                                            height: 293.h,
-                                            width: 218.w,
+                                            height: 293.h*0.93,
+                                            width: 218.w*0.78,
                                           ),
                                   ),
                                 ),
@@ -101,12 +101,12 @@ Future<Object> popup(context, grey_image) {
                     ),
                   ),
                   Positioned(
-                    top: 1850.h,
-                    left: 400.w,
-                    right: 400.w,
+                    top: 1850.h*0.93,
+                    left: 400.w*0.78,
+                    right: 400.w*0.78,
                     child: SizedBox(
-                      width: 611.w,
-                      height: 195.h,
+                      width: 611.w*0.78,
+                      height: 195.h*0.93,
                       child: FlatButton(
                         onPressed: () async {
                           Navigator.pop(context, grey_image);
@@ -194,15 +194,15 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                   child: Container(
                     color: Colors.transparent,
                     width: MediaQuery.of(context).size.width,
-                    height: type == 'search' ? 1874.h : 2100.h,
+                    height: type == 'search' ? 1874.h*0.93 : 2100.h*0.93,
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.only(
-                      top: type == 'search' ? 1900.h : 2100.h,
-                      bottom: type == 'search' ? 263.h : 50.h,
-                      left: 33.w,
-                      right: 33.w),
+                      top: type == 'search' ? 1900.h*0.93 : 2100.h*0.93,
+                      bottom: type == 'search' ? 263.h*0.93 : 50.h*0.93,
+                      left: 33.w*0.78,
+                      right: 33.w*0.78),
                   width: MediaQuery.of(context).size.width,
                   child: Card(
                     shadowColor: Colors.black54,
@@ -245,7 +245,7 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                         children: [
                           Padding(
                               padding: EdgeInsets.only(
-                            left: 30.w,
+                            left: 30.w*0.78,
                           )),
                           Container(
                             decoration: BoxDecoration(
@@ -278,45 +278,45 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                                 ),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10.0))),
-                            height: 413.w,
-                            width: 413.w,
+                            height: 413.w*0.78,
+                            width: 413.w*0.78,
                           ),
                           Padding(
                               padding: EdgeInsets.only(
-                            left: 53.w,
+                            left: 53.w*0.78,
                           )),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                margin: EdgeInsets.only(top: 55.h),
-                                height: 92.h,
+                                margin: EdgeInsets.only(top: 55.h*0.93),
+                                height: 92.h*0.93,
                                 child: Row(
                                   children: [
                                     Container(
-                                        width: 700.w,
+                                        width: 700.w*0.78,
                                         child: boldfont(
                                             Message["name"].length <= 10
                                                 ? '${Message["name"]}'
                                                 : '${Message["name"].substring(0, 11)}...',
-                                            60,
+                                            50,
                                             Color(0xff010000))),
                                     (() {
                                       if (placeCode == 1) {
                                         return Container(
                                           margin: EdgeInsets.only(
-                                              left: 8.w, top: 25.h),
+                                              left: 8.w*0.78, top: 25.h*0.93),
                                           child: InkWell(
                                             child: Container(
                                               padding: EdgeInsets.only(
-                                                  left: 30.w,
-                                                  right: 30.w,
-                                                  bottom: 10.h),
+                                                  left: 30.w*0.78,
+                                                  right: 30.w*0.78,
+                                                  bottom: 10.h*0.93),
                                               child: Image.asset(
                                                 mark == 0 || mark == null
                                                     ? "./assets/listPage/love_grey.png"
                                                     : "./assets/listPage/love_color.png",
-                                                height: 80.h,
+                                                height: 80.h*0.93,
                                               ),
                                             ),
                                             onTap: () async {
@@ -352,7 +352,7 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                                 ),
                               ),
                               // Padding(
-                              //   padding: EdgeInsets.only(left: 10 * width.w),
+                              //   padding: EdgeInsets.only(left: 10 * width.w*0.78),
                               // ),
 
                               placeCode == 1
@@ -360,41 +360,41 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                                       children: [
                                         Image.asset(
                                           "./assets/listPage/star_color.png",
-                                          width: 30 * width.w,
+                                          width: 30 * width.w*0.78,
                                         ),
                                         Padding(
                                           padding: EdgeInsets.only(
-                                              left: 4.7 * width.w),
+                                              left: 4.7 * width.w*0.78),
                                         ),
-                                        normalfont(total ?? "0.0", 54,
+                                        normalfont(total ?? "0.0", 46,
                                             Color(0xff4d4d4d))
                                       ],
                                     )
                                   : Container(),
                               placeCode == 1
                                   ? Container(
-                                      margin: EdgeInsets.only(top: 10.h),
+                                      margin: EdgeInsets.only(top: 10.h*0.93),
                                       child: Message["address"].length > 18
                                           ? normalfont(
                                               '${Message["address"].substring(0, 18)}...',
-                                              54,
+                                              46,
                                               Color(0xffb0b0b0))
                                           : normalfont('${Message["address"]}',
-                                              54, Color(0xffb0b0b0)),
+                                              46, Color(0xffb0b0b0)),
                                     )
                                   : Container(
-                                      width: 750.w,
-                                      margin: EdgeInsets.only(top: 10.h),
+                                      width: 750.w*0.78,
+                                      margin: EdgeInsets.only(top: 10.h*0.93),
                                       child: Message["address"].length > 32
                                           ? normalfont(
                                               '${Message["address"].substring(0, 32)}...',
-                                              54,
+                                              46,
                                               Color(0xffb0b0b0))
-                                          : normalfont(Message["address"], 54,
+                                          : normalfont(Message["address"], 46,
                                               Color(0xffb0b0b0)),
                                     ),
                               Container(
-                                margin: EdgeInsets.only(top: 15.h),
+                                margin: EdgeInsets.only(top: 15.h*0.93),
                                 alignment: Alignment.bottomRight,
                                 child: Row(children: [
                                   icon(
@@ -471,12 +471,12 @@ report(context, reviewId) {
                   children: [
                     Container(
                       margin: EdgeInsets.only(
-                          top: 231 * height.h,
-                          bottom: 0.h,
-                          left: 85 * width.w,
-                          right: 0.w),
-                      width: 550 * width.w,
-                      height: 736 * height.h,
+                          top: 231 * height.h*0.93,
+                          bottom: 0.h*0.93,
+                          left: 85 * width.w*0.78,
+                          right: 0.w*0.78),
+                      width: 550 * width.w*0.78,
+                      height: 736 * height.h*0.93,
                       child: Card(
                         shadowColor: Colors.black54,
                         elevation: 1,
@@ -486,9 +486,9 @@ report(context, reviewId) {
                         ),
                         child: Container(
                             margin: EdgeInsets.only(
-                              top: 30 * height.h,
-                              left: 33 * width.w,
-                              right: 33 * width.w,
+                              top: 30 * height.h*0.93,
+                              left: 33 * width.w*0.78,
+                              right: 33 * width.w*0.78,
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -496,7 +496,7 @@ report(context, reviewId) {
                                 Row(
                                   children: [
                                     Container(
-                                        width: 420 * width.w,
+                                        width: 420 * width.w*0.78,
                                         child:
                                             boldfont("신고유형", 68, Colors.black)),
                                     InkWell(
@@ -505,7 +505,7 @@ report(context, reviewId) {
                                       },
                                       child: Image.asset(
                                         "./assets/sublistPage/cancel.png",
-                                        width: 26 * width.w,
+                                        width: 26 * width.w*0.78,
                                       ),
                                     ),
                                   ],
@@ -513,7 +513,7 @@ report(context, reviewId) {
 
                                 Padding(
                                     padding:
-                                        EdgeInsets.only(top: 37 * height.h)),
+                                        EdgeInsets.only(top: 37 * height.h*0.93)),
                                 Row(
                                   children: [
                                     InkWell(
@@ -533,18 +533,18 @@ report(context, reviewId) {
                                       child: reportIndex[0]
                                           ? Image.asset(
                                               "./assets/sublistPage/check.png",
-                                              width: 32 * width.w,
+                                              width: 32 * width.w*0.78,
                                             )
                                           : Image.asset(
                                               "./assets/sublistPage/uncheck.png",
-                                              width: 32 * width.w,
+                                              width: 32 * width.w*0.78,
                                             ),
                                     ),
                                     Padding(
                                         padding: EdgeInsets.only(
-                                            right: 7 * width.w)),
+                                            right: 7 * width.w*0.78)),
                                     Container(
-                                      width: 206 * width.w,
+                                      width: 206 * width.w*0.78,
                                       child: normalfont(
                                           "영리목적/홍보성", 58, Color(0xff666666)),
                                     ),
@@ -565,22 +565,22 @@ report(context, reviewId) {
                                       child: reportIndex[1]
                                           ? Image.asset(
                                               "./assets/sublistPage/check.png",
-                                              width: 32 * width.w,
+                                              width: 32 * width.w*0.78,
                                             )
                                           : Image.asset(
                                               "./assets/sublistPage/uncheck.png",
-                                              width: 32 * width.w,
+                                              width: 32 * width.w*0.78,
                                             ),
                                     ),
                                     Padding(
                                         padding: EdgeInsets.only(
-                                            right: 7 * width.w)),
+                                            right: 7 * width.w*0.78)),
                                     normalfont("기능작동오류", 58, Color(0xff666666)),
                                   ],
                                 ),
                                 Padding(
                                     padding:
-                                        EdgeInsets.only(top: 47 * height.h)),
+                                        EdgeInsets.only(top: 47 * height.h*0.93)),
 
                                 Row(
                                   children: [
@@ -601,18 +601,18 @@ report(context, reviewId) {
                                       child: reportIndex[2]
                                           ? Image.asset(
                                               "./assets/sublistPage/check.png",
-                                              width: 32 * width.w,
+                                              width: 32 * width.w*0.78,
                                             )
                                           : Image.asset(
                                               "./assets/sublistPage/uncheck.png",
-                                              width: 32 * width.w,
+                                              width: 32 * width.w*0.78,
                                             ),
                                     ),
                                     Padding(
                                         padding: EdgeInsets.only(
-                                            right: 7 * width.w)),
+                                            right: 7 * width.w*0.78)),
                                     Container(
-                                      width: 206 * width.w,
+                                      width: 206 * width.w*0.78,
                                       child: normalfont(
                                           "음란성/선전성", 58, Color(0xff666666)),
                                     ),
@@ -633,23 +633,23 @@ report(context, reviewId) {
                                       child: reportIndex[3]
                                           ? Image.asset(
                                               "./assets/sublistPage/check.png",
-                                              width: 32 * width.w,
+                                              width: 32 * width.w*0.78,
                                             )
                                           : Image.asset(
                                               "./assets/sublistPage/uncheck.png",
-                                              width: 32 * width.w,
+                                              width: 32 * width.w*0.78,
                                             ),
                                     ),
                                     Padding(
                                         padding: EdgeInsets.only(
-                                            right: 7 * width.w)),
+                                            right: 7 * width.w*0.78)),
                                     normalfont(
                                         "욕설/인신공격", 58, Color(0xff666666)),
                                   ],
                                 ),
                                 Padding(
                                     padding:
-                                        EdgeInsets.only(top: 47 * height.h)),
+                                        EdgeInsets.only(top: 47 * height.h*0.93)),
                                 Row(
                                   children: [
                                     InkWell(
@@ -669,18 +669,18 @@ report(context, reviewId) {
                                       child: reportIndex[4]
                                           ? Image.asset(
                                               "./assets/sublistPage/check.png",
-                                              width: 32 * width.w,
+                                              width: 32 * width.w*0.78,
                                             )
                                           : Image.asset(
                                               "./assets/sublistPage/uncheck.png",
-                                              width: 32 * width.w,
+                                              width: 32 * width.w*0.78,
                                             ),
                                     ),
                                     Padding(
                                         padding: EdgeInsets.only(
-                                            right: 7 * width.w)),
+                                            right: 7 * width.w*0.78)),
                                     Container(
-                                      width: 206 * width.w,
+                                      width: 206 * width.w*0.78,
                                       child: normalfont(
                                           "개인정보노출", 58, Color(0xff666666)),
                                     ),
@@ -701,26 +701,26 @@ report(context, reviewId) {
                                       child: reportIndex[5]
                                           ? Image.asset(
                                               "./assets/sublistPage/check.png",
-                                              width: 32 * width.w,
+                                              width: 32 * width.w*0.78,
                                             )
                                           : Image.asset(
                                               "./assets/sublistPage/uncheck.png",
-                                              width: 32 * width.w,
+                                              width: 32 * width.w*0.78,
                                             ),
                                     ),
                                     Padding(
                                         padding: EdgeInsets.only(
-                                            right: 7 * width.w)),
+                                            right: 7 * width.w*0.78)),
                                     normalfont("반복 게시", 58, Color(0xff666666)),
                                   ],
                                 ),
                                 Padding(
                                     padding:
-                                        EdgeInsets.only(top: 49 * height.h)),
+                                        EdgeInsets.only(top: 49 * height.h*0.93)),
                                 // Text input
                                 Container(
                                   width: double.infinity,
-                                  height: 330 * width.w,
+                                  height: 330 * width.w*0.78,
                                   decoration: BoxDecoration(
                                     color: Color.fromRGBO(255, 114, 142, 0.05),
                                     borderRadius:
@@ -779,12 +779,12 @@ report(context, reviewId) {
                       ),
                     ),
                     Positioned(
-                      top: 1000 * height.h,
-                      left: 117 * width.w,
-                      right: 117 * width.w,
+                      top: 1000 * height.h*0.93,
+                      left: 117 * width.w*0.78,
+                      right: 117 * width.w*0.78,
                       child: SizedBox(
-                        width: 488 * width.w,
-                        height: 96 * height.h,
+                        width: 488 * width.w*0.78,
+                        height: 96 * height.h*0.93,
                         child: FlatButton(
                           onPressed: () async {
                             if (myController.text.length > 10 && isreport) {

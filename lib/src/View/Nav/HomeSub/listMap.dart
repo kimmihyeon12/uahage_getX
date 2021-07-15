@@ -56,11 +56,12 @@ class _ListMapState extends State<ListMap> {
         child: Stack(children: [
           WebView(
             key: key,
+
             onWebViewCreated: (WebViewController webViewController) async {
               webview = webViewController;
               if (placeCode == 1) {
                 await webview.loadUrl(url +
-                    '/maps/show-place?type=filter&userId=${UserController.to.userId}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&babyBed=&babyChair=&babyMenu=&babyTableware=&stroller=&diaperChange=&meetingRoom=&nursingRoom=&playRoom=&parking=&isBookmarked=&placeName=${placeName}&token=${UserController.to.token.value}');
+                    '/maps/show-place?userId=${UserController.to.userId}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=filter&babyBed=&babyChair=&babyMenu=&babyTableware=&stroller=&diaperChange=&meetingRoom=&nursingRoom=&playRoom=&parking=&isBookmarked=&placeName=${placeName}&token=${UserController.to.token.value}');
               } else {
                 await webview.loadUrl(url +
                     '/maps/show-place?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=allsearch&placeName=${placeName}&token=${UserController.to.token.value}');
@@ -110,21 +111,21 @@ class _ListMapState extends State<ListMap> {
                       borderRadius: BorderRadius.circular(8),
                       color: Colors.white,
                     ),
-                    margin: EdgeInsets.fromLTRB(51.w, 100.h, 51.w, 0),
-                    height: 196.h,
+                    margin: EdgeInsets.fromLTRB(51.w*0.75, 100.h*0.9, 51.w*0.75, 0),
+                    height: 196.h*0.9,
                     child: Row(
                       // crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
-                          margin: EdgeInsets.only(left: 53.w),
+                          margin: EdgeInsets.only(left: 53.w*0.75),
                           child: Image.asset(
                             "./assets/searchPage/arrow.png",
-                            height: 68.h,
+                            height: 68.h*0.9,
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(left: 41.w),
-                          width: 1200.w,
+                          margin: EdgeInsets.only(left: 41.w*0.75),
+                          width: 1200.w*0.75,
                           child: // 검색 조건을 설정해주세요
                               Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -135,12 +136,12 @@ class _ListMapState extends State<ListMap> {
                                       fontWeight: FontWeight.w500,
                                       fontFamily: "NotoSansCJKkr_Medium",
                                       fontStyle: FontStyle.normal,
-                                      fontSize: 65.sp),
+                                      fontSize: 50.sp),
                                   textAlign: TextAlign.left),
                               InkWell(
                                 child: Image.asset(
                                   "./assets/searchPage/cat_btn.png",
-                                  height: 158.h,
+                                  height: 158.h*0.9,
                                 ),
                               ),
                             ],

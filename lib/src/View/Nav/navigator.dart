@@ -41,9 +41,7 @@ class _NavigationState extends State<Navigation> {
       child: Scaffold(
           body: Stack(
             children: [
-              ConnectionController.to.connectionstauts !=
-                      "ConnectivityResult.none"
-                  ? IndexedStack(
+              _selectedTabIndex!=1?  IndexedStack(
                       index: _selectedTabIndex,
                       children: <Widget>[
                         Home(),
@@ -51,8 +49,8 @@ class _NavigationState extends State<Navigation> {
                         Star(),
                         MyPage(),
                       ],
-                    )
-                  : progress()
+                    ):Search()
+
             ],
           ),
           bottomNavigationBar: BottomNavigationBar(

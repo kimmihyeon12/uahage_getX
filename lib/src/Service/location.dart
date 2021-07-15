@@ -11,7 +11,9 @@ class Location extends GetView<LocationController> {
   LocationPermission permission;
 
   Future setCurrentLocation() async {
+    print("1");
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    print("2");
     if (!serviceEnabled) {
       print('Location services are disabled.');
       return Future.error('Location services are disabled.');
