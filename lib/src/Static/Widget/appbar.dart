@@ -25,7 +25,7 @@ appBar(context, text, bookmarkColor) {
 
 imageAppbar(context, text) {
   return PreferredSize(
-      preferredSize: Size.fromHeight(172.h),
+      preferredSize: Size.fromHeight(195.h),
       child: Container(
         child: Stack(
           children: [
@@ -37,7 +37,7 @@ imageAppbar(context, text) {
             Center(
               child: Image.asset(
                 './assets/homePage/uahage.png',
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
                 height: 100.h,
               ),
             )

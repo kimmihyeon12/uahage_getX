@@ -17,6 +17,7 @@ class SnsLogin extends GetView<UserController> {
     try {
       var token = await AuthApi.instance.issueAccessToken(authCode);
       controller.setKakaoToken(token.accessToken);
+      print(token.accessToken);
 
       AccessTokenStore.instance.toStore(token);
       await kakaoGetEmail();
