@@ -17,7 +17,7 @@ class Users extends GetView<UserController> {
     print("userid ${controller.userId.value}");
     try {
       var response = await http.get(
-        Uri.parse(url + "/api/users/${controller.userId.value}"),
+        Uri.parse(url + "/users/${controller.userId.value}"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': '${UserController.to.token.value}'
@@ -63,26 +63,27 @@ class Users extends GetView<UserController> {
       print(UserController.to.option);
       if (UserController.to.option == "KAKAO") {
         response = await http.post(
-          Uri.parse(url + "/api/users/kakao-login"),
+          Uri.parse(url + "/users/kakao-login"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': '${controller.kakaotoken.value}'
+            'Authorization': 'bearer ${controller.kakaotoken.value}'
           },
           body: jsonEncode(userData),
         );
       } else {
         response = await http.post(
           Uri.parse(
-            url + "/api/users/naver-login",
+            url + "/users/naver-login",
           ),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': '${controller.navertoken.value}'
+            'Authorization': 'bearer ${controller.navertoken.value}'
           },
           body: jsonEncode(userData),
         );
       }
-
+      print(userData);
+      print(jsonDecode(utf8.decode(response.bodyBytes)));
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         String token = data['data']['token'];
@@ -115,7 +116,7 @@ class Users extends GetView<UserController> {
   //DELETE
   delete() async {
     var response = await http.delete(
-      Uri.parse(url + "/api/users/${controller.userId.value}"),
+      Uri.parse(url + "/users/${controller.userId.value}"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': '${controller.token.value}'
@@ -133,7 +134,7 @@ class Users extends GetView<UserController> {
         'Authorization': "${UserController.to.token.value}"
       };
       var response = await dio.put(
-        url + "/api/users/${UserController.to.userId.value}",
+        url + "/users/${UserController.to.userId.value}",
         data: formdata,
       );
       return response.statusCode == 200 ? "성공" : "실패";
@@ -148,13 +149,13 @@ class Users extends GetView<UserController> {
     print("이메일 체크");
     var response = await http.get(
       Uri.parse(url +
-          "/api/users/validate-email/${controller.option.value}.${controller.email.value}"),
+          "/users/verify-duplicate-email/${controller.option.value}:${controller.email.value}"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': '${UserController.to.token.value}'
       },
     );
-    return jsonDecode(response.body)["data"];
+    return jsonDecode(utf8.decode(response.bodyBytes))["available"];
   }
 
 //${controller.email.value}${controller.option.value}
@@ -164,20 +165,27 @@ class Users extends GetView<UserController> {
     try {
       var response = await http.get(
         Uri.parse(
-          url + "/api/users/validate-nickname/${nickName}",
+          url + "/users/verify-duplicate-nickname/${nickName}",
         ),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': '${UserController.to.token.value}'
         },
       );
-
-      if (jsonDecode(response.body)["data"]["isSuccess"]) {
-        return {"idValid": true, "value": "사용 가능한 닉네임입니다."};
+      print(jsonDecode(utf8.decode(response.bodyBytes)));
+      if (jsonDecode(utf8.decode(response.bodyBytes))['statusCode'] == 200) {
+        if (jsonDecode(utf8.decode(response.bodyBytes))["available"]) {
+          return {"idValid": true, "value": "사용 가능한 닉네임입니다."};
+        } else {
+          return {
+            "idValid": false,
+            "value": jsonDecode(utf8.decode(response.bodyBytes))["message"]
+          };
+        }
       } else {
         return {
           "idValid": false,
-          "value": jsonDecode(response.body)["message"]
+          "value": jsonDecode(utf8.decode(response.bodyBytes))["message"]
         };
       }
     } catch (err) {
@@ -197,7 +205,7 @@ isNicknameCheck() async {
   try {
     var response = await http.get(
       Uri.parse(
-        url + "/api/users/${UserController.to.userId.value}/nickname",
+        url + "/users/${UserController.to.userId.value}/nickname",
       ),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',

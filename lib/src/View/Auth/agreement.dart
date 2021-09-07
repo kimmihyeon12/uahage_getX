@@ -31,7 +31,7 @@ class _AgreementState extends State<Agreement> {
 
   @override
   Widget build(BuildContext context) {
-    KakaoContext.clientId = "581f27a7aed8a99e5b0a78b33c855dab";
+    KakaoContext.clientId = "497c2ccd4dadd2b2af74f07b9e1e442a";
 
     ScreenUtil.init(context, width: 1501, height: 2667);
     if (check[1] && check[2] && check[3]) {

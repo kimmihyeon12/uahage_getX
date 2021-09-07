@@ -12,7 +12,6 @@ class Loading extends GetView<UserController> {
   lodingTime() async {
     var result = await location.setCurrentLocation();
     if (!result) await lodingTime();
-
     await 1.delay();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();

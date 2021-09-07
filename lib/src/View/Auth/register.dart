@@ -22,13 +22,20 @@ class Register extends StatefulWidget {
   _RegisterState createState() => _RegisterState();
 }
 
+// class BabyInfo {
+//   String gender;
+//   String birthday;
+// }
+
 class _RegisterState extends State<Register> {
   String url = URL;
 
   Users users = new Users();
   //user
   bool isIdValid = false;
-
+  bool isbirthday = false;
+  bool isgender = false;
+  //List<BabyInfo> babyInfo;
   List<String> birthday = ["", "", "", ""];
   String nickName = "";
   List<String> gender = ["", "", "", ""];
@@ -121,6 +128,9 @@ class _RegisterState extends State<Register> {
                                                 .checkNickName(nickName);
                                             setState(() {
                                               isIdValid = data['idValid'];
+                                              print("isIdValid");
+                                              print(data['idValid']);
+                                              print(isIdValid);
                                             });
                                             currentFocus.unfocus();
                                             dialog(
@@ -167,7 +177,7 @@ class _RegisterState extends State<Register> {
                       boy[0] = !boy[0];
                       girl[0] = true;
                       none[0] = true;
-
+                      isgender = true;
                       gender[0] = "M";
                     });
                   },
@@ -188,6 +198,7 @@ class _RegisterState extends State<Register> {
                       boy[0] = true;
                       none[0] = true;
                       gender[0] = "F";
+                      isgender = true;
                     });
                   },
                   child: Column(children: <Widget>[
@@ -208,6 +219,7 @@ class _RegisterState extends State<Register> {
                       girl[0] = true;
                       boy[0] = true;
                       gender[0] = "N";
+                      isgender = true;
                     });
                   },
                   child: Column(children: <Widget>[
@@ -419,7 +431,6 @@ class _RegisterState extends State<Register> {
                     ),
                     onTap: () {
                       setState(() {
-                        print("add");
                         if (addbaby_count < 4) {
                           addbaby_count++;
                           addbaby[addbaby_count] = true;
@@ -542,11 +553,11 @@ class _RegisterState extends State<Register> {
                   shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(8.0),
                   ),
-                  onPressed: isIdValid == true &&
-                          age != 0 &&
-                          gender != "" &&
-                          birthday != "" &&
-                          nickName != ""
+                  onPressed: isIdValid == true
+                      // &&
+                      //       age != 0 &&
+                      //       gender != "" &&
+                      //       birthday != ""
                       ? () async {
                           showDialog(
                             barrierDismissible: false,
@@ -576,13 +587,8 @@ class _RegisterState extends State<Register> {
                             dialog(context, "닉네임 중복을 확인해주세요");
                           }
                         },
-                  color: isIdValid == true &&
-                          age != 0 &&
-                          gender != "" &&
-                          birthday != "" &&
-                          nickName != ""
-                      ? Color(0xffff7292)
-                      : Color(0xffcccccc),
+                  color:
+                      isIdValid == true ? Color(0xffff7292) : Color(0xffcccccc),
                   child: Text(
                     "OK",
                     style: TextStyle(
@@ -656,6 +662,7 @@ class _RegisterState extends State<Register> {
                       var result = await yearPicker(context);
                       setState(() {
                         birthday[index] = result;
+                        isbirthday = true;
                       });
                     },
                     child: AbsorbPointer(
@@ -664,6 +671,7 @@ class _RegisterState extends State<Register> {
                         onChanged: (txt) {
                           setState(() {
                             birthday[index] = txt;
+                            isbirthday = true;
                           });
                         },
                         textAlign: TextAlign.left,
