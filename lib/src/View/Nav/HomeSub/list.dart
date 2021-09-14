@@ -241,7 +241,7 @@ class PlaceList extends GetView<PlaceController> {
                                                     left: 4.7 * width.w),
                                               ),
                                               normalfont(
-                                                  "${controller.place[index].total ?? 0.0} ",
+                                                  "${controller.place[index].reviewTotal ?? 0.0} ",
                                                   54,
                                                   Color(0xff4d4d4d))
                                             ],
@@ -301,30 +301,43 @@ class PlaceList extends GetView<PlaceController> {
                                             alignment: Alignment.bottomRight,
                                             child: Row(
                                               children: [
-                                                icon(
-                                                  context,
-                                                  controller
-                                                      .place[index].baby_menu,
-                                                  controller
-                                                      .place[index].stroller,
-                                                  controller
-                                                      .place[index].baby_bed,
-                                                  controller.place[index]
-                                                      .baby_tableware,
-                                                  controller.place[index]
-                                                      .nursing_room,
-                                                  controller.place[index]
-                                                      .meeting_room,
-                                                  controller.place[index]
-                                                      .diaper_change,
-                                                  controller
-                                                      .place[index].play_room,
-                                                  controller
-                                                      .place[index].baby_chair,
-                                                  // PlaceController
-                                                  //     .to.place[index].parking
-                                                  //     .toString())
-                                                ),
+                                                controller.place[index]
+                                                            .facility ==
+                                                        null
+                                                    ? Container()
+                                                    : icon(
+                                                        context,
+                                                        controller.place[index]
+                                                                .facility[
+                                                            "babyMenu"],
+                                                        controller.place[index]
+                                                                .facility[
+                                                            "stroller"],
+                                                        controller.place[index]
+                                                                .facility[
+                                                            "babyBed"],
+                                                        controller.place[index]
+                                                                .facility[
+                                                            "babyTableware"],
+                                                        controller.place[index]
+                                                                .facility[
+                                                            "nursingRoom"],
+                                                        controller.place[index]
+                                                                .facility[
+                                                            "meetingRoom"],
+                                                        controller.place[index]
+                                                                .facility[
+                                                            "diaperChange"],
+                                                        controller.place[index]
+                                                                .facility[
+                                                            "playRoom"],
+                                                        controller.place[index]
+                                                                .facility[
+                                                            "babyChair"],
+                                                        // PlaceController
+                                                        //     .to.place[index].parking
+                                                        //     .toString())
+                                                      ),
                                               ],
                                             ),
                                           )
@@ -346,15 +359,15 @@ class PlaceList extends GetView<PlaceController> {
                                           right: 30.w,
                                           bottom: 10.h),
                                       child: Image.asset(
-                                        controller.place[index].bookmark == 0
+                                        !controller.place[index].isBookmarked
                                             ? "./assets/listPage/love_grey.png"
                                             : "./assets/listPage/love_color.png",
                                         height: 55.h,
                                       ),
                                     ),
                                     onTap: () async {
-                                      if (controller.place[index].bookmark ==
-                                          0) {
+                                      if (!controller
+                                          .place[index].isBookmarked) {
                                         await bookmark.bookmarkToogle(
                                             UserController.to.userId.value,
                                             controller.place[index].id);

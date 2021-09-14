@@ -39,9 +39,10 @@ class Place extends GetView<PlaceController> {
 
     var response;
     if (placeName == "restaurants") {
+      print("pageNumber ${pageNumber}");
       response = await http.get(
         Uri.parse(url +
-            '/api/places/$placeName?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&userId=${UserController.to.userId}&babyBed=&babyChair=&babyMenu=&babyTableware&stroller=&diaperChange&meetingRoom&nursingRoom&playRoom&parking=&isBookmarked=&pageNumber=$pageNumber'),
+            '/places/$placeName?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&userId=${UserController.to.userId}&babyBed=&babyChair=&babyMenu=&babyTableware&stroller=&diaperChange&meetingRoom&nursingRoom&playRoom&parking=&isBookmarked=&pageNumber=$pageNumber'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': '${UserController.to.token.value}'
@@ -50,17 +51,18 @@ class Place extends GetView<PlaceController> {
     } else {
       response = await http.get(
         Uri.parse(url +
-            '/api/places/$placeName?pageNumber=$pageNumber&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}'),
+            '/places/$placeName?pageNumber=$pageNumber&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': '${UserController.to.token.value}'
         },
       );
     }
-    List responseJson = json.decode(response.body)["data"]["data"];
+    List responseJson = jsonDecode(utf8.decode(response.bodyBytes))["places"];
 
     var currentData;
     for (var data in responseJson) {
+      print(data);
       if (placeCode == 1) {
         currentData = Restaurant.fromJson(data);
       } else if (placeCode == 2) {

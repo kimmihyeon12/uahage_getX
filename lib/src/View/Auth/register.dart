@@ -36,9 +36,9 @@ class _RegisterState extends State<Register> {
   bool isbirthday = false;
   bool isgender = false;
   //List<BabyInfo> babyInfo;
-  List<String> birthday = ["", "", "", ""];
+  List<String> birthday = [null, null, null, null];
   String nickName = "";
-  List<String> gender = ["", "", "", ""];
+  List<String> gender = [null, null, null, null];
   List<bool> boy = [true, true, true, true];
   List<bool> girl = [true, true, true, true];
   List<bool> none = [true, true, true, true];

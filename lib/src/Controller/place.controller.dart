@@ -6,7 +6,7 @@ class PlaceController extends GetxService {
 
   RxList place = <dynamic>[].obs;
   RxList placeRestaurantBookmark = <Restaurant>[].obs;
-  RxInt placePageNumber = 0.obs;
+  RxInt placePageNumber = 1.obs;
   RxInt indexCount = 0.obs;
 
   void changeindexCount(int index) {
@@ -16,7 +16,7 @@ class PlaceController extends GetxService {
   placeInit() {
     place(<dynamic>[]);
     indexCount(0);
-    placePageNumber(0);
+    placePageNumber(1);
   }
 
   setPlace(placedata) {

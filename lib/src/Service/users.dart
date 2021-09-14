@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:uahage/src/Controller/user.controller.dart';
+import 'package:uahage/src/Service/userForm.dart';
 import 'package:uahage/src/Static/url.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,7 +14,6 @@ class Users extends GetView<UserController> {
   String url = URL;
   //ALL SELECT
   select() async {
-    print("회원보기");
     print("userid ${controller.userId.value}");
     try {
       var response = await http.get(
@@ -24,7 +24,8 @@ class Users extends GetView<UserController> {
         },
       );
 
-      var data = await jsonDecode(response.body)['data'];
+      var data = await jsonDecode(utf8.decode(response.bodyBytes))["user"];
+      print(data);
 
       return {
         "nickname": data["nickname"] == null ? "" : data["nickname"],
@@ -42,52 +43,43 @@ class Users extends GetView<UserController> {
 
   //INSERT
   Future insert(
-      String type, nickname, babyGender, babyBirthday, ageGroupType) async {
+      String type, nickname, babyGenders, babyBirthdays, ageGroupType) async {
     print('회원가입 및 로그인');
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-
-    Map<String, dynamic> userData = type == "withNickname"
-        ? {
-            "providerName": "${UserController.to.option.value}",
-            "nickname": "${nickname}",
-            "babyGender": "${babyGender}",
-            "babyBirthday": "${babyBirthday}",
-            "ageGroupType": ageGroupType,
-          }
-        : {
-            "providerName": "${UserController.to.option.value}",
-          };
+    var formdata =
+        await userForm(nickname, babyGenders, babyBirthdays, ageGroupType);
+    print(formdata);
 
     try {
       var response;
       print(UserController.to.option);
       if (UserController.to.option == "KAKAO") {
-        response = await http.post(
-          Uri.parse(url + "/users/kakao-login"),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': 'bearer ${controller.kakaotoken.value}'
-          },
-          body: jsonEncode(userData),
+        var dio = new Dio();
+        dio.options.headers = {
+          'Content-Type': 'application/json',
+          'Authorization': 'bearer ${controller.kakaotoken.value}'
+        };
+
+        response = await dio.post(
+          url + "/users/kakao-login",
+          data: formdata,
         );
       } else {
-        response = await http.post(
-          Uri.parse(
-            url + "/users/naver-login",
-          ),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': 'bearer ${controller.navertoken.value}'
-          },
-          body: jsonEncode(userData),
+        var dio = new Dio();
+        dio.options.headers = {
+          'Content-Type': 'application/json',
+          'Authorization': 'bearer ${controller.kakaotoken.value}'
+        };
+
+        response = await dio.post(
+          url + "/users/naver-login",
+          data: formdata,
         );
       }
-      print(userData);
-      print(jsonDecode(utf8.decode(response.bodyBytes)));
-      if (response.statusCode == 200) {
-        var data = jsonDecode(response.body);
-        String token = data['data']['token'];
 
+      if (response.statusCode == 200) {
+        String token = response.data["data"]["accessToken"];
+        print(token);
         //token decode
         String foo = token.split('.')[1];
         List<int> res = base64.decode(base64.normalize(foo));
@@ -96,17 +88,17 @@ class Users extends GetView<UserController> {
         //save user info
         await sharedPreferences.setString("uahageUserToken", token.toString());
         await sharedPreferences.setString(
-            "uahageUserId", result["uid"].toString());
+            "uahageUserId", result["id"].toString());
 
-        controller.setUserid(result["uid"].toString());
+        controller.setUserid(result["id"].toString());
         controller.setToken(token.toString());
 
         print('${controller.userId.value} ${controller.token.value}');
 
-        return data["message"];
+        return response.data["message"];
       } else {
         //  controller.errorstate(true);
-        return Future.error(jsonDecode(response.body)["message"]);
+        return Future.error(response.data["message"]);
       }
     } catch (error) {
       return Future.error(error);
@@ -155,6 +147,7 @@ class Users extends GetView<UserController> {
         'Authorization': '${UserController.to.token.value}'
       },
     );
+
     return jsonDecode(utf8.decode(response.bodyBytes))["available"];
   }
 

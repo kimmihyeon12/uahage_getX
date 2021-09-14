@@ -27,17 +27,18 @@ class ListMap extends StatefulWidget {
 }
 
 class _ListMapState extends State<ListMap> {
-  String url = URL;
+  String url = pageURL;
   WebViewController webview;
   final key = UniqueKey();
   List<int> grey_image = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-  Bookmark bookmark = new Bookmark();
+  //Bookmark bookmark = new Bookmark();
   String placeName;
   int placeCode;
   String test = "";
   Future searchCategory() async {
-    await webview.loadUrl(url +
-        "/maps/show-place?userId=${UserController.to.userId.value}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=filter&babyMenu=${grey_image[0]}&babyBed=${grey_image[1]}&babyTableware=${grey_image[2]}&meetingRoom=${grey_image[3]}&diaperChange=${grey_image[4]}&playRoom=${grey_image[5]}&stroller=${grey_image[6]}&nursingRoom=${grey_image[7]}&babyChair=${grey_image[8]}&placeName=restaurants&token=${UserController.to.token.value}");
+    await webview
+        .loadUrl(url + "/?lat=35.1449589&lon=126.9216603&placeName=restaurant");
+    //  "/maps/show-place?userId=${UserController.to.userId.value}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=filter&babyMenu=${grey_image[0]}&babyBed=${grey_image[1]}&babyTableware=${grey_image[2]}&meetingRoom=${grey_image[3]}&diaperChange=${grey_image[4]}&playRoom=${grey_image[5]}&stroller=${grey_image[6]}&nursingRoom=${grey_image[7]}&babyChair=${grey_image[8]}&placeName=restaurants&token=${UserController.to.token.value}");
   }
 
   initState() {
@@ -56,11 +57,14 @@ class _ListMapState extends State<ListMap> {
         child: Stack(children: [
           WebView(
             key: key,
+            debuggingEnabled: true,
             onWebViewCreated: (WebViewController webViewController) async {
               webview = webViewController;
               if (placeCode == 1) {
                 await webview.loadUrl(url +
-                    '/maps/show-place?type=filter&userId=${UserController.to.userId}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&babyBed=&babyChair=&babyMenu=&babyTableware=&stroller=&diaperChange=&meetingRoom=&nursingRoom=&playRoom=&parking=&isBookmarked=&placeName=${placeName}&token=${UserController.to.token.value}');
+                    "/?lat=35.1449589&lon=126.9216603&placeName=restaurant");
+
+                // '/maps/show-place?type=filter&userId=${UserController.to.userId}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&babyBed=&babyChair=&babyMenu=&babyTableware=&stroller=&diaperChange=&meetingRoom=&nursingRoom=&playRoom=&parking=&isBookmarked=&placeName=${placeName}&token=${UserController.to.token.value}');
               } else {
                 await webview.loadUrl(url +
                     '/maps/show-place?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=allsearch&placeName=${placeName}&token=${UserController.to.token.value}');
@@ -71,7 +75,7 @@ class _ListMapState extends State<ListMap> {
               JavascriptChannel(
                   name: 'Print',
                   onMessageReceived: (JavascriptMessage message) async {
-                    var messages = jsonDecode(message.message);
+                    /* var messages = jsonDecode(message.message);
                     print(messages);
 
                     if (placeCode == 1) {
@@ -88,7 +92,7 @@ class _ListMapState extends State<ListMap> {
                         }
                       }
                     }
-                    await placepopup(context, messages, "", placeCode);
+                    await placepopup(context, messages, "", placeCode);*/
                   }),
             ]),
           ),
