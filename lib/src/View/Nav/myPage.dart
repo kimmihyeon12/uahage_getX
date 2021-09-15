@@ -23,6 +23,7 @@ class _MyPageState extends State<MyPage> {
   void userSelect() async {
     var data = await users.select();
     userdata = data;
+    print(userdata);
   }
 
   @override

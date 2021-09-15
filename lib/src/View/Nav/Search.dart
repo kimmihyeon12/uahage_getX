@@ -22,15 +22,25 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  String url = URL;
+  String url = pageURL;
   WebViewController webview;
   Bookmark bookmark = new Bookmark();
   final key = UniqueKey();
-  List<int> greyImage = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+  List<bool> greyImage = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
 
   Future searchCategory() async {
     await webview.loadUrl(url +
-        "/maps/show-place?userId=${UserController.to.userId.value}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=filter&babyMenu=${greyImage[0]}&babyBed=${greyImage[1]}&babyTableware=${greyImage[2]}&meetingRoom=${greyImage[3]}&diaperChange=${greyImage[4]}&playRoom=${greyImage[5]}&stroller=${greyImage[6]}&nursingRoom=${greyImage[7]}&babyChair=${greyImage[8]}&placeName=restaurants&token=${UserController.to.token.value}");
+        "/?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&babyMenu=${greyImage[0]}&babyBed=${greyImage[1]}&babyTableware=${greyImage[2]}&meetingRoom=${greyImage[3]}&diaperChange=${greyImage[4]}&playRoom=${greyImage[5]}&stroller=${greyImage[6]}&nursingRoom=${greyImage[7]}&babyChair=${greyImage[8]}");
   }
 
   @override
@@ -48,7 +58,7 @@ class _SearchState extends State<Search> {
               webview = webViewController;
 
               await webview.loadUrl(url +
-                  '/maps?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&token=${UserController.to.token.value}');
+                  "/?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&userId=${UserController.to.userId}");
             },
             javascriptMode: JavascriptMode.unrestricted,
             javascriptChannels: Set.from([
@@ -56,18 +66,18 @@ class _SearchState extends State<Search> {
                   name: 'Print',
                   onMessageReceived: (JavascriptMessage message) async {
                     var messages = jsonDecode(message.message);
-
-                    messages["bookmark"] = 0;
-                    BookmarkController.to.placeBookmarkInit();
-                    await bookmark.bookmarkSelectAll(UserController.to.userId);
-                    for (int i = 0;
-                        i < BookmarkController.to.placeBookmark.length;
-                        i++) {
-                      if (BookmarkController.to.placeBookmark[i].id ==
-                          messages["id"]) {
-                        messages["bookmark"] = 1;
-                      }
-                    }
+                    print(messages);
+                    // messages["bookmark"] = 0;
+                    // BookmarkController.to.placeBookmarkInit();
+                    // await bookmark.bookmarkSelectAll(UserController.to.userId);
+                    // for (int i = 0;
+                    //     i < BookmarkController.to.placeBookmark.length;
+                    //     i++) {
+                    //   if (BookmarkController.to.placeBookmark[i].id ==
+                    //       messages["id"]) {
+                    //     messages["bookmark"] = 1;
+                    //   }
+                    // }
 
                     await placepopup(context, messages, "", 1);
                   })
@@ -76,7 +86,17 @@ class _SearchState extends State<Search> {
           GestureDetector(
             onTap: () async {
               setState(() {
-                greyImage = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+                greyImage = [
+                  false,
+                  false,
+                  false,
+                  false,
+                  false,
+                  false,
+                  false,
+                  false,
+                  false
+                ];
               });
 
               List okButton = await popup(context, greyImage);

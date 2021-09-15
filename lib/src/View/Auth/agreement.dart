@@ -52,8 +52,9 @@ class _AgreementState extends State<Agreement> {
             Container(),
 
             Container(
-                margin: EdgeInsets.only(top: 441.h),
-                child: boldfont("서비스 약관에 동의해주세요.", 78, Color(0xffff7292))),
+                margin: EdgeInsets.only(top: 300.h),
+                child: boldfont(
+                    "서비스 이용을 위해\n 고객님의 동의가 필요합니다.", 78, Color(0xffff7292))),
 
             // Agreement
             Container(
@@ -268,7 +269,7 @@ class _AgreementState extends State<Agreement> {
                       : Color(0xffcacaca),
                   onPressed: () {
                     if (check[0] == false) {
-                      dialog(context, "이용약관에 동의하셔야 합니다.");
+                      dialog(context, "이용약관에 동의하셔야 합니다. 😥");
                     } else {
                       switch (UserController.to.option.value) {
                         case "KAKAO":

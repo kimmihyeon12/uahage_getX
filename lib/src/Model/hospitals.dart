@@ -4,13 +4,13 @@ class Hospitals {
     this.name,
     this.address,
     this.phone,
-    this.examination_items,
+    this.info,
   });
   int id;
   String name;
   String address;
   String phone;
-  String examination_items;
+  var info;
 
   factory Hospitals.fromJson(Map<String, dynamic> json) {
     return Hospitals(
@@ -18,6 +18,6 @@ class Hospitals {
         name: json["name"],
         address: json["address"],
         phone: json["phone"],
-        examination_items: json["examination_items"]);
+        info: json["info"]);
   }
 }

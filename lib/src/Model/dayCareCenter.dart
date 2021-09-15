@@ -1,15 +1,15 @@
 class DayCareCenter {
-  DayCareCenter({this.id, this.name, this.address, this.phone, this.use_bus});
+  DayCareCenter({this.id, this.name, this.address, this.phone, this.info});
   int id;
   String name;
   String address;
   String phone;
-  bool use_bus;
+  var info;
 
   factory DayCareCenter.fromJson(Map<String, dynamic> json) => DayCareCenter(
       id: json["id"],
       name: json["name"],
       address: json["address"],
       phone: json["phone"],
-      use_bus: json["use_bus"]);
+      info: json["info"]);
 }

@@ -16,7 +16,7 @@ class BookmarkController extends GetxService {
   }
 
   setPlaceBookmarkOne(index, value) {
-    placeBookmark[index].bookmark = value;
+    placeBookmark[index].isBookmarked = value;
     placeBookmark.refresh();
   }
 

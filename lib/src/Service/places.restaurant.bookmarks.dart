@@ -14,7 +14,7 @@ class Bookmark extends GetView<BookmarkController> {
     var data = {"userId": userId, "placeId": placeId};
     var response = await http.post(
       Uri.parse(
-        url + "/api/places/restaurants/bookmarks",
+        url + "/places/restaurants/bookmarked",
       ),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -22,22 +22,24 @@ class Bookmark extends GetView<BookmarkController> {
       },
       body: jsonEncode(data),
     );
+    print(response);
   }
 
   bookmarkSelectAll(userId) async {
     String url = URL;
-
+    print('user-Id $userId');
     final response = await http.get(
       Uri.parse(URL +
-          '/api/places/restaurants?pageNumber=0&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&userId=$userId&babyBed=&babyChair=&babyMenu=&babyTableware&stroller=&diaperChange&meetingRoom&nursingRoom&playRoom&parking=&isBookmarked=1'),
+          //   '/places/restaurants?pageNumber=1&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&userId=$userId&isBookmarked=true'),
+          '/places/restaurants?${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&userId=${UserController.to.userId}&pageNumber=1&isBookmarked=true'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': '${UserController.to.token.value}'
       },
     );
 
-    List responseJson = json.decode(response.body)["data"]["data"];
-
+    List responseJson = jsonDecode(utf8.decode(response.bodyBytes))["places"];
+    print(responseJson);
     var currentData;
     for (var data in responseJson) {
       currentData = Restaurant.fromJson(data);

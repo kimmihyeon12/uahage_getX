@@ -179,11 +179,11 @@ class PlaceList extends GetView<PlaceController> {
                                               else
                                                 return experienceListImage[3];
                                             } else if (placeCode == 8) {
-                                              if (controller.place[index]
-                                                      .image_path !=
-                                                  null) {
-                                                return controller
-                                                    .place[index].image_path[0];
+                                              if (!(controller.place[index]
+                                                      .images.length ==
+                                                  0)) {
+                                                return controller.place[index]
+                                                    .images[0]["imagePath"];
                                               } else {
                                                 return experienceListImage[0];
                                               }
@@ -371,12 +371,14 @@ class PlaceList extends GetView<PlaceController> {
                                         await bookmark.bookmarkToogle(
                                             UserController.to.userId.value,
                                             controller.place[index].id);
-                                        controller.setPlaceBookmark(index, 1);
+                                        controller.setPlaceBookmark(
+                                            index, true);
                                       } else {
                                         await bookmark.bookmarkToogle(
                                             UserController.to.userId.value,
                                             controller.place[index].id);
-                                        controller.setPlaceBookmark(index, 0);
+                                        controller.setPlaceBookmark(
+                                            index, false);
                                       }
                                     },
                                   ),

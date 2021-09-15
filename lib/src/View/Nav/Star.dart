@@ -176,7 +176,7 @@ class Star extends GetView<BookmarkController> {
                                                       left: 4.7 * width.w),
                                                 ),
                                                 normalfont(
-                                                    "${controller.placeBookmark[index].total ?? 0.0} ",
+                                                    "${controller.placeBookmark[index].reviewTotal ?? 0.0} ",
                                                     54,
                                                     Color(0xff4d4d4d))
                                               ],
@@ -206,39 +206,63 @@ class Star extends GetView<BookmarkController> {
                                               alignment: Alignment.bottomRight,
                                               child: Row(
                                                 children: [
-                                                  icon(
-                                                    context,
-                                                    controller
-                                                        .placeBookmark[index]
-                                                        .baby_menu,
-                                                    controller
-                                                        .placeBookmark[index]
-                                                        .stroller,
-                                                    controller
-                                                        .placeBookmark[index]
-                                                        .baby_bed,
-                                                    controller
-                                                        .placeBookmark[index]
-                                                        .baby_tableware,
-                                                    controller
-                                                        .placeBookmark[index]
-                                                        .nursing_room,
-                                                    controller
-                                                        .placeBookmark[index]
-                                                        .meeting_room,
-                                                    controller
-                                                        .placeBookmark[index]
-                                                        .diaper_change,
-                                                    controller
-                                                        .placeBookmark[index]
-                                                        .play_room,
-                                                    controller
-                                                        .placeBookmark[index]
-                                                        .baby_chair,
-                                                    // PlaceController
-                                                    //     .to.place[index].parking
-                                                    //     .toString())
-                                                  ),
+                                                  controller
+                                                              .placeBookmark[
+                                                                  index]
+                                                              .facility ==
+                                                          null
+                                                      ? Container()
+                                                      : icon(
+                                                          context,
+                                                          controller
+                                                                  .placeBookmark[
+                                                                      index]
+                                                                  .facility[
+                                                              "babyMenu"],
+                                                          controller
+                                                                  .placeBookmark[
+                                                                      index]
+                                                                  .facility[
+                                                              "stroller"],
+                                                          controller
+                                                                  .placeBookmark[
+                                                                      index]
+                                                                  .facility[
+                                                              "babyBed"],
+                                                          controller
+                                                                  .placeBookmark[
+                                                                      index]
+                                                                  .facility[
+                                                              "babyTableware"],
+                                                          controller
+                                                                  .placeBookmark[
+                                                                      index]
+                                                                  .facility[
+                                                              "nursingRoom"],
+                                                          controller
+                                                                  .placeBookmark[
+                                                                      index]
+                                                                  .facility[
+                                                              "meetingRoom"],
+                                                          controller
+                                                                  .placeBookmark[
+                                                                      index]
+                                                                  .facility[
+                                                              "diaperChange"],
+                                                          controller
+                                                                  .placeBookmark[
+                                                                      index]
+                                                                  .facility[
+                                                              "playRoom"],
+                                                          controller
+                                                                  .placeBookmark[
+                                                                      index]
+                                                                  .facility[
+                                                              "babyChair"],
+                                                          // PlaceController
+                                                          //     .to.place[index].parking
+                                                          //     .toString())
+                                                        ),
                                                 ],
                                               ),
                                             )
@@ -259,9 +283,8 @@ class Star extends GetView<BookmarkController> {
                                             right: 30.w,
                                             bottom: 10.h),
                                         child: Image.asset(
-                                          controller.placeBookmark[index]
-                                                      .bookmark ==
-                                                  0
+                                          !controller.placeBookmark[index]
+                                                  .isBookmarked
                                               ? "./assets/listPage/love_grey.png"
                                               : "./assets/listPage/love_color.png",
                                           height: 55.h,
@@ -271,13 +294,12 @@ class Star extends GetView<BookmarkController> {
                                         await bookmark.bookmarkToogle(
                                             UserController.to.userId.value,
                                             controller.placeBookmark[index].id);
-                                        controller.placeBookmark[index]
-                                                    .bookmark ==
-                                                0
+                                        !controller.placeBookmark[index]
+                                                .isBookmarked
                                             ? controller.setPlaceBookmarkOne(
-                                                index, 1)
+                                                index, true)
                                             : controller.setPlaceBookmarkOne(
-                                                index, 0);
+                                                index, false);
 
                                         // controller
                                         //     .starPlaceBookmarkrefresh(index);

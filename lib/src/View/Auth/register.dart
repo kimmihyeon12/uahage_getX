@@ -691,11 +691,11 @@ class _RegisterState extends State<Register> {
                           focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Color(0xffff7292)),
                           ),
-                          hintText: birthday[index] == ''
-                              ? "생년월일을 선택해주세요"
+                          hintText: birthday[index] == null
+                              ? "생년월일을 선택해주세요 🍰 "
                               : birthday[index],
                           hintStyle: TextStyle(
-                              color: birthday[index] == ''
+                              color: birthday[index] == null
                                   ? Color(0xffd4d4d4)
                                   : Color(0xffff7292),
                               fontWeight: FontWeight.w500,

@@ -15,7 +15,7 @@ class Loading extends GetView<UserController> {
     await 1.delay();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    Get.offNamed("/login");
+    //Get.offNamed("/login");
     if (prefs.getString('uahageUserId') != null) {
       controller.setUserid(prefs.getString('uahageUserId'));
       controller.setToken(prefs.getString('uahageUserToken'));

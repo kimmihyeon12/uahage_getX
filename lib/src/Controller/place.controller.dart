@@ -27,9 +27,9 @@ class PlaceController extends GetxService {
     placePageNumber++;
   }
 
-  setPlaceBookmark(int index, int value) {
+  setPlaceBookmark(int index, bool value) {
     print('bookmark index $index');
-    place[index].bookmark = value;
+    place[index].isBookmarked = value;
     place.refresh();
   }
 

@@ -44,7 +44,7 @@ class ListSub extends StatefulWidget {
 
 class _ListSubState extends State<ListSub> {
   WebViewController _controller;
-  String url = URL;
+  String url = pageURL;
   int placeCode = Get.arguments['placeCode'];
   var data = Get.arguments['data'];
   int index = Get.arguments['index'];
@@ -159,7 +159,7 @@ class _ListSubState extends State<ListSub> {
     return WillPopScope(
       onWillPop: () {
         if (placeCode == 1)
-          Get.back(result: [data.bookmark, aver]);
+          Get.back(result: [data.isBookmarked, aver]);
         else
           Get.back(result: "");
       },
@@ -171,7 +171,7 @@ class _ListSubState extends State<ListSub> {
               return appBar(
                 context,
                 data.name,
-                [data.bookmark, aver],
+                [data.isBookmarked, aver],
               );
             else
               return appBar(context, data.name, "");
@@ -216,7 +216,7 @@ class _ListSubState extends State<ListSub> {
                                       return mainImage(
                                           kidsCafeListImage[1], 1500.w);
                                   } else if (placeCode == 8) {
-                                    if (data.image_path == null) {
+                                    if (data.images.length == 0) {
                                       return mainImage(
                                           experienceListImage[0], 1500.w);
                                     } else {
@@ -225,10 +225,11 @@ class _ListSubState extends State<ListSub> {
                                         child: SizedBox(
                                           height: 870.w,
                                           child: PageView.builder(
-                                            itemCount: data.image_path.length,
+                                            itemCount: data.images.length,
                                             itemBuilder: (context, index) {
                                               return Image.network(
-                                                  data.image_path[index],
+                                                  data.images[index]
+                                                      ["imagePath"],
                                                   fit: BoxFit.cover);
                                             },
                                           ),
@@ -281,18 +282,18 @@ class _ListSubState extends State<ListSub> {
                                                 maxWidth: 170.w,
                                                 maxHeight: 170.h),
                                             icon: Image.asset(
-                                                data.bookmark == 0
+                                                !data.isBookmarked
                                                     ? "./assets/listPage/love_grey.png"
                                                     : "./assets/listPage/love_color.png",
                                                 height: 60.h),
                                             onPressed: () async {
-                                              if (data.bookmark == 0) {
+                                              if (data.isBookmarked) {
                                                 await bookmark.bookmarkToogle(
                                                     UserController
                                                         .to.userId.value,
                                                     data.id);
                                                 setState(() {
-                                                  data.bookmark = 1;
+                                                  data.isBookmarked = false;
                                                 });
                                               } else {
                                                 await bookmark.bookmarkToogle(
@@ -300,7 +301,7 @@ class _ListSubState extends State<ListSub> {
                                                         .to.userId.value,
                                                     data.id);
                                                 setState(() {
-                                                  data.bookmark = 0;
+                                                  data.isBookmarked = true;
                                                 });
                                               }
                                             },
@@ -440,7 +441,9 @@ class _ListSubState extends State<ListSub> {
                                     children: [
                                       Container(
                                         width: 955.w,
-                                        child: normalfont("${data.phone}", 58,
+                                        child: normalfont(
+                                            "${data.phone == null ? "없음" : data.phone}",
+                                            58,
                                             Color(0xff808080)),
                                       ),
                                       Padding(
@@ -490,10 +493,10 @@ class _ListSubState extends State<ListSub> {
                                                     padding: EdgeInsets.only(
                                                         top: 10.h)),
                                                 normalfont(
-                                                    data.worked_at ==
+                                                    data.info["workedAt"] ==
                                                             "undefined"
                                                         ? '문의'
-                                                        : '${data.worked_at}',
+                                                        : '${data.info["workedAt"]}',
                                                     58,
                                                     Color(0xff808080)),
                                                 Padding(
@@ -611,164 +614,180 @@ class _ListSubState extends State<ListSub> {
                           (() {
                             if (placeCode == 1) {
                               return Container(
-                                child: Container(
-                                  height: 928.h,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(
-                                          left: 75.w,
-                                          top: 50.h,
-                                        ),
-                                        child: normalfont(
-                                            "편의시설", 58, Color(0xff4d4d4d)),
-                                      ),
-                                      Padding(
-                                          padding: EdgeInsets.only(top: 50.h)),
-                                      Row(
-                                          // crossAxisAlignment: CrossAxisAlignment.start,
+                                child: data.facility == null
+                                    ? Container()
+                                    : Container(
+                                        height: 928.h,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                left: 75.w,
+                                                top: 50.h,
+                                              ),
+                                              child: normalfont("편의시설", 58,
+                                                  Color(0xff4d4d4d)),
+                                            ),
                                             Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 67.w)),
-                                            data.baby_menu == true
-                                                ? Image.asset(
-                                                    imagecolor[0],
-                                                    width: 218.w,
-                                                    height: 292.h,
-                                                  )
-                                                : Image.asset(
-                                                    imagegrey[0],
-                                                    width: 218.w,
-                                                    height: 292.h,
-                                                  ),
+                                                padding:
+                                                    EdgeInsets.only(top: 50.h)),
+                                            Row(
+                                                // crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                      padding: EdgeInsets.only(
+                                                          left: 67.w)),
+                                                  data.facility["babyMenu"] ==
+                                                          true
+                                                      ? Image.asset(
+                                                          imagecolor[0],
+                                                          width: 218.w,
+                                                          height: 292.h,
+                                                        )
+                                                      : Image.asset(
+                                                          imagegrey[0],
+                                                          width: 218.w,
+                                                          height: 292.h,
+                                                        ),
+                                                  Padding(
+                                                      padding: EdgeInsets.only(
+                                                          left: 59.w)),
+                                                  data.facility["babyBed"] ==
+                                                          true
+                                                      ? Image.asset(
+                                                          imagecolor[1],
+                                                          width: 218.w,
+                                                          height: 292.h,
+                                                        )
+                                                      : Image.asset(
+                                                          imagegrey[1],
+                                                          width: 218.w,
+                                                          height: 292.h,
+                                                        ),
+                                                  Padding(
+                                                      padding: EdgeInsets.only(
+                                                          left: 59.w)),
+                                                  data.facility[
+                                                              "babyTableware"] ==
+                                                          true
+                                                      ? Image.asset(
+                                                          imagecolor[2],
+                                                          width: 218.w,
+                                                          height: 292.h,
+                                                        )
+                                                      : Image.asset(
+                                                          imagegrey[2],
+                                                          width: 218.w,
+                                                          height: 292.h,
+                                                        ),
+                                                  Padding(
+                                                      padding: EdgeInsets.only(
+                                                          left: 59.w)),
+                                                  data.facility[
+                                                              "meetingRoom"] ==
+                                                          true
+                                                      ? Image.asset(
+                                                          imagecolor[3],
+                                                          width: 218.w,
+                                                          height: 292.h,
+                                                        )
+                                                      : Image.asset(
+                                                          imagegrey[3],
+                                                          width: 218.w,
+                                                          height: 292.h,
+                                                        ),
+                                                  Padding(
+                                                      padding: EdgeInsets.only(
+                                                          left: 59.w)),
+                                                  data.facility[
+                                                              "diaperChange"] ==
+                                                          true
+                                                      ? Image.asset(
+                                                          imagecolor[4],
+                                                          width: 231.w,
+                                                          height: 284.h,
+                                                        )
+                                                      : Image.asset(
+                                                          imagegrey[4],
+                                                          width: 231.w,
+                                                          height: 284.h,
+                                                        ),
+                                                  Padding(
+                                                      padding: EdgeInsets.only(
+                                                          left: 59.w)),
+                                                ]),
                                             Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 59.w)),
-                                            data.baby_bed == true
-                                                ? Image.asset(
-                                                    imagecolor[1],
-                                                    width: 218.w,
-                                                    height: 292.h,
-                                                  )
-                                                : Image.asset(
-                                                    imagegrey[1],
-                                                    width: 218.w,
-                                                    height: 292.h,
-                                                  ),
-                                            Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 59.w)),
-                                            data.baby_tableware == true
-                                                ? Image.asset(
-                                                    imagecolor[2],
-                                                    width: 218.w,
-                                                    height: 292.h,
-                                                  )
-                                                : Image.asset(
-                                                    imagegrey[2],
-                                                    width: 218.w,
-                                                    height: 292.h,
-                                                  ),
-                                            Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 59.w)),
-                                            data.meeting_room == true
-                                                ? Image.asset(
-                                                    imagecolor[3],
-                                                    width: 218.w,
-                                                    height: 292.h,
-                                                  )
-                                                : Image.asset(
-                                                    imagegrey[3],
-                                                    width: 218.w,
-                                                    height: 292.h,
-                                                  ),
-                                            Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 59.w)),
-                                            data.diaper_change == true
-                                                ? Image.asset(
-                                                    imagecolor[4],
-                                                    width: 231.w,
-                                                    height: 284.h,
-                                                  )
-                                                : Image.asset(
-                                                    imagegrey[4],
-                                                    width: 231.w,
-                                                    height: 284.h,
-                                                  ),
-                                            Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 59.w)),
-                                          ]),
-                                      Padding(
-                                          padding: EdgeInsets.only(top: 50.h)),
-                                      Row(
-                                        children: [
-                                          Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 67.w)),
-                                          data.play_room == true
-                                              ? Image.asset(
-                                                  imagecolor[5],
-                                                  width: 218.w,
-                                                  height: 292.h,
-                                                )
-                                              : Image.asset(
-                                                  imagegrey[5],
-                                                  width: 218.w,
-                                                  height: 292.h,
-                                                ),
-                                          Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 59.w)),
-                                          data.stroller == true
-                                              ? Image.asset(
-                                                  imagecolor[6],
-                                                  width: 218.w,
-                                                  height: 292.h,
-                                                )
-                                              : Image.asset(
-                                                  imagegrey[6],
-                                                  width: 218.w,
-                                                  height: 292.h,
-                                                ),
-                                          Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 59.w)),
-                                          data.nursing_room == true
-                                              ? Image.asset(
-                                                  imagecolor[7],
-                                                  width: 218.w,
-                                                  height: 292.h,
-                                                )
-                                              : Image.asset(
-                                                  imagegrey[7],
-                                                  width: 218.w,
-                                                  height: 292.h,
-                                                ),
-                                          Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 59.w)),
-                                          data.baby_chair == true
-                                              ? Image.asset(
-                                                  imagecolor[8],
-                                                  width: 218.w,
-                                                  height: 292.h,
-                                                )
-                                              : Image.asset(
-                                                  imagegrey[8],
-                                                  width: 218.w,
-                                                  height: 292.h,
-                                                )
-                                        ],
+                                                padding:
+                                                    EdgeInsets.only(top: 50.h)),
+                                            Row(
+                                              children: [
+                                                Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 67.w)),
+                                                data.facility["playRoom"] ==
+                                                        true
+                                                    ? Image.asset(
+                                                        imagecolor[5],
+                                                        width: 218.w,
+                                                        height: 292.h,
+                                                      )
+                                                    : Image.asset(
+                                                        imagegrey[5],
+                                                        width: 218.w,
+                                                        height: 292.h,
+                                                      ),
+                                                Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 59.w)),
+                                                data.facility["stroller"] ==
+                                                        true
+                                                    ? Image.asset(
+                                                        imagecolor[6],
+                                                        width: 218.w,
+                                                        height: 292.h,
+                                                      )
+                                                    : Image.asset(
+                                                        imagegrey[6],
+                                                        width: 218.w,
+                                                        height: 292.h,
+                                                      ),
+                                                Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 59.w)),
+                                                data.facility["nursingRoom"] ==
+                                                        true
+                                                    ? Image.asset(
+                                                        imagecolor[7],
+                                                        width: 218.w,
+                                                        height: 292.h,
+                                                      )
+                                                    : Image.asset(
+                                                        imagegrey[7],
+                                                        width: 218.w,
+                                                        height: 292.h,
+                                                      ),
+                                                Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 59.w)),
+                                                data.facility["babyChair"] ==
+                                                        true
+                                                    ? Image.asset(
+                                                        imagecolor[8],
+                                                        width: 218.w,
+                                                        height: 292.h,
+                                                      )
+                                                    : Image.asset(
+                                                        imagegrey[8],
+                                                        width: 218.w,
+                                                        height: 292.h,
+                                                      )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ],
-                                  ),
-                                ),
                               );
                             } else if (placeCode == 2) {
                               return Container(
@@ -785,8 +804,10 @@ class _ListSubState extends State<ListSub> {
                                       normalfont("검진항목", 58, Color(0xff4d4d4d)),
                                       Padding(
                                           padding: EdgeInsets.only(top: 10.h)),
-                                      normalfont("${data.examination_items}",
-                                          58, Color(0xff808080)),
+                                      normalfont(
+                                          "${data.info["examinationItems"]}",
+                                          58,
+                                          Color(0xff808080)),
                                       Padding(
                                           padding: EdgeInsets.only(top: 50.h)),
                                     ],
@@ -809,7 +830,7 @@ class _ListSubState extends State<ListSub> {
                                       Padding(
                                           padding: EdgeInsets.only(top: 10.h)),
                                       normalfont(
-                                          data.use_bus == true
+                                          data.info["use_bus"] == true
                                               ? "버스 : 운행"
                                               : "버스 : 미운행",
                                           58,
@@ -836,9 +857,12 @@ class _ListSubState extends State<ListSub> {
                                       Padding(
                                           padding: EdgeInsets.only(top: 10.h)),
                                       normalfont(
-                                          data.store_info == "undefined"
+                                          data.info["store_info"] ==
+                                                      "undefined" ||
+                                                  data.info["store_info"] ==
+                                                      null
                                               ? '준비 중입니다.'
-                                              : "${data.store_info}",
+                                              : "${data.info["store_info"]}",
                                           58,
                                           Color(0xff808080)),
                                       Padding(
@@ -848,16 +872,17 @@ class _ListSubState extends State<ListSub> {
                                           padding: EdgeInsets.only(top: 10.h)),
                                       InkWell(
                                         child: normalfont(
-                                            data.url == "undefined"
+                                            data.info["url"] == "undefined"
                                                 ? '준비 중입니다.'
-                                                : "${data.url}",
+                                                : "${data.info["url"]}",
                                             58,
                                             Color(0xff808080)),
                                         onTap: () async {
-                                          if (await canLaunch(data.url)) {
-                                            await launch(data.url);
+                                          if (await canLaunch(
+                                              data.info["url"])) {
+                                            await launch(data.info["url"]);
                                           } else {
-                                            throw 'Could not launch $url';
+                                            throw 'Could not launch ${data.info["url"]}';
                                           }
                                         },
                                       ),
@@ -883,8 +908,8 @@ class _ListSubState extends State<ListSub> {
                                           "관람 / 체험료", 58, Color(0xff4d4d4d)),
                                       Padding(
                                           padding: EdgeInsets.only(top: 10.h)),
-                                      normalfont("${data.admission_fee}", 58,
-                                          Color(0xff808080)),
+                                      normalfont("${data.info["admissionFee"]}",
+                                          58, Color(0xff808080)),
                                       Padding(
                                           padding: EdgeInsets.only(top: 50.h)),
                                     ],
@@ -936,7 +961,7 @@ class _ListSubState extends State<ListSub> {
                                                       webViewController) {
                                                 _controller = webViewController;
                                                 _controller.loadUrl(url +
-                                                    '/maps/show-place-name?placeName=${data.name}&placeAddress=${data.address}');
+                                                    '/detail?name=${data.name}&address=${data.address}');
                                               },
                                               javascriptMode:
                                                   JavascriptMode.unrestricted,

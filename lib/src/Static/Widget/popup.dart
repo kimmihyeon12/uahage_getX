@@ -69,14 +69,14 @@ Future<Object> popup(context, grey_image) {
                                   child: InkWell(
                                     onTap: () {
                                       setState(() {
-                                        if (grey_image[index] == 1)
-                                          grey_image[index] = 0;
+                                        if (grey_image[index] == true)
+                                          grey_image[index] = false;
                                         else
-                                          grey_image[index] = 1;
+                                          grey_image[index] = true;
                                       });
                                       print(grey_image);
                                     },
-                                    child: grey_image[index] == 0
+                                    child: grey_image[index] == false
                                         ? Image.asset(
                                             "./assets/searchPage/image" +
                                                 (index + 1).toString() +
@@ -111,15 +111,15 @@ Future<Object> popup(context, grey_image) {
                         onPressed: () async {
                           Navigator.pop(context, grey_image);
                           grey_image = [
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
+                            false,
+                            false,
+                            false,
+                            false,
+                            false,
+                            false,
+                            false,
+                            false,
+                            false,
                           ];
                         },
                         shape: new RoundedRectangleBorder(
@@ -170,10 +170,11 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
     "https://uahage.s3.ap-northeast-2.amazonaws.com/experience_/image4.png",
   ];
   print(Message["name"]);
-  int mark;
+  bool mark;
   var total = Message["total"];
   if (placeCode == 1) {
-    mark = Message["bookmark"];
+    mark = Message["isBookmarked"];
+    print("mark $mark");
   }
   var width = 1500 / 720;
   var height = 2667 / 1280;
@@ -217,7 +218,7 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                         var message;
                         if (placeCode == 1) {
                           message = Restaurant.fromJson(Message);
-                          message.bookmark = mark;
+                          message.isBookmarked = mark;
                         } else if (placeCode == 2) {
                           message = Hospitals.fromJson(Message);
                         } else if (placeCode == 3) {
@@ -313,21 +314,22 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                                                   right: 30.w,
                                                   bottom: 10.h),
                                               child: Image.asset(
-                                                mark == 0 || mark == null
+                                                mark == false || mark == null
                                                     ? "./assets/listPage/love_grey.png"
                                                     : "./assets/listPage/love_color.png",
                                                 height: 80.h,
                                               ),
                                             ),
                                             onTap: () async {
-                                              if (mark == 0 || mark == null) {
+                                              if (mark == false ||
+                                                  mark == null) {
                                                 await bookmark.bookmarkToogle(
                                                     UserController
                                                         .to.userId.value,
                                                     Message["id"]);
 
                                                 setState(() {
-                                                  mark = 1;
+                                                  mark = true;
                                                 });
                                               } else {
                                                 await bookmark.bookmarkToogle(
@@ -338,7 +340,7 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                                                 //     .starPlaceBookmarkrefresh(
                                                 //         Message["index"]);
                                                 setState(() {
-                                                  mark = 0;
+                                                  mark = false;
                                                 });
                                               }
                                             },

@@ -31,7 +31,7 @@ class _ListMapState extends State<ListMap> {
   WebViewController webview;
   final key = UniqueKey();
   List<int> grey_image = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-  //Bookmark bookmark = new Bookmark();
+  Bookmark bookmark = new Bookmark();
   String placeName;
   int placeCode;
   String test = "";
@@ -62,12 +62,14 @@ class _ListMapState extends State<ListMap> {
               webview = webViewController;
               if (placeCode == 1) {
                 await webview.loadUrl(url +
-                    "/?lat=35.1449589&lon=126.9216603&placeName=restaurant");
+                    "/?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&userId=${UserController.to.userId}");
 
                 // '/maps/show-place?type=filter&userId=${UserController.to.userId}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&babyBed=&babyChair=&babyMenu=&babyTableware=&stroller=&diaperChange=&meetingRoom=&nursingRoom=&playRoom=&parking=&isBookmarked=&placeName=${placeName}&token=${UserController.to.token.value}');
               } else {
+                print("placeName");
+                print(placeName);
                 await webview.loadUrl(url +
-                    '/maps/show-place?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=allsearch&placeName=${placeName}&token=${UserController.to.token.value}');
+                    '/places?name=${placeName}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}');
               }
             },
             javascriptMode: JavascriptMode.unrestricted,
@@ -75,24 +77,10 @@ class _ListMapState extends State<ListMap> {
               JavascriptChannel(
                   name: 'Print',
                   onMessageReceived: (JavascriptMessage message) async {
-                    /* var messages = jsonDecode(message.message);
+                    var messages = jsonDecode(message.message);
                     print(messages);
 
-                    if (placeCode == 1) {
-                      messages["bookmark"] = 0;
-                      BookmarkController.to.placeBookmarkInit();
-                      await bookmark
-                          .bookmarkSelectAll(UserController.to.userId);
-                      for (int i = 0;
-                          i < BookmarkController.to.placeBookmark.length;
-                          i++) {
-                        if (BookmarkController.to.placeBookmark[i].id ==
-                            messages["id"]) {
-                          messages["bookmark"] = 1;
-                        }
-                      }
-                    }
-                    await placepopup(context, messages, "", placeCode);*/
+                    await placepopup(context, messages, "", placeCode);
                   }),
             ]),
           ),
