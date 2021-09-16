@@ -17,18 +17,14 @@ class ReviewImage extends StatefulWidget {
 }
 
 class _ReviewImageState extends State<ReviewImage> {
-  var data;
-  List image = [];
+  var image;
+
   @override
   void initState() {
     super.initState();
-    data = widget.data;
-    select();
-  }
-
-  select() async {
-    image = await reviewSelectImage(data.id);
-    setState(() {});
+    image = widget.data;
+    print(image);
+    //select();
   }
 
   @override
@@ -50,7 +46,7 @@ class _ReviewImageState extends State<ReviewImage> {
               child: Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: NetworkImage(image[index]["image_path"]),
+                      image: NetworkImage(image[index]["imagePath"]),
                       fit: BoxFit.fitWidth),
                 ),
               ),

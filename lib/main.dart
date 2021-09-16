@@ -23,6 +23,7 @@ import 'package:uahage/src/View/Nav/search.dart';
 import 'package:uahage/src/View/Nav/myPage.dart';
 import 'package:uahage/src/View/Auth/withdrawal.dart';
 import 'package:uahage/src/View/Nav/userMotify.dart';
+import 'package:uahage/src/View/Nav/welcome.dart';
 import 'src/View/Nav/Star.dart';
 
 void main() {
@@ -53,6 +54,10 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: "/withdrawal",
           page: () => Withdrawal(),
+        ),
+        GetPage(
+          name: "/welcome",
+          page: () => WelCome(),
         ),
 
         //NAV

@@ -22,7 +22,7 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  String url = URL;
+  String url = pageURL;
   WebViewController controller;
   String keyword = Get.arguments;
   Bookmark bookmark = new Bookmark();
@@ -60,9 +60,9 @@ class _SearchBarState extends State<SearchBar> {
                               (WebViewController webViewController) async {
                             controller = webViewController;
                             final key = UniqueKey();
-                            await controller.loadUrl(url +
-                                "/maps/show-list?userId=${UserController.to.userId}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&keyword=%27$keyword%27&token=${UserController.to.token.value}");
-                            //    url +  "/maps/show-list?userId=${UserContr oller.to.userId}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&keyword=%27$keyword%27&token=${UserController.to.token.value}"
+                            await controller
+                                .loadUrl(url + "/search?keyword=$keyword");
+                            //  "/maps/show-list?userId=${UserController.to.userId}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&keyword=%27$keyword%27&token=${UserController.to.token.value}");
                           },
                           javascriptMode: JavascriptMode.unrestricted,
                           javascriptChannels: Set.from([
@@ -70,28 +70,15 @@ class _SearchBarState extends State<SearchBar> {
                                 name: 'Print',
                                 onMessageReceived:
                                     (JavascriptMessage message) async {
-                                  var messages = message.message;
-
-                                  if (messages == "null") {
+                                  var messages = jsonDecode(message.message);
+                                  print("searchbar");
+                                  print(messages);
+                                  if (messages == null) {
                                     Get.off(SearchNoneResult(),
                                         transition: Transition.fadeIn);
                                   }
-                                  // messages["bookmark"] = 0;
-                                  // BookmarkController.to.placeBookmarkInit();
-                                  // await bookmark
-                                  //     .bookmarkSelectAll(UserController.to.userId);
-                                  // for (int i = 0;
-                                  //     i <
-                                  //         BookmarkController
-                                  //             .to.placeBookmark.length;
-                                  //     i++) {
-                                  //   if (BookmarkController.to.placeBookmark[i].id ==
-                                  //       messages["id"]) {
-                                  //     messages["bookmark"] = 1;
-                                  //   }
-                                  // }
 
-                                  // await placepopup(context, messages, "", 1);
+                                  await placepopup(context, messages, "", 1);
                                 }),
                           ]),
                         ),

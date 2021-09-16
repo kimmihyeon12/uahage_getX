@@ -61,6 +61,7 @@ class _UserModifyState extends State<UserModify> {
     if (sheet.image != null) {
       setState(() {
         _image = sheet.image;
+        print(_image);
       });
     } else {
       setState(() {
@@ -72,23 +73,31 @@ class _UserModifyState extends State<UserModify> {
   Future _formData() async {
     File file = _image;
     String fileName;
+    FormData formData;
     if (userdata["image"] == null) {
       setState(() {
         isImage = true;
       });
     }
-
-    FormData formData = FormData.fromMap({
-      "images": _image == null
-          ? null
-          : await MultipartFile.fromFile(file.path,
-              filename: file.path.split('/').last),
-      "imgInit": isImage ? "Y" : "N",
-      "nickname": "${userdata["nickname"]}",
-      "ageGroupType": userdata["ageGroupType"],
-      "babyGenders": gender,
-      "babyBirthdays": birthday,
-    });
+    if (_image == null) {
+      print("이미지 삭제~~~~~");
+      formData = FormData.fromMap({
+        "imageInit": "Y",
+        "nickname": "${userdata["nickname"]}",
+        "ageGroupType": userdata["ageGroupType"],
+        "babyGenders": gender,
+        "babyBirthdays": birthday,
+      });
+    } else {
+      formData = FormData.fromMap({
+        "images": await MultipartFile.fromFile(file.path,
+            filename: file.path.split('/').last),
+        "nickname": "${userdata["nickname"]}",
+        "ageGroupType": userdata["ageGroupType"],
+        "babyGenders": gender,
+        "babyBirthdays": birthday,
+      });
+    }
 
     return formData;
   }

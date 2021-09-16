@@ -24,12 +24,11 @@ class _SearchNoneResultState extends State<SearchNoneResult> {
               alignment: Alignment.center,
               margin: EdgeInsets.only(top: 803.h),
               child: Image.asset(
-                './assets/starPage/group.png',
-                height: 600.h,
-                width: 800.w,
+                './assets/starPage/nonesearch.png',
+                height: 820.h,
               ),
             ),
-            InkWell(
+            /* InkWell(
               onTap: () {
                 Get.to(ReviseSuggest(placeId: 0, placeCategoryId: 0));
               },
@@ -41,7 +40,7 @@ class _SearchNoneResultState extends State<SearchNoneResult> {
                   width: 500.w,
                 ),
               ),
-            ),
+            ),*/
           ],
         ),
       ),

@@ -1,43 +1,37 @@
 class Review {
   Review({
     this.id,
-    this.user_id,
-    this.nickname,
-    this.profile,
-    this.description,
-    this.total_rating,
-    this.taste_rating,
-    this.cost_rating,
-    this.service_rating,
-    this.created_at,
-    this.image_path,
+    this.desc,
+    this.totalRating,
+    this.tasteRating,
+    this.costRating,
+    this.serviceRating,
+    this.updatedAt,
+    this.user,
+    this.images,
   });
 
   int id;
-  int user_id;
-  String nickname;
-  String profile;
-  String description;
-  String total_rating;
-  String taste_rating;
-  String cost_rating;
-  String service_rating;
-  String created_at;
-  String image_path;
+  String desc;
+  double totalRating;
+  double tasteRating;
+  double costRating;
+  double serviceRating;
+  String updatedAt;
+  var user;
+  var images;
 
   factory Review.fromJson(Map<String, dynamic> json) {
     return Review(
       id: json["id"],
-      user_id: json["user_id"],
-      nickname: json["nickname"],
-      profile: json["profile"],
-      description: json["description"],
-      total_rating: json["total_rating"],
-      taste_rating: json["taste_rating"],
-      cost_rating: json["cost_rating"],
-      service_rating: json["service_rating"],
-      created_at: json["created_at"],
-      image_path: json["image_path"],
+      desc: json["desc"],
+      totalRating: json["totalRating"],
+      tasteRating: json["tasteRating"],
+      costRating: json["costRating"],
+      serviceRating: json["serviceRating"],
+      updatedAt: json["updatedAt"],
+      user: json["user"],
+      images: json["images"],
     );
   }
 }

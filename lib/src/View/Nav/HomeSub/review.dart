@@ -42,6 +42,7 @@ class _ReviewPageState extends State<ReviewPage> {
   final myController = TextEditingController();
   bool imageLoad = false;
   double taste, cost, service = 0;
+  bool isImageLoad = false;
   @override
   void initState() {
     super.initState();
@@ -49,24 +50,28 @@ class _ReviewPageState extends State<ReviewPage> {
     data = widget.data;
     reviewData = widget.reviewData;
 
-    index1 =
-        reviewData != null ? double.parse(reviewData.taste_rating).round() : 0;
-    taste = reviewData != null ? double.parse(reviewData.taste_rating) : 0;
-    index2 =
-        reviewData != null ? double.parse(reviewData.cost_rating).round() : 0;
-    cost = reviewData != null ? double.parse(reviewData.cost_rating) : 0;
-    index3 = reviewData != null
-        ? double.parse(reviewData.service_rating).round()
-        : 0;
-    service = reviewData != null ? double.parse(reviewData.service_rating) : 0;
-    myController.text = reviewData != null ? reviewData.description : "";
+    index1 = reviewData != null ? reviewData.tasteRating.round() : 0;
+    taste = reviewData != null ? reviewData.tasteRating : 0;
+    index2 = reviewData != null ? reviewData.costRating.round() : 0;
+    cost = reviewData != null ? reviewData.costRating : 0;
+    index3 = reviewData != null ? reviewData.serviceRating.round() : 0;
+    service = reviewData != null ? reviewData.serviceRating : 0;
+    myController.text = reviewData != null ? reviewData.desc : "";
+    // if (reviewData != null) {
+    //   if (reviewData.image_path != null) {
+    //     imageLoad = true;
+    //     prevImage.add(reviewData.image_path.split(','));
+    //   }
+    // }
     if (reviewData != null) {
-      if (reviewData.image_path != null) {
-        imageLoad = true;
-        prevImage.add(reviewData.image_path.split(','));
+      isImageLoad = true;
+      for (int i = 0; i < reviewData.images.length; i++) {
+        prevImage.add(reviewData.images[i]["previewImagePath"]);
+        print(reviewData.images[i]["previewImagePath"]);
       }
+    } else {
+      isImageLoad = false;
     }
-
     setState(() {});
   }
 
@@ -294,7 +299,7 @@ class _ReviewPageState extends State<ReviewPage> {
               children: [
                 InkWell(
                   onTap: () async {
-                    if (((imageLoad == false ? 0 : prevImage[0].length) +
+                    if (((isImageLoad == false ? 0 : prevImage.length) +
                             uploadingImage.length) >
                         4) {
                       dialog(context, "5장이상의 사진을 넣을수 없습니다");
@@ -312,13 +317,12 @@ class _ReviewPageState extends State<ReviewPage> {
                   flex: 1,
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount:
-                          (imageLoad == false ? 0 : prevImage[0].length) +
-                              (uploadingImage.length),
+                      itemCount: (isImageLoad == false ? 0 : prevImage.length) +
+                          (uploadingImage.length),
                       itemBuilder: (context, index) {
                         return Row(
                           children: [
-                            (imageLoad == false ? 0 : prevImage[0].length) >
+                            (isImageLoad == false ? 0 : prevImage.length) >
                                     index
                                 ? ClipRRect(
                                     borderRadius: BorderRadius.circular(10.0),
@@ -328,7 +332,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                           width: 130 * width.w,
                                           height: 130 * height.w,
                                           child: Image.network(
-                                            prevImage[0][index],
+                                            prevImage[index],
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -336,8 +340,9 @@ class _ReviewPageState extends State<ReviewPage> {
                                           decoration: BoxDecoration(
                                             shape: BoxShape.rectangle,
                                             image: DecorationImage(
-                                                image: NetworkImage(prevImage[0]
-                                                    [index]), //imageURL
+                                                image: NetworkImage(
+                                                  prevImage[index],
+                                                ), //imageURL
                                                 fit: BoxFit.cover),
                                             borderRadius:
                                                 BorderRadius.circular(10.0),
@@ -354,11 +359,11 @@ class _ReviewPageState extends State<ReviewPage> {
                                           child: InkWell(
                                             onTap: () {
                                               setState(() {
-                                                if (prevImage[0].length >
-                                                    index) {
-                                                  deleteImage
-                                                      .add(prevImage[0][index]);
-                                                  prevImage[0].removeAt(index);
+                                                if (prevImage.length > index) {
+                                                  deleteImage.add(
+                                                      reviewData.images[index]
+                                                          ["imageId"]);
+                                                  prevImage.removeAt(index);
                                                 }
                                               });
                                             },
@@ -380,9 +385,9 @@ class _ReviewPageState extends State<ReviewPage> {
                                           height: 130 * height.w,
                                           child: Image.file(
                                             uploadingImage[index -
-                                                (imageLoad == false
+                                                (isImageLoad == false
                                                     ? 0
-                                                    : prevImage[0].length)],
+                                                    : prevImage.length)],
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -392,9 +397,9 @@ class _ReviewPageState extends State<ReviewPage> {
                                             image: DecorationImage(
                                                 image: FileImage(uploadingImage[
                                                     index -
-                                                        (imageLoad == false
+                                                        (isImageLoad == false
                                                             ? 0
-                                                            : prevImage[0]
+                                                            : prevImage
                                                                 .length)]), //imageURL
                                                 fit: BoxFit.cover),
                                             borderRadius:
@@ -412,11 +417,12 @@ class _ReviewPageState extends State<ReviewPage> {
                                           child: InkWell(
                                             onTap: () {
                                               setState(() {
+                                                print("삭제했어용");
                                                 uploadingImage.removeAt(index -
-                                                    (reviewData.image_path ==
-                                                            null
+                                                    (reviewData.images.length ==
+                                                            0
                                                         ? 0
-                                                        : prevImage[0].length));
+                                                        : prevImage.length));
                                               });
                                             },
                                             child: Image.asset(

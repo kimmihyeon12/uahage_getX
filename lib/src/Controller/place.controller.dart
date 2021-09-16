@@ -33,9 +33,9 @@ class PlaceController extends GetxService {
     place.refresh();
   }
 
-  setPlacetotal(int index, String value) {
+  setPlacetotal(int index, double value) {
     print('bookmark index $value');
-    place[index].total = value;
+    place[index].reviewTotal = value;
     place.refresh();
   }
 }

@@ -31,13 +31,14 @@ reviewSelect(placeId, order) async {
   var currentData;
   try {
     var response = await http.get(
-      url + "/api/places/restaurants/${placeId}/reviews?order=$order",
+      url + "/places/restaurants/reviews?order=$order&placeId=${placeId}",
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': '${UserController.to.token.value}'
       },
     );
-    return jsonDecode(response.body)["data"];
+
+    return jsonDecode(utf8.decode(response.bodyBytes));
   } catch (err) {
     return Future.error(err);
   }
@@ -47,13 +48,14 @@ reviewSelectImage(placeId) async {
   String url = URL;
   try {
     var response = await http.get(
-      Uri.parse(url + "/api/places/restaurants/${placeId}/reviews?type=img"),
+      Uri.parse(url +
+          "/places/restaurants/reviews?type=img&order=date&placeId=${placeId}"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': '${UserController.to.token.value}'
       },
     );
-    return jsonDecode(response.body)["data"]["data"];
+    return jsonDecode(response.body)["reviews"];
   } catch (err) {
     return Future.error(err);
   }
@@ -63,7 +65,7 @@ reviewDelete(reviewId) async {
   String url = URL;
   try {
     var response = await http.delete(
-      Uri.parse(url + "/api/places/restaurants/reviews/${reviewId}"),
+      Uri.parse(url + "/places/restaurants/reviews/${reviewId}"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': '${UserController.to.token.value}'
@@ -85,7 +87,7 @@ reviewUpdate(reviewId, formdata) async {
     };
 
     var response = await dio.put(
-      url + "/api/places/restaurants/reviews/${reviewId}",
+      url + "/places/restaurants/reviews/${reviewId}",
       data: formdata,
     );
     return response.statusCode == 200 ? "성공" : "실패";
@@ -101,7 +103,7 @@ reviewUpdateFormdata(uploadingImage, desc, tasteRating, costRating,
     "tasteRating": tasteRating,
     "costRating": costRating,
     "serviceRating": serviceRating,
-    "deleteImage": deleteImage,
+    "deleteImgIds": deleteImage,
     "userId": UserController.to.userId,
   });
   for (int i = 0; i < uploadingImage.length; i++) {

@@ -39,7 +39,6 @@ class Place extends GetView<PlaceController> {
 
     var response;
     if (placeName == "restaurants") {
-      print("pageNumber ${pageNumber}");
       response = await http.get(
         Uri.parse(url +
             '/places/$placeName?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&userId=${UserController.to.userId}&babyBed=&babyChair=&babyMenu=&babyTableware&stroller=&diaperChange&meetingRoom&nursingRoom&playRoom&parking=&isBookmarked=&pageNumber=$pageNumber'),
@@ -62,7 +61,6 @@ class Place extends GetView<PlaceController> {
 
     var currentData;
     for (var data in responseJson) {
-      print(data);
       if (placeCode == 1) {
         currentData = Restaurant.fromJson(data);
       } else if (placeCode == 2) {

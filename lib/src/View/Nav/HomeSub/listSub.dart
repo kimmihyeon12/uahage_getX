@@ -51,8 +51,19 @@ class _ListSubState extends State<ListSub> {
   var width = 1500 / 720;
   var height = 2667 / 1280;
   Bookmark bookmark = new Bookmark();
-  List<Review> reviewData = <Review>[];
-  List prevImage = [];
+
+  //리뷰
+  List<Review> allReviewDatas = [];
+  var myReviewData;
+
+  double averageTotalRating = 0;
+  List<int> totalRating = [0, 0, 0, 0, 0];
+  var option = "date";
+  int maxScore = 0;
+  bool isMyId = false;
+
+  List previewImagePath = [];
+  var imageJson;
 
   mainImage(image, screenWidth) {
     return CachedNetworkImage(
@@ -61,60 +72,38 @@ class _ListSubState extends State<ListSub> {
     );
   }
 
-  var option = "DATE";
-  List imageList = [];
+  selectImage() async {
+    imageJson = await reviewSelectImage(data.id);
+    for (int i = 0; i < imageJson.length; i++) {
+      if (i < 4) {
+        previewImagePath.add(imageJson[i]["previewImagePath"]);
+      }
+    }
+  }
 
-  double aver = 0;
-  List score = [];
-  double averStar = 0;
-  int maxScoreNumber;
-  int maxScore = 0;
-  bool isMyId = false;
-  var datas;
-  int count = 0;
-  var _isnickname;
   //리뷰 전체보기
   select(option) async {
-    reviewData = [];
-    imageList = [];
+    allReviewDatas = [];
     var responseJson = await reviewSelect(data.id, option);
-
-    var currentData;
-
-    var i = 0;
-    for (var data in responseJson["data"]) {
-      currentData = Review.fromJson(data);
-
-      if (data["user_id"].toString() == UserController.to.userId.toString()) {
-        setState(() {
-          isMyId = true;
-          datas = Review.fromJson(data);
-        });
-      }
-      reviewData.add(currentData);
-      reviewData[i].image_path != null
-          ? imageList.add(reviewData[i].image_path.split(','))
-          : imageList.add(null);
-
-      i++;
-    }
     setState(() {
-      responseJson["average"].toString() == "null"
-          ? aver = 0
-          : aver = double.parse(responseJson["average"].toString());
-
-      score = [];
-      score.add(responseJson['totalDetailObj']["onePointTotal"]);
-      score.add(responseJson['totalDetailObj']["twoPointTotal"]);
-      score.add(responseJson['totalDetailObj']["threePointTotal"]);
-      score.add(responseJson['totalDetailObj']["fourPointTotal"]);
-      score.add(responseJson['totalDetailObj']["fivePointTotal"]);
-      for (int i = 0; i < score.length; i++) {
-        if (maxScore < score[i]) {
-          maxScore = score[i];
-        }
+      averageTotalRating = responseJson["shared"]["allTotalRating"];
+      totalRating[0] = responseJson["shared"]["onePointTotal"];
+      totalRating[1] = responseJson["shared"]["twoPointTotal"];
+      totalRating[2] = responseJson["shared"]["threePointTotal"];
+      totalRating[3] = responseJson["shared"]["fourPointTotal"];
+      totalRating[4] = responseJson["shared"]["fivePointTotal"];
+      for (int i = 0; i < totalRating.length; i++) {
+        if (maxScore < totalRating[i]) maxScore = totalRating[i];
       }
-      averStar = ((aver * 2).ceil()) / 2;
+      for (var data in responseJson["reviews"]) {
+        if (data["user"]["userId"].toString() ==
+            UserController.to.userId.toString()) {
+          //내리뷰
+          isMyId = true;
+          myReviewData = Review.fromJson(data);
+        }
+        allReviewDatas.add(Review.fromJson(data));
+      }
     });
   }
 
@@ -123,15 +112,11 @@ class _ListSubState extends State<ListSub> {
     await reviewDelete(reviewId);
   }
 
-  checkNick() async {
-    _isnickname = await isNicknameCheck();
-  }
-
   @override
   void initState() {
     super.initState();
-
     select("DATE");
+    selectImage();
   }
 
   final ScrollController _scrollController = ScrollController();
@@ -139,27 +124,13 @@ class _ListSubState extends State<ListSub> {
 
   @override
   Widget build(BuildContext context) {
-    checkNick();
-
-    count = 0;
-    prevImage = [];
-    for (int i = 0; i < imageList.length; i++) {
-      if (imageList[i] != null) {
-        for (int j = 0; j < imageList[i].length; j++) {
-          if (count < 4 && imageList[i] != null) {
-            prevImage.add(imageList[i][j]);
-            count++;
-          }
-        }
-      }
-    }
     connection();
 
     ScreenUtil.init(context, width: 1500, height: 2667);
     return WillPopScope(
       onWillPop: () {
         if (placeCode == 1)
-          Get.back(result: [data.isBookmarked, aver]);
+          Get.back(result: [data.isBookmarked, averageTotalRating]);
         else
           Get.back(result: "");
       },
@@ -171,7 +142,7 @@ class _ListSubState extends State<ListSub> {
               return appBar(
                 context,
                 data.name,
-                [data.isBookmarked, aver],
+                [data.isBookmarked, averageTotalRating],
               );
             else
               return appBar(context, data.name, "");
@@ -319,7 +290,7 @@ class _ListSubState extends State<ListSub> {
                                       ? Row(
                                           children: [
                                             for (int i = 0;
-                                                i < averStar.toInt();
+                                                i < averageTotalRating.toInt();
                                                 i++)
                                               Container(
                                                 margin: EdgeInsets.only(
@@ -329,7 +300,10 @@ class _ListSubState extends State<ListSub> {
                                                   width: 38 * width.w,
                                                 ),
                                               ),
-                                            (averStar - averStar.toInt() == 0.5)
+                                            (averageTotalRating -
+                                                        averageTotalRating
+                                                            .toInt() >
+                                                    0)
                                                 ? Container(
                                                     margin: EdgeInsets.only(
                                                         right: 12 * width.w),
@@ -340,7 +314,11 @@ class _ListSubState extends State<ListSub> {
                                                   )
                                                 : Container(),
                                             for (int i = 0;
-                                                i < 5 - averStar.ceil().toInt();
+                                                i <
+                                                    5 -
+                                                        averageTotalRating
+                                                            .ceil()
+                                                            .toInt();
                                                 i++)
                                               Container(
                                                 child: Image.asset(
@@ -353,7 +331,7 @@ class _ListSubState extends State<ListSub> {
                                             // Padding(
                                             //     padding: EdgeInsets.only(
                                             //         left: 12 * width.w)),
-                                            Text('${aver}',
+                                            Text('${averageTotalRating}',
                                                 style: TextStyle(
                                                   color: Color(0xff4d4d4d),
                                                   fontSize: 30 * width.sp,
@@ -364,7 +342,7 @@ class _ListSubState extends State<ListSub> {
                                                 padding: EdgeInsets.only(
                                                     left: 12 * width.w)),
                                             Text(
-                                                '${reviewData.length}명이 평가에 참여했습니다',
+                                                '${allReviewDatas.length.toString()}명이 평가에 참여했습니다',
                                                 style: TextStyle(
                                                   color: Color(0xffc6c6c6),
                                                   fontSize: 25 * width.sp,
@@ -1108,7 +1086,8 @@ class _ListSubState extends State<ListSub> {
                                                   onTap: () async {
                                                     var result = await Get.to(
                                                         ReviewPage(
-                                                            reviewData: datas,
+                                                            reviewData:
+                                                                myReviewData,
                                                             data: data));
 
                                                     if (result == "ok") {
@@ -1166,178 +1145,154 @@ class _ListSubState extends State<ListSub> {
                                                   Radius.circular(20))),
                                           height: 193 * height.h,
                                           width: 648 * width.w),
-                                      score.length > 0
-                                          ? Container(
-                                              margin:
-                                                  EdgeInsets.only(top: 35.h),
-                                              child: Row(
-                                                children: [
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 22 * height.h),
-                                                  ),
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      normalfont(
-                                                          "고객만족도",
-                                                          24 * width,
-                                                          Color(0xff939393)),
-                                                      boldfont(
-                                                          '${aver}',
-                                                          55 * width,
-                                                          Color(0xff3a3939)),
-                                                      Row(
-                                                        children: [
-                                                          for (int i = 0;
-                                                              i <
-                                                                  averStar
-                                                                      .toInt();
-                                                              i++)
-                                                            Container(
-                                                              margin: EdgeInsets
-                                                                  .only(
-                                                                      right: 12 *
-                                                                          width
-                                                                              .w),
-                                                              child:
-                                                                  Image.asset(
-                                                                "./assets/listPage/star_color.png",
-                                                                width: 38 *
-                                                                    width.w,
-                                                              ),
-                                                            ),
-                                                          (averStar -
-                                                                      averStar
-                                                                          .toInt() ==
-                                                                  0.5)
-                                                              ? Container(
-                                                                  margin: EdgeInsets.only(
-                                                                      right: 12 *
-                                                                          width
-                                                                              .w),
-                                                                  child: Image
-                                                                      .asset(
-                                                                    "./assets/listPage/star_half.png",
-                                                                    width: 38 *
-                                                                        width.w,
-                                                                  ),
-                                                                )
-                                                              : Container(),
-                                                          for (int i = 0;
-                                                              i <
-                                                                  5 -
-                                                                      averStar
-                                                                          .ceil()
-                                                                          .toInt();
-                                                              i++)
-                                                            Container(
-                                                              child:
-                                                                  Image.asset(
-                                                                "./assets/listPage/star_grey.png",
-                                                                width: 38 *
-                                                                    width.w,
-                                                              ),
-                                                              margin: EdgeInsets
-                                                                  .only(
-                                                                      right: 12 *
-                                                                          width
-                                                                              .w),
-                                                            ),
-                                                        ],
+                                      Container(
+                                        margin: EdgeInsets.only(top: 35.h),
+                                        child: Row(
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 22 * height.h),
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                normalfont("고객만족도", 24 * width,
+                                                    Color(0xff939393)),
+                                                boldfont(
+                                                    '${averageTotalRating}',
+                                                    55 * width,
+                                                    Color(0xff3a3939)),
+                                                Row(
+                                                  children: [
+                                                    for (int i = 0;
+                                                        i <
+                                                            averageTotalRating
+                                                                .toInt();
+                                                        i++)
+                                                      Container(
+                                                        margin: EdgeInsets.only(
+                                                            right:
+                                                                12 * width.w),
+                                                        child: Image.asset(
+                                                          "./assets/listPage/star_color.png",
+                                                          width: 38 * width.w,
+                                                        ),
                                                       ),
-                                                    ],
-                                                  ),
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 30 * width.w)),
-                                                  Column(
-                                                    children: [
-                                                      Image.asset(
-                                                        "./assets/sublistPage/line.png",
-                                                        height: 158 * height.h,
+                                                    (averageTotalRating -
+                                                                averageTotalRating
+                                                                    .toInt() >
+                                                            0)
+                                                        ? Container(
+                                                            margin:
+                                                                EdgeInsets.only(
+                                                                    right: 12 *
+                                                                        width
+                                                                            .w),
+                                                            child: Image.asset(
+                                                              "./assets/listPage/star_half.png",
+                                                              width:
+                                                                  38 * width.w,
+                                                            ),
+                                                          )
+                                                        : Container(),
+                                                    for (int i = 0;
+                                                        i <
+                                                            5 -
+                                                                averageTotalRating
+                                                                    .ceil()
+                                                                    .toInt();
+                                                        i++)
+                                                      Container(
+                                                        child: Image.asset(
+                                                          "./assets/listPage/star_grey.png",
+                                                          width: 38 * width.w,
+                                                        ),
+                                                        margin: EdgeInsets.only(
+                                                            right:
+                                                                12 * width.w),
                                                       ),
-                                                    ],
-                                                  ),
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 35 * width.w)),
-                                                  Column(
-                                                    children: [
-                                                      normalfont(
-                                                          '${score[4]}',
-                                                          50,
-                                                          Color(0xffa9a9a9)),
-                                                      scoreImage(4),
-                                                      normalfont("5점", 50,
-                                                          Color(0xffa9a9a9)),
-                                                    ],
-                                                  ),
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 21 * width.w)),
-                                                  Column(
-                                                    children: [
-                                                      normalfont(
-                                                          '${score[3]}',
-                                                          50,
-                                                          Color(0xffa9a9a9)),
-                                                      scoreImage(3),
-                                                      normalfont("4점", 50,
-                                                          Color(0xffa9a9a9)),
-                                                    ],
-                                                  ),
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 21 * width.w)),
-                                                  Column(
-                                                    children: [
-                                                      normalfont(
-                                                          '${score[2]}',
-                                                          50,
-                                                          Color(0xffa9a9a9)),
-                                                      scoreImage(2),
-                                                      normalfont("3점", 50,
-                                                          Color(0xffa9a9a9)),
-                                                    ],
-                                                  ),
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 21 * width.w)),
-                                                  Column(
-                                                    children: [
-                                                      normalfont(
-                                                          '${score[1]}',
-                                                          50,
-                                                          Color(0xffa9a9a9)),
-                                                      scoreImage(1),
-                                                      normalfont("2점", 50,
-                                                          Color(0xffa9a9a9)),
-                                                    ],
-                                                  ),
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 21 * width.w)),
-                                                  Column(
-                                                    children: [
-                                                      normalfont(
-                                                          '${score[0]}',
-                                                          50,
-                                                          Color(0xffa9a9a9)),
-                                                      scoreImage(0),
-                                                      normalfont("1점", 50,
-                                                          Color(0xffa9a9a9)),
-                                                    ],
-                                                  ),
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 21 * width.w)),
-                                                ],
-                                              ),
-                                            )
-                                          : Container()
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 30 * width.w)),
+                                            Column(
+                                              children: [
+                                                Image.asset(
+                                                  "./assets/sublistPage/line.png",
+                                                  height: 158 * height.h,
+                                                ),
+                                              ],
+                                            ),
+                                            Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 35 * width.w)),
+                                            Column(
+                                              children: [
+                                                normalfont('${totalRating[4]}',
+                                                    50, Color(0xffa9a9a9)),
+                                                scoreImage(4),
+                                                normalfont("5점", 50,
+                                                    Color(0xffa9a9a9)),
+                                              ],
+                                            ),
+                                            Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 21 * width.w)),
+                                            Column(
+                                              children: [
+                                                normalfont('${totalRating[3]}',
+                                                    50, Color(0xffa9a9a9)),
+                                                scoreImage(3),
+                                                normalfont("4점", 50,
+                                                    Color(0xffa9a9a9)),
+                                              ],
+                                            ),
+                                            Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 21 * width.w)),
+                                            Column(
+                                              children: [
+                                                normalfont('${totalRating[2]}',
+                                                    50, Color(0xffa9a9a9)),
+                                                scoreImage(2),
+                                                normalfont("3점", 50,
+                                                    Color(0xffa9a9a9)),
+                                              ],
+                                            ),
+                                            Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 21 * width.w)),
+                                            Column(
+                                              children: [
+                                                normalfont('${totalRating[1]}',
+                                                    50, Color(0xffa9a9a9)),
+                                                scoreImage(1),
+                                                normalfont("2점", 50,
+                                                    Color(0xffa9a9a9)),
+                                              ],
+                                            ),
+                                            Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 21 * width.w)),
+                                            Column(
+                                              children: [
+                                                normalfont('${totalRating[0]}',
+                                                    50, Color(0xffa9a9a9)),
+                                                scoreImage(0),
+                                                normalfont("1점", 50,
+                                                    Color(0xffa9a9a9)),
+                                              ],
+                                            ),
+                                            Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 21 * width.w)),
+                                          ],
+                                        ),
+                                      )
                                     ],
                                   ),
                                 )
@@ -1356,7 +1311,9 @@ class _ListSubState extends State<ListSub> {
                                   children: [
                                     Padding(
                                         padding: EdgeInsets.only(left: 36.w)),
-                                    for (int i = 0; i < prevImage.length; i++)
+                                    for (int i = 0;
+                                        i < previewImagePath.length;
+                                        i++)
                                       i < 3
                                           ? Container(
                                               margin: EdgeInsets.only(
@@ -1368,7 +1325,7 @@ class _ListSubState extends State<ListSub> {
                                                   width: 148 * width.w,
                                                   height: 148 * height.w,
                                                   child: Image.network(
-                                                    prevImage[i],
+                                                    previewImagePath[i],
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
@@ -1376,7 +1333,8 @@ class _ListSubState extends State<ListSub> {
                                             )
                                           : InkWell(
                                               onTap: () {
-                                                Get.to(ReviewImage(data: data));
+                                                Get.to(ReviewImage(
+                                                    data: imageJson));
                                               },
                                               child: Container(
                                                 margin: EdgeInsets.only(
@@ -1392,7 +1350,7 @@ class _ListSubState extends State<ListSub> {
                                                           height:
                                                               148 * height.w,
                                                           child: Image.network(
-                                                            prevImage[i],
+                                                            previewImagePath[i],
                                                             fit: BoxFit.cover,
                                                           ),
                                                         ),
@@ -1438,7 +1396,7 @@ class _ListSubState extends State<ListSub> {
                           //Sorting condition
                           placeCode == 1
                               ? Container(
-                                  // height: 20.h,
+                                  height: 20.h,
                                   width: double.infinity,
                                   child: Row(
                                     children: [
@@ -1448,8 +1406,10 @@ class _ListSubState extends State<ListSub> {
                                               left: 35 * width.w)),
                                       normalfont(
                                           "리뷰 ", 30 * width, Color(0xff4d4d4d)),
-                                      normalfont(reviewData.length.toString(),
-                                          30 * width, Color(0xffe9718d)),
+                                      normalfont(
+                                          allReviewDatas.length.toString(),
+                                          30 * width,
+                                          Color(0xffe9718d)),
                                       Spacer(),
                                       Container(
                                         child: Row(
@@ -1458,13 +1418,13 @@ class _ListSubState extends State<ListSub> {
                                           children: [
                                             InkWell(
                                               onTap: () {
-                                                option = "DATE";
+                                                option = "date";
                                                 select(option);
                                               },
                                               child: normalfont(
                                                   "최신순",
                                                   26 * width,
-                                                  option == "DATE"
+                                                  option == "date"
                                                       ? Color(0xff4d4d4d)
                                                       : Color(0xff939393)),
                                             ),
@@ -1472,13 +1432,13 @@ class _ListSubState extends State<ListSub> {
                                                 Color(0xffdddddd)),
                                             InkWell(
                                               onTap: () {
-                                                option = "TOP";
+                                                option = "top";
                                                 select(option);
                                               },
                                               child: normalfont(
                                                   "평점높은순",
                                                   26 * width,
-                                                  option == "TOP"
+                                                  option == "top"
                                                       ? Color(0xff4d4d4d)
                                                       : Color(0xff939393)),
                                             ),
@@ -1486,13 +1446,13 @@ class _ListSubState extends State<ListSub> {
                                                 Color(0xffdddddd)),
                                             InkWell(
                                               onTap: () {
-                                                option = "LOW";
+                                                option = "low";
                                                 select(option);
                                               },
                                               child: normalfont(
                                                   "평점낮은순",
                                                   26 * width,
-                                                  option == "LOW"
+                                                  option == "low"
                                                       ? Color(0xff4d4d4d)
                                                       : Color(0xff939393)),
                                             ),
@@ -1511,9 +1471,9 @@ class _ListSubState extends State<ListSub> {
                               child: ListView.builder(
                                 physics: NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
-                                itemCount: reviewData.length,
+                                itemCount: allReviewDatas.length,
                                 itemBuilder: (context, index) {
-                                  if (reviewData.length == 0) {
+                                  if (allReviewDatas.length == 0) {
                                     return Container(
                                       child: Text(" 로딩중 "),
                                     );
@@ -1539,7 +1499,8 @@ class _ListSubState extends State<ListSub> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  reviewData[index].profile !=
+                                                  allReviewDatas[index].user[
+                                                              "profile"] !=
                                                           null
                                                       ? CircleAvatar(
                                                           radius: 40 * width.w,
@@ -1550,9 +1511,9 @@ class _ListSubState extends State<ListSub> {
                                                                   .circle,
                                                               image: DecorationImage(
                                                                   image: NetworkImage(
-                                                                      reviewData[
-                                                                              index]
-                                                                          .profile),
+                                                                      allReviewDatas[index]
+                                                                              .user[
+                                                                          "profile"]),
                                                                   fit: BoxFit
                                                                       .cover),
                                                             ),
@@ -1590,7 +1551,7 @@ class _ListSubState extends State<ListSub> {
                                                         Row(
                                                           children: [
                                                             boldfont(
-                                                                "${reviewData[index].nickname} ",
+                                                                "${allReviewDatas[index].user["nickname"]} ",
                                                                 58,
                                                                 Colors.black),
                                                             Padding(
@@ -1599,7 +1560,7 @@ class _ListSubState extends State<ListSub> {
                                                                         width
                                                                             .w)),
                                                             normalfont(
-                                                                "${reviewData[index].created_at} ",
+                                                                "${allReviewDatas[index].updatedAt} ",
                                                                 58,
                                                                 Color(
                                                                     0xff808080)),
@@ -1609,21 +1570,21 @@ class _ListSubState extends State<ListSub> {
                                                         Row(
                                                           children: [
                                                             average('맛',
-                                                                "${reviewData[index].taste_rating}"),
+                                                                "${allReviewDatas[index].tasteRating}"),
                                                             Padding(
                                                                 padding: EdgeInsets.only(
                                                                     left: 8 *
                                                                         width
                                                                             .w)),
                                                             average('가격',
-                                                                "${reviewData[index].cost_rating}"),
+                                                                "${allReviewDatas[index].costRating}"),
                                                             Padding(
                                                                 padding: EdgeInsets
                                                                     .only(
                                                                         left: 8
                                                                             .w)),
                                                             average('서비스',
-                                                                "${reviewData[index].service_rating}"),
+                                                                "${allReviewDatas[index].serviceRating}"),
                                                           ],
                                                         ),
                                                       ],
@@ -1631,8 +1592,8 @@ class _ListSubState extends State<ListSub> {
                                                   ),
                                                   Spacer(),
                                                   UserController.to.userId ==
-                                                          reviewData[index]
-                                                              .user_id
+                                                          allReviewDatas[index]
+                                                              .user["userId"]
                                                               .toString()
                                                       ? Row(
                                                           children: [
@@ -1641,7 +1602,7 @@ class _ListSubState extends State<ListSub> {
                                                                 var result = await Get
                                                                     .to(ReviewPage(
                                                                         reviewData:
-                                                                            datas,
+                                                                            myReviewData,
                                                                         data:
                                                                             data));
                                                                 if (result ==
@@ -1705,8 +1666,8 @@ class _ListSubState extends State<ListSub> {
                                                                               () async {
                                                                             Navigator.pop(context,
                                                                                 "OK");
-                                                                            await delete(reviewData[index].id);
-                                                                            datas =
+                                                                            await delete(allReviewDatas[index].id);
+                                                                            allReviewDatas =
                                                                                 null;
                                                                             isMyId =
                                                                                 false;
@@ -1751,7 +1712,7 @@ class _ListSubState extends State<ListSub> {
                                                           onTap: () {
                                                             report(
                                                                 context,
-                                                                reviewData[
+                                                                allReviewDatas[
                                                                         index]
                                                                     .id);
                                                           },
@@ -1789,7 +1750,7 @@ class _ListSubState extends State<ListSub> {
                                                       248, 248, 248, 1.0),
                                                 ),
                                                 child: Text(
-                                                  "${reviewData[index].description} ", //
+                                                  "${allReviewDatas[index].desc} ", //
                                                   style: TextStyle(
                                                       color: Color.fromRGBO(
                                                           0, 0, 0, 0.8),
@@ -1801,7 +1762,10 @@ class _ListSubState extends State<ListSub> {
                                               //Images
                                               Stack(
                                                 children: [
-                                                  imageList[index] == null
+                                                  allReviewDatas[index]
+                                                              .images
+                                                              .length ==
+                                                          0
                                                       ? Container()
                                                       : Container(
                                                           height:
@@ -1817,8 +1781,9 @@ class _ListSubState extends State<ListSub> {
                                                             children: <Widget>[
                                                               for (int i = 0;
                                                                   i <
-                                                                      imageList[
+                                                                      allReviewDatas[
                                                                               index]
+                                                                          .images
                                                                           .length;
                                                                   i++)
                                                                 InkWell(
@@ -1835,9 +1800,9 @@ class _ListSubState extends State<ListSub> {
                                                                           BorderRadius.all(
                                                                               Radius.circular(10)),
                                                                       image: DecorationImage(
-                                                                          image: NetworkImage(imageList[index]
+                                                                          image: NetworkImage(allReviewDatas[index].images[i]
                                                                               [
-                                                                              i]),
+                                                                              "previewImagePath"]),
                                                                           fit: BoxFit
                                                                               .fitWidth),
                                                                     ),
@@ -1849,7 +1814,7 @@ class _ListSubState extends State<ListSub> {
                                                                           "page":
                                                                               "listsub",
                                                                           "image":
-                                                                              imageList[index],
+                                                                              allReviewDatas[index].images,
                                                                           "index":
                                                                               i,
                                                                         });
@@ -1901,30 +1866,31 @@ class _ListSubState extends State<ListSub> {
   }
 
   Widget scoreImage(i) {
-    if (maxScore == score[i] && score[i] != 0) {
+    if (maxScore == totalRating[i] && totalRating[i] != 0) {
       return Image.asset(
         "./assets/sublistPage/bar6.png",
         height: 89 * height.h,
       );
     } else {
-      if (score[i] == 0) {
+      if (totalRating[i] == 0) {
         return Image.asset(
           "./assets/sublistPage/bar1.png",
           height: 89 * height.h,
         );
-      } else if (0 <= score[i] || score[i] <= maxScore * (1 / 4).ceil()) {
+      } else if (0 <= totalRating[i] ||
+          totalRating[i] <= maxScore * (1 / 4).ceil()) {
         return Image.asset(
           "./assets/sublistPage/bar2.png",
           height: 89 * height.h,
         );
-      } else if (maxScore * (1 / 4).ceil() < score[i] ||
-          score[i] <= maxScore * (2 / 4).ceil()) {
+      } else if (maxScore * (1 / 4).ceil() < totalRating[i] ||
+          totalRating[i] <= maxScore * (2 / 4).ceil()) {
         return Image.asset(
           "./assets/sublistPage/bar3.png",
           height: 89 * height.h,
         );
-      } else if (maxScore * (2 / 4).ceil() < score[i] ||
-          score[i] <= maxScore * (3 / 4).ceil()) {
+      } else if (maxScore * (2 / 4).ceil() < totalRating[i] ||
+          totalRating[i] <= maxScore * (3 / 4).ceil()) {
         return Image.asset(
           "./assets/sublistPage/bar4.png",
           height: 89 * height.h,

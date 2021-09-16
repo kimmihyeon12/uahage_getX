@@ -20,11 +20,11 @@ class _HomeState extends State<Home> {
   var height = 2667 / 1280;
 
   imageView(fileName) {
-    return CachedNetworkImage(
-      fadeInDuration: Duration(microseconds: 10),
-      fadeOutDuration: Duration(microseconds: 10),
-      imageUrl:
-          "https://uahage.s3.ap-northeast-2.amazonaws.com/homepage/$fileName.png",
+    return Image.network(
+      // fadeInDuration: Duration(microseconds: 10),
+      // fadeOutDuration: Duration(microseconds: 10),
+      // imageUrl:
+      "https://uahage.s3.ap-northeast-2.amazonaws.com/homepage/${fileName}.png",
       fit: BoxFit.fill,
     );
   }
@@ -48,20 +48,20 @@ class _HomeState extends State<Home> {
               children: [
                 Container(
                   width: 1500.w,
-                  height: 900.h,
+                  height: 800.h,
                   child: Stack(
                     children: [
                       PageView.builder(
-                        itemCount: 1,
+                        itemCount: 4,
                         itemBuilder: (context, index) {
-                          return imageView("image${index + 1}");
+                          return imageView("banner0${index + 1}");
                         },
-                        // onPageChanged: (int page) {
-                        //   setState(() {
-                        //     print(page);
-                        //     index = page + 1;
-                        //   });
-                        // },
+                        onPageChanged: (int page) {
+                          setState(() {
+                            print(page);
+                            index = page + 1;
+                          });
+                        },
                       ),
                       Align(
                         alignment: Alignment.topRight,
@@ -72,11 +72,11 @@ class _HomeState extends State<Home> {
                               //     image: AssetImage('./assets/path.png'),
                               //   ),
                               borderRadius: BorderRadius.circular(20.0)),
-                          margin: EdgeInsets.only(top: 775.h, right: 40.w),
+                          margin: EdgeInsets.only(top: 690.h, right: 40.w),
                           padding:
                               EdgeInsets.symmetric(vertical: 1, horizontal: 10),
                           child: Text(
-                            '$index/1',
+                            '$index/4',
                             style: TextStyle(
                               fontSize: 62.sp,
                               color: Colors.white,
@@ -84,11 +84,6 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                       ),
-                      Container(
-                        margin: EdgeInsets.only(left: 65.w, top: 55.h),
-                        child: boldfont(
-                            "영·유아 보호자와\n함께하는\n정보제공 서비스", 85, Color(0xffff7292)),
-                      )
                     ],
                   ),
                 ),

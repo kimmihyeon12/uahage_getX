@@ -142,9 +142,9 @@ class PlaceList extends GetView<PlaceController> {
                               "placeCode": placeCode,
                               "index": index,
                             });
-                            print("result $result");
+
                             controller.setPlaceBookmark(index, result[0]);
-                            controller.setPlacetotal(index, "${result[1]}");
+                            controller.setPlacetotal(index, result[1]);
                           },
                           child: Container(
                             width: 1280.w,

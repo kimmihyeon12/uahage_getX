@@ -59,8 +59,7 @@ class Star extends GetView<BookmarkController> {
                       margin: EdgeInsets.only(top: 803.h),
                       child: Image.asset(
                         './assets/starPage/group.png',
-                        height: 600.h,
-                        width: 800.w,
+                        height: 612.h,
                       ),
                     ),
                   ],

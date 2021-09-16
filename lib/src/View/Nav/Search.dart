@@ -66,19 +66,6 @@ class _SearchState extends State<Search> {
                   name: 'Print',
                   onMessageReceived: (JavascriptMessage message) async {
                     var messages = jsonDecode(message.message);
-                    print(messages);
-                    // messages["bookmark"] = 0;
-                    // BookmarkController.to.placeBookmarkInit();
-                    // await bookmark.bookmarkSelectAll(UserController.to.userId);
-                    // for (int i = 0;
-                    //     i < BookmarkController.to.placeBookmark.length;
-                    //     i++) {
-                    //   if (BookmarkController.to.placeBookmark[i].id ==
-                    //       messages["id"]) {
-                    //     messages["bookmark"] = 1;
-                    //   }
-                    // }
-
                     await placepopup(context, messages, "", 1);
                   })
             ]),
@@ -129,7 +116,7 @@ class _SearchState extends State<Search> {
                         Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("검색 조건을 설정해주세요",
+                        Text("검색 조건을 설정해주세요 🔍",
                             style: TextStyle(
                                 color: const Color(0xffed7191),
                                 fontWeight: FontWeight.w500,

@@ -50,7 +50,7 @@ class _ImageBigState extends State<ImageBig> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           image: DecorationImage(
-                              image: NetworkImage(image[index]["image_path"]),
+                              image: NetworkImage(image[index]["imagePath"]),
                               fit: BoxFit.contain),
                         ),
                       ),
@@ -138,7 +138,7 @@ class _ImageBigState extends State<ImageBig> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           image: DecorationImage(
-                              image: NetworkImage(image[index]),
+                              image: NetworkImage(image[index]["imagePath"]),
                               fit: BoxFit.contain),
                         ),
                       ),
