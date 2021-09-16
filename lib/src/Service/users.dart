@@ -25,17 +25,7 @@ class Users extends GetView<UserController> {
       );
 
       var data = await jsonDecode(utf8.decode(response.bodyBytes))["user"];
-      print(data);
-
-      return {
-        "nickname": data["nickname"] == null ? "" : data["nickname"],
-        "baby_birthday":
-            data["baby_birthday"] == null ? "" : data["baby_birthday"],
-        "baby_gender": data["baby_gender"] == null ? "" : data["baby_gender"],
-        "age_group_type":
-            data["age_group_type"] == null ? "" : data["age_group_type"],
-        "image_path": data["image_path"] == null ? "" : data["image_path"],
-      };
+      return data;
     } catch (err) {
       print(err);
     }
@@ -97,7 +87,6 @@ class Users extends GetView<UserController> {
 
         return response.data["message"];
       } else {
-        //  controller.errorstate(true);
         return Future.error(response.data["message"]);
       }
     } catch (error) {
@@ -114,7 +103,7 @@ class Users extends GetView<UserController> {
         'Authorization': '${controller.token.value}'
       },
     );
-    return jsonDecode(response.body)["data"];
+    return jsonDecode(utf8.decode(response.bodyBytes))["message"];
   }
 
   //UPDATE

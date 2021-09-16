@@ -19,11 +19,21 @@ class _MyPageState extends State<MyPage> {
   Users users = new Users();
   bool isIdValid = false;
   Map userdata;
+  int babyNumber;
+  List<String> gender = [null, null, null, null];
+  List<String> birthday = [null, null, null, null];
+  List<String> babyNumberName = ["첫째", "둘째", "셋째", "넷째"];
 
   void userSelect() async {
     var data = await users.select();
     userdata = data;
+    babyNumber = userdata["babies"].length;
     print(userdata);
+
+    for (int i = 0; i < babyNumber; i++) {
+      gender[i] = userdata["babies"][i]["babyGender"];
+      birthday[i] = userdata["babies"][i]["babyBirthday"];
+    }
   }
 
   @override
@@ -53,13 +63,13 @@ class _MyPageState extends State<MyPage> {
                               backgroundImage:
                                   AssetImage("./assets/myPage/avatar.png"),
                               child: (() {
-                                if ('${userdata["image_path"]}' != "") {
+                                if (userdata["image"] != null) {
                                   return Container(
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       image: DecorationImage(
-                                          image: NetworkImage(
-                                              userdata["image_path"]),
+                                          image: NetworkImage(userdata["image"]
+                                              ["previewImagePath"]),
                                           fit: BoxFit.cover),
                                     ),
                                   );
@@ -119,101 +129,17 @@ class _MyPageState extends State<MyPage> {
                         ],
                       ),
                     ),
+                    (() {
+                      List<Widget> list = new List<Widget>();
+                      for (int i = 0; i < babyNumber; i++) {
+                        //  Gender
+                        list.add(babyGender(i));
+                        // // Birthday
+                        list.add(babyBirthday(i));
+                      }
+                      return new Column(children: list);
+                    }()),
 
-                    //Gender
-                    Container(
-                      margin: EdgeInsets.fromLTRB(99.w, 35.h, 0, 0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // 아이성별
-                          normalfont(
-                              "아이성별", 58, Color.fromARGB(255, 255, 114, 148)),
-
-                          Container(
-                            margin: EdgeInsets.fromLTRB(99.w, 0.h, 0, 0),
-                            height: 362.h,
-                            width: 262.w,
-                            child: InkWell(
-                              child: Image.asset(
-                                  userdata['baby_gender'] != "F" &&
-                                          userdata['baby_gender'] != "A"
-                                      ? girl_image[0]
-                                      : girl_image[1]),
-                            ),
-                          ),
-                          Container(
-                            height: 362.h,
-                            width: 262.w,
-                            margin: EdgeInsets.only(left: 98.w),
-                            child: InkWell(
-                              child: Image.asset(
-                                  userdata['baby_gender'] != "M" &&
-                                          userdata['baby_gender'] != "A"
-                                      ? boy_image[0]
-                                      : boy_image[1]),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // Birthday
-                    Container(
-                      margin: EdgeInsets.fromLTRB(99.w, 5.h, 0, 0),
-                      child: Row(
-                        children: [
-                          // 아이생일
-                          normalfont(
-                              "아이생일", 58, Color.fromARGB(255, 255, 114, 148)),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              margin: EdgeInsets.fromLTRB(82.w, 0, 121.w, 0),
-                              child: Stack(
-                                children: [
-                                  AbsorbPointer(
-                                    child: TextFormField(
-                                      readOnly: true,
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                          color: Color(0xffff7292),
-                                          fontSize: 57.sp,
-                                          fontFamily: 'NotoSansCJKkr_Medium',
-                                          fontStyle: FontStyle.normal,
-                                          letterSpacing: -1.0),
-                                      decoration: InputDecoration(
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: const Color(0xffff7292),
-                                          ),
-                                          //Color.fromRGBO(255, 114, 148, 1.0)
-                                        ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Color(0xffff7292)),
-                                        ),
-                                        hintText:
-                                            userdata["baby_birthday"] == ''
-                                                ? "생년월일을 선택해주세요"
-                                                : userdata["baby_birthday"],
-                                        hintStyle: TextStyle(
-                                            color:
-                                                userdata["baby_birthday"] == ''
-                                                    ? Color(0xffd4d4d4)
-                                                    : Color(0xffff7292),
-                                            fontFamily: "NotoSansCJKkr_Medium",
-                                            fontSize: 57.0.sp),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                     // Ages
                     Container(
                       margin: EdgeInsets.fromLTRB(155.w, 91.h, 0, 0),
@@ -232,7 +158,7 @@ class _MyPageState extends State<MyPage> {
                                     Padding(
                                       padding: EdgeInsets.only(left: 59.w),
                                       child: Image.asset(
-                                        userdata["age_group_type"] == 1
+                                        userdata["ageGroupType"] == 1
                                             ? './assets/register/10_pink.png'
                                             : './assets/register/10_grey.png',
                                         height: 194.h,
@@ -242,7 +168,7 @@ class _MyPageState extends State<MyPage> {
                                     Padding(
                                       padding: EdgeInsets.only(left: 55.w),
                                       child: Image.asset(
-                                        userdata["age_group_type"] == 2
+                                        userdata["ageGroupType"] == 2
                                             ? './assets/register/20_pink.png'
                                             : './assets/register/20_grey.png',
                                         height: 194.h,
@@ -252,7 +178,7 @@ class _MyPageState extends State<MyPage> {
                                     Padding(
                                       padding: EdgeInsets.only(left: 55.w),
                                       child: Image.asset(
-                                        userdata["age_group_type"] == 3
+                                        userdata["ageGroupType"] == 3
                                             ? './assets/register/30_pink.png'
                                             : './assets/register/30_grey.png',
                                         height: 194.h,
@@ -267,7 +193,7 @@ class _MyPageState extends State<MyPage> {
                                       padding: EdgeInsets.only(
                                           left: 59.w, top: 45.h),
                                       child: Image.asset(
-                                        userdata["age_group_type"] == 4
+                                        userdata["ageGroupType"] == 4
                                             ? './assets/register/40_pink.png'
                                             : './assets/register/40_grey.png',
                                         height: 194.h,
@@ -278,7 +204,7 @@ class _MyPageState extends State<MyPage> {
                                       padding: EdgeInsets.only(
                                           left: 55.w, top: 45.h),
                                       child: Image.asset(
-                                        userdata["age_group_type"] == 5
+                                        userdata["ageGroupType"] == 5
                                             ? './assets/register/50_pink.png'
                                             : './assets/register/50_grey.png',
                                         height: 194.h,
@@ -289,9 +215,9 @@ class _MyPageState extends State<MyPage> {
                                       padding: EdgeInsets.only(
                                           left: 55.w, top: 45.h),
                                       child: Image.asset(
-                                        userdata["age_group_type"] == 6
-                                            ? './assets/register/others_pink.png'
-                                            : './assets/register/others_grey.png',
+                                        userdata["ageGroupType"] == 6
+                                            ? './assets/register/60_pink.png'
+                                            : './assets/register/60_grey.png',
                                         height: 194.h,
                                         width: 249.w,
                                       ),
@@ -434,5 +360,106 @@ class _MyPageState extends State<MyPage> {
             ),
           )
         : progress();
+  }
+
+  Widget babyGender(int i) {
+    print("gender ${gender[i]}");
+    return Container(
+      margin: EdgeInsets.fromLTRB(99.w, 35.h, 0, 0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // 아이성별
+          Container(
+              child: normalfont("${babyNumberName[i]}아이", 58,
+                  Color.fromARGB(255, 255, 114, 148))),
+
+          Container(
+            margin: EdgeInsets.fromLTRB(99.w, 0.h, 0, 0),
+            height: 362.h,
+            width: 262.w,
+            child: InkWell(
+              child:
+                  Image.asset(gender[i] != "F" ? girl_image[0] : girl_image[1]),
+            ),
+          ),
+          Container(
+            height: 362.h,
+            width: 262.w,
+            margin: EdgeInsets.only(left: 80.w),
+            child: InkWell(
+              child:
+                  Image.asset(gender[i] != "M" ? boy_image[0] : boy_image[1]),
+            ),
+          ),
+
+          babyNumber == 1 && i == 0
+              ? Container(
+                  height: 362.h,
+                  width: 293.w,
+                  margin: EdgeInsets.only(top: 22.h, left: 80.w),
+                  child: InkWell(
+                    child: Image.asset(
+                        gender[i] != "N" ? none_image[0] : none_image[1]),
+                  ))
+              : Container(),
+          Padding(padding: EdgeInsets.only(bottom: 11)),
+        ],
+      ),
+    );
+  }
+
+  Widget babyBirthday(int i) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(99.w, 5.h, 0, 0),
+      child: Row(
+        children: [
+          // 아이생일
+          normalfont("아이생일", 58, Color.fromARGB(255, 255, 114, 148)),
+          Expanded(
+            flex: 1,
+            child: Container(
+              margin: EdgeInsets.fromLTRB(82.w, 0, 121.w, 0),
+              child: Stack(
+                children: [
+                  AbsorbPointer(
+                    child: TextFormField(
+                      readOnly: true,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: Color(0xffff7292),
+                          fontSize: 57.sp,
+                          fontFamily: 'NotoSansCJKkr_Medium',
+                          fontStyle: FontStyle.normal,
+                          letterSpacing: -1.0),
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: const Color(0xffff7292),
+                          ),
+                          //Color.fromRGBO(255, 114, 148, 1.0)
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xffff7292)),
+                        ),
+                        hintText: birthday[i] == null
+                            ? "생년월일을 선택해주세요 🍰"
+                            : birthday[i] + "  🍰",
+                        hintStyle: TextStyle(
+                            color: birthday[i] == null
+                                ? Color(0xffd4d4d4)
+                                : Color(0xffff7292),
+                            fontFamily: "NotoSansCJKkr_Medium",
+                            fontSize: 57.0.sp),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

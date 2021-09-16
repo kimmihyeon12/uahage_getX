@@ -17,7 +17,7 @@ Future reviewInsert(formdata) async {
     };
 
     var response = await dio.post(
-      url + "/api/places/restaurants/reviews",
+      url + "/places/restaurants/reviews",
       data: formdata,
     );
     return response.statusCode == 200 ? "성공" : "실패";

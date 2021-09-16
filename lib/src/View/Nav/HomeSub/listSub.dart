@@ -1106,19 +1106,14 @@ class _ListSubState extends State<ListSub> {
                                                     height: 54 * height.h,
                                                   ),
                                                   onTap: () async {
-                                                    if (_isnickname == true) {
-                                                      var result = await Get.to(
-                                                          ReviewPage(
-                                                              reviewData: datas,
-                                                              data: data));
+                                                    var result = await Get.to(
+                                                        ReviewPage(
+                                                            reviewData: datas,
+                                                            data: data));
 
-                                                      if (result == "ok") {
-                                                        await select(option);
-                                                        setState(() {});
-                                                      }
-                                                    } else {
-                                                      dialog(context,
-                                                          "회원정보 수정해주세요");
+                                                    if (result == "ok") {
+                                                      await select(option);
+                                                      setState(() {});
                                                     }
                                                   },
                                                 )
@@ -1128,19 +1123,14 @@ class _ListSubState extends State<ListSub> {
                                                     height: 54 * height.h,
                                                   ),
                                                   onTap: () async {
-                                                    if (_isnickname == true) {
-                                                      var result = await Get.to(
-                                                          ReviewPage(
-                                                              reviewData: null,
-                                                              data: data));
+                                                    var result = await Get.to(
+                                                        ReviewPage(
+                                                            reviewData: null,
+                                                            data: data));
 
-                                                      if (result == "ok") {
-                                                        await select(option);
-                                                        setState(() {});
-                                                      }
-                                                    } else {
-                                                      dialog(context,
-                                                          "회원정보 수정해주세요");
+                                                    if (result == "ok") {
+                                                      await select(option);
+                                                      setState(() {});
                                                     }
                                                   },
                                                 ),

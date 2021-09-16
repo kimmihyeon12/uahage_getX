@@ -25,27 +25,35 @@ class UserModify extends StatefulWidget {
 }
 
 class _UserModifyState extends State<UserModify> {
+  String url = URL;
+  Users users = new Users();
   Map userdata;
+  List<String> gender = [null, null, null, null];
+  List<String> birthday = [null, null, null, null];
+  List<String> babyNumberName = ["첫째", "둘째", "셋째", "넷째"];
+  int babyNumber;
+  bool addbaby = false;
+
+  TextEditingController yController = TextEditingController();
+  var ageImage = [false, false, false, false, false, false];
+  bool isIdValid = false;
+  String _uploadedFileURL = "";
+  File _image;
+  bool isImage = false;
+  String imageLink = "";
+  dynamic recievedImage;
+
   @override
   void initState() {
     super.initState();
     userdata = widget.userdata;
     userdata["nickname"] != "" ? isIdValid = true : isIdValid = false;
+    babyNumber = userdata["babies"].length;
+    for (int i = 0; i < babyNumber; i++) {
+      gender[i] = userdata["babies"][i]["babyGender"];
+      birthday[i] = userdata["babies"][i]["babyBirthday"];
+    }
   }
-
-  TextEditingController yController = TextEditingController();
-
-  var ageImage = [false, false, false, false, false, false];
-
-  bool isIdValid = false;
-
-  String _uploadedFileURL = "";
-  File _image;
-  bool isImage = false;
-  String imageLink = "";
-  Users users = new Users();
-  dynamic recievedImage;
-  String url = URL;
 
   void _imageBottomSheet(context) async {
     Sheet sheet = new Sheet();
@@ -56,7 +64,7 @@ class _UserModifyState extends State<UserModify> {
       });
     } else {
       setState(() {
-        userdata["image_path"] = "";
+        userdata["image"] = null;
       });
     }
   }
@@ -64,22 +72,22 @@ class _UserModifyState extends State<UserModify> {
   Future _formData() async {
     File file = _image;
     String fileName;
-    if (userdata["image_path"] == "") {
+    if (userdata["image"] == null) {
       setState(() {
         isImage = true;
       });
     }
 
     FormData formData = FormData.fromMap({
-      "image": _image == null
+      "images": _image == null
           ? null
           : await MultipartFile.fromFile(file.path,
               filename: file.path.split('/').last),
       "imgInit": isImage ? "Y" : "N",
       "nickname": "${userdata["nickname"]}",
-      "ageGroupType": userdata["age_group_type"],
-      "babyGender": "${userdata['baby_gender']}",
-      "babyBirthday": "${userdata["baby_birthday"]}",
+      "ageGroupType": userdata["ageGroupType"],
+      "babyGenders": gender,
+      "babyBirthdays": birthday,
     });
 
     return formData;
@@ -136,14 +144,13 @@ class _UserModifyState extends State<UserModify> {
                           backgroundImage:
                               AssetImage("./assets/myPage/avatar.png"),
                           child: (() {
-                            if (userdata["image_path"] != "" &&
-                                _image == null) {
+                            if (userdata["image"] != null && _image == null) {
                               return Container(
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
-                                      image: NetworkImage(
-                                          userdata["image_path"]), //imageURL
+                                      image: NetworkImage(userdata["image"]
+                                          ["previewImagePath"]), //imageURL
                                       fit: BoxFit.cover),
                                 ),
                               );
@@ -285,150 +292,62 @@ class _UserModifyState extends State<UserModify> {
                     ),
                   ),
                 ),
-                //Gender
-                Container(
-                  margin: EdgeInsets.fromLTRB(99.w, 35.h, 0, 0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // 아이성별
-                      normalfont(
-                          "아이성별", 58, Color.fromARGB(255, 255, 114, 148)),
-                      Container(
-                        height: 362.h,
-                        width: 262.w,
-                        child: InkWell(
-                          child: Image.asset(userdata['baby_gender'] != "F" &&
-                                  userdata['baby_gender'] != "A"
-                              ? girl_image[0]
-                              : girl_image[1]),
+
+                (() {
+                  List<Widget> list = new List<Widget>();
+                  for (int i = 0; i < babyNumber; i++) {
+                    //  Gender
+                    list.add(changeBabyGender(i));
+                    // // Birthday
+                    list.add(changeBabyBirthday(i));
+                  }
+                  return new Column(children: list);
+                }()),
+                //되돌리기 아이추가
+                Row(children: [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(420.w, 230.h, 0, 0.h),
+                  ),
+                  babyNumber - 1 == 0
+                      ? Padding(
+                          padding: EdgeInsets.fromLTRB(120.w, 0, 0, 0.h),
+                        )
+                      : Container(),
+                  babyNumber - 1 == 0
+                      ? Container()
+                      : InkWell(
+                          child: Image.asset(
+                            './assets/register/back.png',
+                            width: 350.w,
+                          ),
                           onTap: () {
                             setState(() {
-                              if (userdata['baby_gender'] == "")
-                                userdata['baby_gender'] = "F";
-                              else if (userdata['baby_gender'] == "M")
-                                userdata['baby_gender'] = "A";
-                              else if (userdata['baby_gender'] == "A")
-                                userdata['baby_gender'] = "M";
-                              else if (userdata['baby_gender'] == "F") {
-                                userdata['baby_gender'] = "";
-                              }
+                              gender[babyNumber - 1] = null;
+                              birthday[babyNumber - 1] = null;
+                              babyNumber--;
+                              addbaby = false;
                             });
                           },
                         ),
-                      ),
-                      Container(
-                        height: 362.h,
-                        width: 262.w,
-                        margin: EdgeInsets.only(left: 98.w),
-                        child: InkWell(
-                          child: Image.asset(userdata['baby_gender'] != "M" &&
-                                  userdata['baby_gender'] != "A"
-                              ? boy_image[0]
-                              : boy_image[1]),
-                          onTap: () {
-                            setState(() {
-                              if (userdata['baby_gender'] == "")
-                                userdata['baby_gender'] = "M";
-                              else if (userdata['baby_gender'] == "F")
-                                userdata['baby_gender'] = "A";
-                              else if (userdata['baby_gender'] == "A")
-                                userdata['baby_gender'] = "F";
-                              else if (userdata['baby_gender'] == "M") {
-                                userdata['baby_gender'] = "";
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ],
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(100.w, 0, 0, 0.h),
                   ),
-                ),
-
-                Container(
-                  margin: EdgeInsets.fromLTRB(99.w, 5.h, 0, 0),
-                  child: Row(
-                    children: [
-                      // 아이생일
-                      Text("아이생일",
-                          style: TextStyle(
-                            fontSize: 57.sp,
-                            color: const Color(0xffff7292),
-                            fontFamily: "NotoSansCJKkr_Medium",
-                          ),
-                          textAlign: TextAlign.left),
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                          margin: EdgeInsets.fromLTRB(82.w, 0, 121.w, 0),
-                          child: Stack(
-                            children: [
-                              GestureDetector(
-                                onTap: () async {
-                                  var result = await yearPicker(context);
-                                  setState(() {
-                                    userdata["baby_birthday"] = result;
-                                  });
-                                },
-                                child: AbsorbPointer(
-                                  child: TextFormField(
-                                    readOnly: true,
-                                    controller: yController,
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                        color: Color(0xffff7292),
-                                        fontSize: 57.sp,
-                                        fontFamily: 'NotoSansCJKkr_Medium',
-                                        fontStyle: FontStyle.normal,
-                                        letterSpacing: -1.0),
-                                    decoration: InputDecoration(
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: const Color(0xffff7292),
-                                        ),
-                                        //Color.fromRGBO(255, 114, 148, 1.0)
-                                      ),
-                                      focusedBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Color(0xffff7292)),
-                                      ),
-                                      hintText: userdata["baby_birthday"] == ''
-                                          ? "생년월일을 선택해주세요"
-                                          : userdata["baby_birthday"],
-                                      hintStyle: TextStyle(
-                                          color: userdata["baby_birthday"] == ''
-                                              ? Color(0xffd4d4d4)
-                                              : Color(0xffff7292),
-                                          fontFamily: "NotoSansCJKkr_Medium",
-                                          fontSize: 57.0.sp),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: IconButton(
-                                  onPressed: () async {
-                                    var result = await yearPicker(context);
-                                    setState(() {
-                                      userdata["baby_birthday"] = result;
-                                    });
-                                  },
-                                  icon: Image.asset(
-                                      "./assets/myPage/calendar.png"),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                  InkWell(
+                    child: Image.asset(
+                      './assets/register/addbaby.png',
+                      width: 350.w,
+                    ),
+                    onTap: () {
+                      setState(() {
+                        if (babyNumber < 4) {
+                          babyNumber++;
+                          addbaby = true;
+                        }
+                      });
+                    },
                   ),
-                ),
+                ]),
 
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 98.h, 0, 0.h),
-                ),
                 //Ages
                 Column(children: [
                   Row(
@@ -440,7 +359,7 @@ class _UserModifyState extends State<UserModify> {
                       Padding(padding: EdgeInsets.only(left: 62.w)),
                       InkWell(
                         child: Image.asset(
-                          userdata["age_group_type"] == 1
+                          userdata["ageGroupType"] == 1
                               ? './assets/register/10_pink.png'
                               : './assets/register/10_grey.png',
                           height: 196.h,
@@ -453,7 +372,7 @@ class _UserModifyState extends State<UserModify> {
                       Padding(padding: EdgeInsets.only(left: 55.w)),
                       InkWell(
                         child: Image.asset(
-                          userdata["age_group_type"] == 2
+                          userdata["ageGroupType"] == 2
                               ? './assets/register/20_pink.png'
                               : './assets/register/20_grey.png',
                           height: 196.h,
@@ -466,7 +385,7 @@ class _UserModifyState extends State<UserModify> {
                       Padding(padding: EdgeInsets.only(left: 55.w)),
                       InkWell(
                         child: Image.asset(
-                          userdata["age_group_type"] == 3
+                          userdata["ageGroupType"] == 3
                               ? './assets/register/30_pink.png'
                               : './assets/register/30_grey.png',
                           height: 196.h,
@@ -487,7 +406,7 @@ class _UserModifyState extends State<UserModify> {
                       Padding(padding: EdgeInsets.only(left: 62.w)),
                       InkWell(
                         child: Image.asset(
-                          userdata["age_group_type"] == 4
+                          userdata["ageGroupType"] == 4
                               ? './assets/register/40_pink.png'
                               : './assets/register/40_grey.png',
                           height: 196.h,
@@ -500,7 +419,7 @@ class _UserModifyState extends State<UserModify> {
                       Padding(padding: EdgeInsets.only(left: 55.w)),
                       InkWell(
                         child: Image.asset(
-                          userdata["age_group_type"] == 5
+                          userdata["ageGroupType"] == 5
                               ? './assets/register/50_pink.png'
                               : './assets/register/50_grey.png',
                           height: 196.h,
@@ -513,9 +432,9 @@ class _UserModifyState extends State<UserModify> {
                       Padding(padding: EdgeInsets.only(left: 55.w)),
                       InkWell(
                         child: Image.asset(
-                          userdata["age_group_type"] == 6
-                              ? './assets/register/others_pink.png'
-                              : './assets/register/others_grey.png',
+                          userdata["ageGroupType"] == 6
+                              ? './assets/register/60_pink.png'
+                              : './assets/register/60_grey.png',
                           height: 196.h,
                           width: 251.w,
                         ),
@@ -540,16 +459,18 @@ class _UserModifyState extends State<UserModify> {
                       child: FlatButton(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0)),
-                        color: isIdValid &&
-                                userdata["age_group_type"] != "" &&
-                                userdata['baby_gender'] != "" &&
-                                userdata["baby_birthday"] != ""
+                        color: isIdValid
+                            // &&
+                            //         userdata["ageGroupType"] != "" &&
+                            //         userdata['baby_gender'] != "" &&
+                            //         userdata["baby_birthday"] != ""
                             ? Color(0xffff7292)
                             : Color(0xffcacaca),
-                        onPressed: isIdValid &&
-                                userdata["age_group_type"] != "" &&
-                                userdata['baby_gender'] != "" &&
-                                userdata["baby_birthday"] != ""
+                        onPressed: isIdValid
+                            // &&
+                            //         userdata["ageGroupType"] != "" &&
+                            //         userdata['baby_gender'] != "" &&
+                            //         userdata["baby_birthday"] != ""
                             ? () async {
                                 var formdata = await _formData();
                                 showDialog(
@@ -605,7 +526,8 @@ class _UserModifyState extends State<UserModify> {
                       ),
                     ),
                   ),
-                )
+                ),
+                Padding(padding: EdgeInsets.only(top: 300.h)),
               ],
             ),
           ),
@@ -614,9 +536,141 @@ class _UserModifyState extends State<UserModify> {
     );
   }
 
+  Widget changeBabyGender(int i) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(99.w, 35.h, 0, 0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+              child: normalfont("${babyNumberName[i]}아이", 58,
+                  Color.fromARGB(255, 255, 114, 148))),
+          Container(
+            margin: EdgeInsets.fromLTRB(99.w, 0.h, 0, 0),
+            height: 362.h,
+            width: 262.w,
+            child: InkWell(
+              child:
+                  Image.asset(gender[i] != "F" ? girl_image[0] : girl_image[1]),
+              onTap: () {
+                setState(() {
+                  if (gender[i] == "F")
+                    gender[i] == null;
+                  else {
+                    gender[i] = "F";
+                  }
+                });
+              },
+            ),
+          ),
+          Container(
+            height: 362.h,
+            width: 262.w,
+            margin: EdgeInsets.only(left: 80.w),
+            child: InkWell(
+              child:
+                  Image.asset(gender[i] != "M" ? boy_image[0] : boy_image[1]),
+              onTap: () {
+                setState(() {
+                  if (gender[i] == "M")
+                    gender[i] == null;
+                  else {
+                    gender[i] = "M";
+                  }
+                });
+              },
+            ),
+          ),
+          i == 0 && addbaby == false
+              ? Container(
+                  height: 362.h,
+                  width: 293.w,
+                  margin: EdgeInsets.only(top: 22.h, left: 80.w),
+                  child: InkWell(
+                    child: Image.asset(
+                        gender[i] != "N" ? none_image[0] : none_image[1]),
+                    onTap: () {
+                      setState(() {
+                        if (gender[i] == "N")
+                          gender[i] == null;
+                        else {
+                          gender[i] = "N";
+                        }
+                      });
+                    },
+                  ))
+              : Container(),
+        ],
+      ),
+    );
+  }
+
+  Widget changeBabyBirthday(int i) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(99.w, 5.h, 0, 0),
+      child: Row(
+        children: [
+          // 아이생일
+          normalfont("아이생일", 58, Color.fromARGB(255, 255, 114, 148)),
+          Expanded(
+            flex: 1,
+            child: Container(
+              margin: EdgeInsets.fromLTRB(82.w, 0, 121.w, 0),
+              child: Stack(
+                children: [
+                  GestureDetector(
+                    onTap: () async {
+                      var result = await yearPicker(context);
+                      setState(() {
+                        birthday[i] = result;
+                        //isbirthday = true;
+                      });
+                    },
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        readOnly: true,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            color: Color(0xffff7292),
+                            fontSize: 57.sp,
+                            fontFamily: 'NotoSansCJKkr_Medium',
+                            fontStyle: FontStyle.normal,
+                            letterSpacing: -1.0),
+                        decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: const Color(0xffff7292),
+                            ),
+                            //Color.fromRGBO(255, 114, 148, 1.0)
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xffff7292)),
+                          ),
+                          hintText: birthday[i] == null
+                              ? "생년월일을 선택해주세요 🍰"
+                              : birthday[i] + "  🍰",
+                          hintStyle: TextStyle(
+                              color: birthday[i] == null
+                                  ? Color(0xffd4d4d4)
+                                  : Color(0xffff7292),
+                              fontFamily: "NotoSansCJKkr_Medium",
+                              fontSize: 57.0.sp),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   setAgeColor(int value) {
     setState(() {
-      userdata["age_group_type"] = value;
+      userdata["ageGroupType"] = value;
     });
   }
 }
