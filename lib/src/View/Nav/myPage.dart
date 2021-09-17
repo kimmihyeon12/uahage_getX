@@ -131,6 +131,12 @@ class _MyPageState extends State<MyPage> {
                     ),
                     (() {
                       List<Widget> list = new List<Widget>();
+                      if (babyNumber == 0) {
+                        //  Gender
+                        list.add(babyGender(0));
+                        // // Birthday
+                        list.add(babyBirthday(0));
+                      }
                       for (int i = 0; i < babyNumber; i++) {
                         //  Gender
                         list.add(babyGender(i));
@@ -393,7 +399,7 @@ class _MyPageState extends State<MyPage> {
             ),
           ),
 
-          babyNumber == 1 && i == 0
+          (babyNumber == 1 && i == 0) || babyNumber == 0
               ? Container(
                   height: 362.h,
                   width: 293.w,

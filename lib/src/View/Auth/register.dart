@@ -35,6 +35,7 @@ class _RegisterState extends State<Register> {
   bool isIdValid = false;
   bool isbirthday = false;
   bool isgender = false;
+
   //List<BabyInfo> babyInfo;
 
   String nickName = "";

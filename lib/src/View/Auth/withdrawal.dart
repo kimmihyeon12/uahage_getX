@@ -35,8 +35,10 @@ class _WithdrawalState extends State<Withdrawal> {
         child: Scaffold(
             body: Stack(
           children: [
-            Image.asset('./assets/firstPage/rectangleRectangle.png',
-                height: 1415.h, fit: BoxFit.fitHeight),
+            Image.asset(
+              './assets/firstPage/rectangleRectangle.png',
+              width: 1501.w,
+            ),
             Container(
               alignment: Alignment.bottomCenter,
               child: Image(

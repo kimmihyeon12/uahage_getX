@@ -94,8 +94,7 @@ class Star extends GetView<BookmarkController> {
 
                                     controller.setPlaceBookmarkOne(
                                         index, result[0]);
-                                    controller.setPlacetotal(
-                                        index, "${result[1]}");
+                                    controller.setPlacetotal(index, result[1]);
                                   },
                                   child: Container(
                                     width: 1280.w,

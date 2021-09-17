@@ -73,10 +73,14 @@ class _ListSubState extends State<ListSub> {
   }
 
   selectImage() async {
+    print("select!!");
     imageJson = await reviewSelectImage(data.id);
+    previewImagePath = [];
     for (int i = 0; i < imageJson.length; i++) {
       if (i < 4) {
-        previewImagePath.add(imageJson[i]["previewImagePath"]);
+        setState(() {
+          previewImagePath.add(imageJson[i]["previewImagePath"]);
+        });
       }
     }
   }
@@ -1092,6 +1096,7 @@ class _ListSubState extends State<ListSub> {
 
                                                     if (result == "ok") {
                                                       await select(option);
+                                                      await selectImage();
                                                       setState(() {});
                                                     }
                                                   },
@@ -1109,6 +1114,7 @@ class _ListSubState extends State<ListSub> {
 
                                                     if (result == "ok") {
                                                       await select(option);
+                                                      await selectImage();
                                                       setState(() {});
                                                     }
                                                   },
@@ -1396,7 +1402,7 @@ class _ListSubState extends State<ListSub> {
                           //Sorting condition
                           placeCode == 1
                               ? Container(
-                                  height: 20.h,
+                                  height: 200.h,
                                   width: double.infinity,
                                   child: Row(
                                     children: [
@@ -1417,9 +1423,9 @@ class _ListSubState extends State<ListSub> {
                                               MainAxisAlignment.spaceAround,
                                           children: [
                                             InkWell(
-                                              onTap: () {
+                                              onTap: () async {
                                                 option = "date";
-                                                select(option);
+                                                await select(option);
                                               },
                                               child: normalfont(
                                                   "최신순",
@@ -1431,9 +1437,9 @@ class _ListSubState extends State<ListSub> {
                                             normalfont(" | ", 26 * width,
                                                 Color(0xffdddddd)),
                                             InkWell(
-                                              onTap: () {
+                                              onTap: () async {
                                                 option = "top";
-                                                select(option);
+                                                await select(option);
                                               },
                                               child: normalfont(
                                                   "평점높은순",
@@ -1460,8 +1466,9 @@ class _ListSubState extends State<ListSub> {
                                         ),
                                       ),
                                       Padding(
-                                          padding:
-                                              EdgeInsets.only(right: 38.w)),
+                                          padding: EdgeInsets.only(
+                                        right: 38.w,
+                                      )),
                                     ],
                                   ),
                                 )

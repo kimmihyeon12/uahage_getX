@@ -22,11 +22,12 @@ class SnsLogin extends GetView<UserController> {
 
       AccessTokenStore.instance.toStore(token);
       await kakaoGetEmail();
+      print(1);
       var isAlreadyRegistered = await users.checkEmail();
-      print(isAlreadyRegistered);
+      print(3);
       if (!isAlreadyRegistered) {
         // 이미 존재하는 이메일 일때(회원가입 한 경우)
-        //await users.insert(null, null, null, null, null);
+        await users.insert(null, null, null, null, null);
         Get.toNamed("/navigator");
       } else {
         Get.toNamed("/register");

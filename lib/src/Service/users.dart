@@ -49,11 +49,16 @@ class Users extends GetView<UserController> {
           'Content-Type': 'application/json',
           'Authorization': 'bearer ${controller.kakaotoken.value}'
         };
-
-        response = await dio.post(
-          url + "/users/kakao-login",
-          data: formdata,
-        );
+        if (type == null) {
+          //이미 이메일이 있는경우
+          //토큰 발급용
+          response = await dio.post(url + "/users/kakao-login", data: null);
+        } else {
+          response = await dio.post(
+            url + "/users/kakao-login",
+            data: formdata,
+          );
+        }
       } else {
         var dio = new Dio();
         dio.options.headers = {
@@ -128,6 +133,8 @@ class Users extends GetView<UserController> {
   //CHECK THE EMAIL
   Future checkEmail() async {
     print("이메일 체크");
+    print(url +
+        "/users/verify-duplicate-email/${controller.option.value}:${controller.email.value}");
     var response = await http.get(
       Uri.parse(url +
           "/users/verify-duplicate-email/${controller.option.value}:${controller.email.value}"),

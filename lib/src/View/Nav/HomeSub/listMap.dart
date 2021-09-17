@@ -30,15 +30,24 @@ class _ListMapState extends State<ListMap> {
   String url = pageURL;
   WebViewController webview;
   final key = UniqueKey();
-  List<int> grey_image = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+  List<bool> greyImage = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
   Bookmark bookmark = new Bookmark();
   String placeName;
   int placeCode;
   String test = "";
   Future searchCategory() async {
-    await webview
-        .loadUrl(url + "/?lat=35.1449589&lon=126.9216603&placeName=restaurant");
-    //  "/maps/show-place?userId=${UserController.to.userId.value}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&type=filter&babyMenu=${grey_image[0]}&babyBed=${grey_image[1]}&babyTableware=${grey_image[2]}&meetingRoom=${grey_image[3]}&diaperChange=${grey_image[4]}&playRoom=${grey_image[5]}&stroller=${grey_image[6]}&nursingRoom=${grey_image[7]}&babyChair=${grey_image[8]}&placeName=restaurants&token=${UserController.to.token.value}");
+    await webview.loadUrl(url +
+        "/?userId=${UserController.to.userId}&lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&babyMenu=${greyImage[0]}&babyBed=${greyImage[1]}&babyTableware=${greyImage[2]}&meetingRoom=${greyImage[3]}&diaperChange=${greyImage[4]}&playRoom=${greyImage[5]}&stroller=${greyImage[6]}&nursingRoom=${greyImage[7]}&babyChair=${greyImage[8]}");
   }
 
   initState() {
@@ -88,12 +97,22 @@ class _ListMapState extends State<ListMap> {
               ? GestureDetector(
                   onTap: () async {
                     setState(() {
-                      grey_image = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+                      greyImage = [
+                        false,
+                        false,
+                        false,
+                        false,
+                        false,
+                        false,
+                        false,
+                        false,
+                        false
+                      ];
                     });
 
-                    List okButton = await popup(context, grey_image);
+                    List okButton = await popup(context, greyImage);
                     if (okButton != null) {
-                      grey_image = okButton;
+                      greyImage = okButton;
                       await searchCategory();
                     }
                   },

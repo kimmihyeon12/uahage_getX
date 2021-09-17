@@ -15,7 +15,7 @@ revisesuggestion(formdata) async {
     };
 
     var response = await dio.post(
-      url + "/api/places/propose",
+      url + "/places/proposes",
       data: formdata,
     );
 

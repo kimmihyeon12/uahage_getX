@@ -31,7 +31,7 @@ class _UserModifyState extends State<UserModify> {
   List<String> gender = [null, null, null, null];
   List<String> birthday = [null, null, null, null];
   List<String> babyNumberName = ["첫째", "둘째", "셋째", "넷째"];
-  int babyNumber;
+  int babyNumber = 1;
   bool addbaby = false;
 
   TextEditingController yController = TextEditingController();
@@ -304,6 +304,12 @@ class _UserModifyState extends State<UserModify> {
 
                 (() {
                   List<Widget> list = new List<Widget>();
+                  if (babyNumber == 0) {
+                    //  Gender
+                    list.add(changeBabyGender(0));
+                    // // Birthday
+                    list.add(changeBabyBirthday(0));
+                  }
                   for (int i = 0; i < babyNumber; i++) {
                     //  Gender
                     list.add(changeBabyGender(i));
@@ -317,12 +323,12 @@ class _UserModifyState extends State<UserModify> {
                   Padding(
                     padding: EdgeInsets.fromLTRB(420.w, 230.h, 0, 0.h),
                   ),
-                  babyNumber - 1 == 0
+                  babyNumber - 1 == 0 || babyNumber == 0
                       ? Padding(
                           padding: EdgeInsets.fromLTRB(120.w, 0, 0, 0.h),
                         )
                       : Container(),
-                  babyNumber - 1 == 0
+                  babyNumber - 1 == 0 || babyNumber == 0
                       ? Container()
                       : InkWell(
                           child: Image.asset(
@@ -351,6 +357,7 @@ class _UserModifyState extends State<UserModify> {
                         if (babyNumber < 4) {
                           babyNumber++;
                           addbaby = true;
+                          if (babyNumber == 0) babyNumber = babyNumber + 2;
                         }
                       });
                     },
@@ -590,7 +597,7 @@ class _UserModifyState extends State<UserModify> {
               },
             ),
           ),
-          i == 0 && addbaby == false
+          (i == 0 && addbaby == false) || babyNumber == 0
               ? Container(
                   height: 362.h,
                   width: 293.w,
