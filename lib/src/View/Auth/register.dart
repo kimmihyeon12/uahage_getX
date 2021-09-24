@@ -35,7 +35,7 @@ class _RegisterState extends State<Register> {
   bool isIdValid = false;
   bool isbirthday = false;
   bool isgender = false;
-
+  bool babyAllValid;
   //List<BabyInfo> babyInfo;
 
   String nickName = "";
@@ -132,9 +132,6 @@ class _RegisterState extends State<Register> {
                                                 .checkNickName(nickName);
                                             setState(() {
                                               isIdValid = data['idValid'];
-                                              print("isIdValid");
-                                              print(data['idValid']);
-                                              print(isIdValid);
                                             });
                                             currentFocus.unfocus();
                                             dialog(
@@ -212,6 +209,10 @@ class _RegisterState extends State<Register> {
                   ),
                   onTap: () {
                     setState(() {
+                      if (gender[0] == "N") {
+                        gender[0] = null;
+                        birthday[0] = null;
+                      }
                       if (babyNumber < 4) {
                         babyNumber++;
                         addbaby = true;
@@ -283,42 +284,36 @@ class _RegisterState extends State<Register> {
                   shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(8.0),
                   ),
-                  onPressed: isIdValid == true
-                      // &&
-                      //       age != 0 &&
-                      //       gender != "" &&
-                      //       birthday != ""
-                      ? () async {
-                          showDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (context) => FutureBuilder(
-                              future: users.insert("withNickname", nickName,
-                                  gender, birthday, age),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((_) async {
-                                    Navigator.pop(context);
-                                    //if (controller.error.value == false) {
-                                    Get.offNamed("/navigator");
-                                    //  }
-                                  });
-                                } else if (snapshot.hasError) {
-                                  dialog(context, snapshot);
-                                }
-                                return progress();
-                              },
-                            ),
-                          );
-                        }
-                      : () {
-                          if (isIdValid == false) {
-                            dialog(context, "닉네임 중복을 확인해주세요");
-                          }
-                        },
-                  color:
-                      isIdValid == true ? Color(0xffff7292) : Color(0xffcccccc),
+                  onPressed: () async {
+                    if (isIdValid && babyAllValid)
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (context) => FutureBuilder(
+                          future: users.insert(
+                              "withNickname", nickName, gender, birthday, age),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              WidgetsBinding.instance
+                                  .addPostFrameCallback((_) async {
+                                Navigator.pop(context);
+                                //if (controller.error.value == false) {
+                                Get.offNamed("/navigator");
+                                //  }
+                              });
+                            } else if (snapshot.hasError) {
+                              dialog(context, snapshot);
+                            }
+                            return progress();
+                          },
+                        ),
+                      );
+                    if (!isIdValid) dialog(context, "아이디 중복확인을 해주세요");
+                    if (!babyAllValid) dialog(context, "모든 값을 입력해주세요");
+                  },
+                  color: isIdValid == true && babyAllValid == true
+                      ? Color(0xffff7292)
+                      : Color(0xffcccccc),
                   child: Text(
                     "OK",
                     style: TextStyle(
@@ -330,43 +325,6 @@ class _RegisterState extends State<Register> {
                 ),
               ),
               Padding(padding: EdgeInsets.only(top: 270.h)),
-
-              //next
-              // Center(
-              //   child: FlatButton(
-              //     onPressed: () async {
-              //       showDialog(
-              //         context: context,
-              //         builder: (context) => FutureBuilder(
-              //           future:
-              //               users.insert("", nickName, gender, birthday, age),
-              //           builder: (context, snapshot) {
-              //             if (snapshot.hasData) {
-              //               WidgetsBinding.instance
-              //                   .addPostFrameCallback((_) async {
-              //                 Navigator.pop(context);
-              //                 //  if (controller.error.value == false) {
-              //                 Get.offNamed("/navigator");
-              //                 //  }
-              //               });
-              //             } else if (snapshot.hasError) {
-              //               dialog(context, snapshot);
-              //             }
-              //             return progress();
-              //           },
-              //         ),
-              //       );
-              //     },
-              //     child: Text(
-              //       "건너뛰기",
-              //       style: TextStyle(
-              //         color: Color.fromRGBO(255, 114, 148, 1.0),
-              //         fontFamily: 'NotoSansCJKkr_Medium',
-              //         fontSize: 58.sp,
-              //       ),
-              //     ),
-              //   ),
-              // )
             ],
           ),
         ),
@@ -409,6 +367,14 @@ class _RegisterState extends State<Register> {
                     gender[i] == null;
                   else {
                     gender[i] = "F";
+
+                    birthday[i] = null;
+                  }
+                  babyAllValid = true;
+                  for (int i = 0; i < babyNumber; i++) {
+                    if (birthday[i] == null || gender[i] == null) {
+                      babyAllValid = false;
+                    }
                   }
                 });
               },
@@ -427,6 +393,13 @@ class _RegisterState extends State<Register> {
                     gender[i] == null;
                   else {
                     gender[i] = "M";
+                    birthday[i] = null;
+                  }
+                  babyAllValid = true;
+                  for (int i = 0; i < babyNumber; i++) {
+                    if (birthday[i] == null || gender[i] == null) {
+                      babyAllValid = false;
+                    }
                   }
                 });
               },
@@ -446,6 +419,13 @@ class _RegisterState extends State<Register> {
                           gender[i] == null;
                         else {
                           gender[i] = "N";
+                          birthday[i] = "아기가 아직 없어요!";
+                        }
+                        babyAllValid = true;
+                        for (int i = 0; i < babyNumber; i++) {
+                          if (birthday[i] == null || gender[i] == null) {
+                            babyAllValid = false;
+                          }
                         }
                       });
                     },
@@ -471,11 +451,21 @@ class _RegisterState extends State<Register> {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                      var result = await yearPicker(context);
-                      setState(() {
-                        birthday[i] = result;
-                        //isbirthday = true;
-                      });
+                      if (!(gender[i] == "N")) {
+                        var result = await yearPicker(context);
+                        setState(() {
+                          if (result == "")
+                            birthday[i] = null;
+                          else
+                            birthday[i] = result;
+                          babyAllValid = true;
+                          for (int i = 0; i < babyNumber; i++) {
+                            if (birthday[i] == null || gender[i] == null) {
+                              babyAllValid = false;
+                            }
+                          }
+                        });
+                      }
                     },
                     child: AbsorbPointer(
                       child: TextFormField(

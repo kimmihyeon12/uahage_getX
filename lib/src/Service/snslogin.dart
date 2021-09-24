@@ -14,17 +14,12 @@ class SnsLogin extends GetView<UserController> {
   }
 
   issueAccessToken(String authCode) async {
-    print("ggggg");
     try {
       var token = await AuthApi.instance.issueAccessToken(authCode);
       controller.setKakaoToken(token.accessToken);
-      print(token.accessToken);
-
       AccessTokenStore.instance.toStore(token);
       await kakaoGetEmail();
-      print(1);
       var isAlreadyRegistered = await users.checkEmail();
-      print(3);
       if (!isAlreadyRegistered) {
         // 이미 존재하는 이메일 일때(회원가입 한 경우)
         await users.insert(null, null, null, null, null);

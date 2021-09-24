@@ -63,7 +63,7 @@ class Users extends GetView<UserController> {
         var dio = new Dio();
         dio.options.headers = {
           'Content-Type': 'application/json',
-          'Authorization': 'bearer ${controller.kakaotoken.value}'
+          'Authorization': 'bearer ${controller.navertoken.value}'
         };
 
         response = await dio.post(
@@ -105,7 +105,7 @@ class Users extends GetView<UserController> {
       Uri.parse(url + "/users/${controller.userId.value}"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': '${controller.token.value}'
+        'Authorization': 'bearer ${controller.token.value}'
       },
     );
     return jsonDecode(utf8.decode(response.bodyBytes))["message"];
@@ -117,7 +117,7 @@ class Users extends GetView<UserController> {
       var dio = new Dio();
       dio.options.headers = {
         'Content-Type': 'application/json',
-        'Authorization': "${UserController.to.token.value}"
+        'Authorization': "bearer ${UserController.to.token.value}"
       };
       var response = await dio.put(
         url + "/users/${UserController.to.userId.value}",

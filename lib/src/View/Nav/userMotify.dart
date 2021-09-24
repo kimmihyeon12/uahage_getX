@@ -33,7 +33,7 @@ class _UserModifyState extends State<UserModify> {
   List<String> babyNumberName = ["첫째", "둘째", "셋째", "넷째"];
   int babyNumber = 1;
   bool addbaby = false;
-
+  bool babyAllValid = true;
   TextEditingController yController = TextEditingController();
   var ageImage = [false, false, false, false, false, false];
   bool isIdValid = false;
@@ -53,6 +53,7 @@ class _UserModifyState extends State<UserModify> {
       gender[i] = userdata["babies"][i]["babyGender"];
       birthday[i] = userdata["babies"][i]["babyBirthday"];
     }
+    print("babynumber ${babyNumber}");
   }
 
   void _imageBottomSheet(context) async {
@@ -354,7 +355,13 @@ class _UserModifyState extends State<UserModify> {
                     ),
                     onTap: () {
                       setState(() {
+                        if (gender[0] == "N") {
+                          gender[0] = null;
+                          birthday[0] = null;
+                        }
                         if (babyNumber < 4) {
+                          print("추가추가추가");
+                          babyAllValid = false;
                           babyNumber++;
                           addbaby = true;
                           if (babyNumber == 0) babyNumber = babyNumber + 2;
@@ -475,70 +482,59 @@ class _UserModifyState extends State<UserModify> {
                       child: FlatButton(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0)),
-                        color: isIdValid
-                            // &&
-                            //         userdata["ageGroupType"] != "" &&
-                            //         userdata['baby_gender'] != "" &&
-                            //         userdata["baby_birthday"] != ""
+                        color: isIdValid == true && babyAllValid == true
                             ? Color(0xffff7292)
-                            : Color(0xffcacaca),
-                        onPressed: isIdValid
-                            // &&
-                            //         userdata["ageGroupType"] != "" &&
-                            //         userdata['baby_gender'] != "" &&
-                            //         userdata["baby_birthday"] != ""
-                            ? () async {
-                                var formdata = await _formData();
-                                showDialog(
-                                  barrierDismissible: false,
-                                  context: context,
-                                  builder: (context) => FutureBuilder(
-                                    future: users.update(formdata),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasData) {
-                                        WidgetsBinding.instance
-                                            .addPostFrameCallback((_) {
-                                          Navigator.pop(context, true);
-                                          Navigator.pop(context, true);
-                                        });
-                                      } else if (snapshot.hasError) {
-                                        return AlertDialog(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20.0)),
-                                          ),
-                                          title: Text("${snapshot.error}"),
-                                          actions: [
-                                            FlatButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: // 확인
-                                                  normalfont("확인", 58,
-                                                      Color(0xffff7292)),
-                                            ),
-                                          ],
-                                        );
-                                      }
-                                      return Center(
-                                        child: SizedBox(
-                                            height: 200.w,
-                                            width: 200.w,
-                                            child: buildSpinKitThreeBounce(
-                                                80.w, 1500.h)),
-                                      );
-                                    },
-                                  ),
-                                );
-                              }
-                            : () {
-                                toast(context, "모든 필드를 입력하십시오", "bottom");
-                                if (isIdValid == false) {
-                                  dialog(context, "닉네임 중복을 확인해주세요");
-                                }
-                              },
+                            : Color(0xffcccccc),
+                        onPressed: () async {
+                          if (isIdValid && babyAllValid) {
+                            var formdata = await _formData();
+                            showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) => FutureBuilder(
+                                future: users.update(formdata),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                      Navigator.pop(context, true);
+                                      Navigator.pop(context, true);
+                                    });
+                                  } else if (snapshot.hasError) {
+                                    return AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20.0)),
+                                      ),
+                                      title: Text("${snapshot.error}"),
+                                      actions: [
+                                        FlatButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: // 확인
+                                              normalfont(
+                                                  "확인", 58, Color(0xffff7292)),
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                  return Center(
+                                    child: SizedBox(
+                                        height: 200.w,
+                                        width: 200.w,
+                                        child: buildSpinKitThreeBounce(
+                                            80.w, 1500.h)),
+                                  );
+                                },
+                              ),
+                            );
+                          }
+                          if (!isIdValid) dialog(context, "아이디 중복확인을 해주세요");
+                          if (!babyAllValid) dialog(context, "모든 값을 입력해주세요");
+                        },
                         child: // 중복확인
-                            normalfont("확인", 62, Color(0xffffffff)),
+                            normalfont("OK", 62, Color(0xffffffff)),
                       ),
                     ),
                   ),
@@ -574,6 +570,13 @@ class _UserModifyState extends State<UserModify> {
                     gender[i] == null;
                   else {
                     gender[i] = "F";
+                    birthday[i] = null;
+                  }
+                  babyAllValid = true;
+                  for (int i = 0; i < babyNumber; i++) {
+                    if (birthday[i] == null || gender[i] == null) {
+                      babyAllValid = false;
+                    }
                   }
                 });
               },
@@ -592,12 +595,20 @@ class _UserModifyState extends State<UserModify> {
                     gender[i] == null;
                   else {
                     gender[i] = "M";
+                    birthday[i] = null;
+                  }
+                  babyAllValid = true;
+                  for (int i = 0; i < babyNumber; i++) {
+                    if (birthday[i] == null || gender[i] == null) {
+                      babyAllValid = false;
+                    }
                   }
                 });
               },
             ),
           ),
-          (i == 0 && addbaby == false) || babyNumber == 0
+          // (i == 0 && addbaby == false) ||
+          babyNumber == 1
               ? Container(
                   height: 362.h,
                   width: 293.w,
@@ -611,6 +622,13 @@ class _UserModifyState extends State<UserModify> {
                           gender[i] == null;
                         else {
                           gender[i] = "N";
+                          birthday[i] = "아기가 아직 없어요!";
+                        }
+                        babyAllValid = true;
+                        for (int i = 0; i < babyNumber; i++) {
+                          if (birthday[i] == null || gender[i] == null) {
+                            babyAllValid = false;
+                          }
                         }
                       });
                     },
@@ -636,11 +654,22 @@ class _UserModifyState extends State<UserModify> {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                      var result = await yearPicker(context);
-                      setState(() {
-                        birthday[i] = result;
-                        //isbirthday = true;
-                      });
+                      if (!(gender[i] == "N")) {
+                        var result = await yearPicker(context);
+                        setState(() {
+                          if (result == "")
+                            birthday[i] = null;
+                          else
+                            birthday[i] = result;
+
+                          babyAllValid = true;
+                          for (int i = 0; i < babyNumber; i++) {
+                            if (birthday[i] == null || gender[i] == null) {
+                              babyAllValid = false;
+                            }
+                          }
+                        });
+                      }
                     },
                     child: AbsorbPointer(
                       child: TextFormField(
