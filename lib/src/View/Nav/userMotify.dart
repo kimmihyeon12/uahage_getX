@@ -80,25 +80,18 @@ class _UserModifyState extends State<UserModify> {
         isImage = true;
       });
     }
-    if (_image == null) {
-      print("이미지 삭제~~~~~");
-      formData = FormData.fromMap({
-        "imageInit": "Y",
-        "nickname": "${userdata["nickname"]}",
-        "ageGroupType": userdata["ageGroupType"],
-        "babyGenders": gender,
-        "babyBirthdays": birthday,
-      });
-    } else {
-      formData = FormData.fromMap({
-        "images": await MultipartFile.fromFile(file.path,
-            filename: file.path.split('/').last),
-        "nickname": "${userdata["nickname"]}",
-        "ageGroupType": userdata["ageGroupType"],
-        "babyGenders": gender,
-        "babyBirthdays": birthday,
-      });
-    }
+
+    formData = FormData.fromMap({
+      "images": (_image == null)
+          ? null
+          : await MultipartFile.fromFile(file.path,
+              filename: file.path.split('/').last),
+      "imageInit": (_image == null) ? "N" : "Y",
+      "nickname": "${userdata["nickname"]}",
+      "ageGroupType": userdata["ageGroupType"],
+      "babyGenders": gender,
+      "babyBirthdays": birthday,
+    });
 
     return formData;
   }

@@ -26,7 +26,7 @@ reviewReport(list, reviewId, desc) async {
       url + "/api/places/restaurants/reviews/decl",
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': '${UserController.to.token.value}'
+        'Authorization': 'bearer ${UserController.to.token.value}'
       },
       body: jsonEncode(jsonData),
     );

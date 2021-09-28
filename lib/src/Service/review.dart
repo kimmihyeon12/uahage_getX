@@ -13,7 +13,7 @@ Future reviewInsert(formdata) async {
     var dio = new Dio();
     dio.options.headers = {
       'Content-Type': 'application/json',
-      'Authorization': "${UserController.to.token.value}"
+      'Authorization': "bearer ${UserController.to.token.value}"
     };
 
     var response = await dio.post(
@@ -68,7 +68,7 @@ reviewDelete(reviewId) async {
       Uri.parse(url + "/places/restaurants/reviews/${reviewId}"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': '${UserController.to.token.value}'
+        'Authorization': 'bearer ${UserController.to.token.value}'
       },
     );
     return "정말 삭제하시겠습니까?";
@@ -83,7 +83,7 @@ reviewUpdate(reviewId, formdata) async {
     var dio = new Dio();
     dio.options.headers = {
       'Content-Type': 'application/json',
-      'Authorization': "${UserController.to.token.value}"
+      'Authorization': "bearer ${UserController.to.token.value}"
     };
 
     var response = await dio.put(

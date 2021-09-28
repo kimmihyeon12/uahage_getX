@@ -11,7 +11,7 @@ revisesuggestion(formdata) async {
     var dio = new Dio();
     dio.options.headers = {
       'Content-Type': 'application/json',
-      'Authorization': "${UserController.to.token.value}"
+      'Authorization': "bearer ${UserController.to.token.value}"
     };
 
     var response = await dio.post(
