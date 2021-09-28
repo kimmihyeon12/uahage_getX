@@ -19,6 +19,7 @@ import 'package:uahage/src/Static/Widget/appbar.dart';
 
 class PlaceList extends GetView<PlaceController> {
   String url = URL;
+  String imgUrl = imgURL;
   Bookmark bookmark = new Bookmark();
   int placeCode = Get.arguments;
   ScrollController scrollController = ScrollController();
@@ -158,12 +159,20 @@ class PlaceList extends GetView<PlaceController> {
                                         image: NetworkImage(
                                           (() {
                                             if (placeCode == 1) {
-                                              if (index % 3 == 1)
-                                                return restaurantListImage[0];
-                                              else if (index % 3 == 2)
-                                                return restaurantListImage[1];
-                                              else
-                                                return restaurantListImage[2];
+                                              if (!(controller
+                                                      .place[index].images ==
+                                                  null)) {
+                                                return imgUrl +
+                                                    controller.place[index]
+                                                        .images["imagePath"];
+                                              } else {
+                                                if (index % 3 == 1)
+                                                  return restaurantListImage[0];
+                                                else if (index % 3 == 2)
+                                                  return restaurantListImage[1];
+                                                else
+                                                  return restaurantListImage[2];
+                                              }
                                             } else if (placeCode == 2) {
                                               if (index % 2 == 1)
                                                 return hospitalListImage[0];

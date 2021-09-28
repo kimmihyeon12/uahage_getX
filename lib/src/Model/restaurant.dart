@@ -8,7 +8,7 @@ class Restaurant {
       this.isBookmarked,
       this.reviewTotal,
       this.facility,
-      this.image});
+      this.images});
 
   int id;
   String name;
@@ -18,7 +18,7 @@ class Restaurant {
   bool isBookmarked;
   double reviewTotal;
   var facility;
-  var image;
+  var images;
 
   factory Restaurant.fromJson(Map<String, dynamic> json) {
     return Restaurant(
@@ -30,7 +30,7 @@ class Restaurant {
       isBookmarked: json["isBookmarked"],
       reviewTotal: json["reviewTotal"],
       facility: json["facility"],
-      image: json["image"],
+      images: json["images"],
     );
   }
 }

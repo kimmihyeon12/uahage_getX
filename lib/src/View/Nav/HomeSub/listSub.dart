@@ -45,6 +45,7 @@ class ListSub extends StatefulWidget {
 class _ListSubState extends State<ListSub> {
   WebViewController _controller;
   String url = pageURL;
+  String imgUrl = imgURL;
   int placeCode = Get.arguments['placeCode'];
   var data = Get.arguments['data'];
   int index = Get.arguments['index'];
@@ -167,15 +168,27 @@ class _ListSubState extends State<ListSub> {
                                 width: 1500.w,
                                 child: (() {
                                   if (placeCode == 1) {
-                                    if (index % 3 == 1) {
-                                      return mainImage(
-                                          restaurantListImage[0], 1500.w);
-                                    } else if (index % 3 == 2) {
-                                      return mainImage(
-                                          restaurantListImage[1], 1500.w);
-                                    } else
-                                      return mainImage(
-                                          restaurantListImage[2], 1500.w);
+                                    if (data.images == null) {
+                                      if (index % 3 == 1) {
+                                        return mainImage(
+                                            restaurantListImage[0], 1500.w);
+                                      } else if (index % 3 == 2) {
+                                        return mainImage(
+                                            restaurantListImage[1], 1500.w);
+                                      } else
+                                        return mainImage(
+                                            restaurantListImage[2], 1500.w);
+                                    } else {
+                                      return Container(
+                                        color: Colors.black,
+                                        child: SizedBox(
+                                          height: 870.w,
+                                          child: Image.network(
+                                              imgUrl + data.images["imagePath"],
+                                              fit: BoxFit.cover),
+                                        ),
+                                      );
+                                    }
                                   } else if (placeCode == 2) {
                                     if (index % 2 == 1)
                                       return mainImage(
