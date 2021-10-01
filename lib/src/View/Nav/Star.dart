@@ -12,8 +12,10 @@ import 'package:uahage/src/Controller/user.controller.dart';
 
 import 'package:uahage/src/Service/places.restaurant.bookmarks.dart';
 import 'package:uahage/src/Static/Font/font.dart';
+import 'package:uahage/src/Static/Image/listImage.dart';
 import 'package:uahage/src/Static/Widget/appbar.dart';
 import 'package:uahage/src/Static/Widget/icon.dart';
+import 'package:uahage/src/Static/url.dart';
 
 class Star extends GetView<BookmarkController> {
   var listimage = [
@@ -22,6 +24,7 @@ class Star extends GetView<BookmarkController> {
     "./assets/listPage/layer1.png",
     "./assets/listPage/layer2.png",
   ];
+  String imgUrl = imgURL;
   var width = 1500 / 720;
   var height = 2667 / 1280;
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
@@ -104,31 +107,43 @@ class Star extends GetView<BookmarkController> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         (() {
-                                          if (index % 4 == 1) {
-                                            return Image.asset(
-                                              listimage[0],
-                                              height: 414.h,
-                                              width: 413.w,
-                                            );
-                                          } else if (index % 4 == 2) {
-                                            return Image.asset(
-                                              listimage[1],
-                                              height: 414.h,
-                                              width: 413.w,
-                                            );
-                                          } else if (index % 4 == 3) {
-                                            return Image.asset(
-                                              listimage[2],
-                                              height: 414.h,
-                                              width: 413.w,
-                                            );
-                                          } else {
-                                            return Image.asset(
-                                              listimage[3],
-                                              height: 414.h,
-                                              width: 413.w,
-                                            );
-                                          }
+                                          return Container(
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: NetworkImage(
+                                                    (() {
+                                                      if (!(controller
+                                                              .placeBookmark[
+                                                                  index]
+                                                              .images ==
+                                                          null)) {
+                                                        return imgUrl +
+                                                            controller
+                                                                    .placeBookmark[
+                                                                        index]
+                                                                    .images[
+                                                                "imagePath"];
+                                                      } else {
+                                                        if (index % 3 == 1)
+                                                          return restaurantListImage[
+                                                              0];
+                                                        else if (index % 3 == 2)
+                                                          return restaurantListImage[
+                                                              1];
+                                                        else
+                                                          return restaurantListImage[
+                                                              2];
+                                                      }
+                                                    }()),
+                                                    scale: 0.1,
+                                                  ),
+                                                ),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10.0))),
+                                            height: 413.w,
+                                            width: 413.w,
+                                          );
                                         }()),
                                         Padding(
                                             padding: EdgeInsets.only(

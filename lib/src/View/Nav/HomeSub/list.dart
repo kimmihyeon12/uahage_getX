@@ -141,6 +141,7 @@ class PlaceList extends GetView<PlaceController> {
                                 await Get.toNamed("/listsub", arguments: {
                               "data": controller.place[index],
                               "placeCode": placeCode,
+                              "placeId": controller.place[index].id,
                               "index": index,
                             });
 

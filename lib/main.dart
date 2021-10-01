@@ -8,6 +8,7 @@ import 'package:uahage/src/Controller/connection.controller.dart';
 
 import 'package:uahage/src/Controller/location.controller.dart';
 import 'package:uahage/src/Controller/place.restaurant.bookmark.controller.dart';
+
 import 'package:uahage/src/Controller/user.controller.dart';
 import 'package:uahage/src/View/Auth/login.dart';
 import 'package:uahage/src/View/Loading/loading.dart';

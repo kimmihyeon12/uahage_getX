@@ -87,7 +87,8 @@ class _ListMapState extends State<ListMap> {
                   name: 'Print',
                   onMessageReceived: (JavascriptMessage message) async {
                     var messages = jsonDecode(message.message);
-                    print(messages);
+
+                    print("messages $messages");
 
                     await placepopup(context, messages, "", placeCode);
                   }),

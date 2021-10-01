@@ -17,6 +17,7 @@ import 'package:uahage/src/Service/report.dart';
 import 'package:uahage/src/Service/review.dart';
 import 'package:uahage/src/Static/Font/font.dart';
 import 'package:uahage/src/Static/Widget/dialog.dart';
+import 'package:uahage/src/Static/url.dart';
 import 'package:uahage/src/View/Auth/announce.dart';
 import 'package:uahage/src/View/Nav/HomeSub/listSub.dart';
 
@@ -150,6 +151,7 @@ Future<Object> popup(context, grey_image) {
 }
 
 Future<Object> placepopup(context, Message, type, placeCode) async {
+  String imgUrl = imgURL;
   var restaurantListImage = [
     "https://uahage.s3.ap-northeast-2.amazonaws.com/restaurant_image/image1.png",
     "https://uahage.s3.ap-northeast-2.amazonaws.com/restaurant_image/image2.png",
@@ -214,6 +216,7 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                     ),
                     child: InkWell(
                       onTap: () async {
+                        print("------------------------ ");
                         print(Message);
                         var message;
                         if (placeCode == 1) {
@@ -255,7 +258,12 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                                   image: NetworkImage(
                                     (() {
                                       if (placeCode == 1) {
-                                        return restaurantListImage[0];
+                                        if (!(Message["images"].length == 0)) {
+                                          return imgUrl +
+                                              Message["images"][0]["imagePath"];
+                                        } else {
+                                          return restaurantListImage[0];
+                                        }
                                       } else if (placeCode == 2) {
                                         return hospitalListImage[0];
                                       } else if (placeCode == 3) {

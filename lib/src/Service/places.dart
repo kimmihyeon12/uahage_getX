@@ -11,6 +11,7 @@ import 'package:uahage/src/Model/kidCafe.dart';
 import 'package:uahage/src/Model/experienceCenter.dart';
 import 'package:uahage/src/Model/restaurant.dart';
 import 'package:uahage/src/Controller/place.controller.dart';
+import 'package:uahage/src/Model/restaurant_detail.dart';
 import 'package:uahage/src/Static/url.dart';
 import 'package:uahage/src/Model/hospitals.dart';
 
@@ -78,6 +79,56 @@ class Place extends GetView<PlaceController> {
       await controller.setPlace(currentData);
       await controller.setPlacePaceNumber();
     }
+  }
+
+  Future getPlaceDetailList(placeCode, placeId) async {
+    String url = URL;
+    String placeName;
+
+    placeName = await getPlaceName(placeCode);
+
+    var response;
+    if (placeName == "restaurants") {
+      response = await http.get(
+        Uri.parse(url +
+            '/places/$placeName/$placeId?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}&userId=${UserController.to.userId}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': '${UserController.to.token.value}'
+        },
+      );
+    } else {
+      response = await http.get(
+        Uri.parse(url +
+            '/places/$placeName/$placeId?lat=${LocationController.to.lat.value}&lon=${LocationController.to.lon.value}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': '${UserController.to.token.value}'
+        },
+      );
+    }
+    var responseJson = jsonDecode(utf8.decode(response.bodyBytes))["place"];
+    print("responseJson");
+    print(responseJson);
+
+    var currentData;
+
+    if (placeCode == 1) {
+      currentData = RestaurantDetail.fromJson(responseJson);
+    } else if (placeCode == 2) {
+      currentData = Hospitals.fromJson(responseJson);
+    } else if (placeCode == 3) {
+      currentData = DayCareCenter.fromJson(responseJson);
+    } else if (placeCode == 5) {
+      currentData = KidCafe.fromJson(responseJson);
+    } else if (placeCode == 6) {
+      currentData = Experiencecenter.fromJson(responseJson);
+    } else if (placeCode == 8) {
+      currentData = CraftRooms.fromJson(responseJson);
+    }
+    print(currentData);
+    return currentData;
+    // await PlaceDetailController.to.setPlace(currentData);
   }
 
   @override
