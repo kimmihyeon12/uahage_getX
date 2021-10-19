@@ -108,8 +108,6 @@ class Place extends GetView<PlaceController> {
       );
     }
     var responseJson = jsonDecode(utf8.decode(response.bodyBytes))["place"];
-    print("responseJson");
-    print(responseJson);
 
     var currentData;
 

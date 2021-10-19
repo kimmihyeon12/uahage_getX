@@ -16,7 +16,7 @@ class Restaurant {
   String phone;
   int categoryId;
   bool isBookmarked;
-  double reviewTotal;
+  var reviewTotal;
   var facility;
   var images;
 

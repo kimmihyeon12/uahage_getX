@@ -171,12 +171,11 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
     "https://uahage.s3.ap-northeast-2.amazonaws.com/experience_/image3.png",
     "https://uahage.s3.ap-northeast-2.amazonaws.com/experience_/image4.png",
   ];
-  print(Message["name"]);
+
   bool mark;
   var total = Message["total"];
   if (placeCode == 1) {
     mark = Message["isBookmarked"];
-    print("mark $mark");
   }
   var width = 1500 / 720;
   var height = 2667 / 1280;
@@ -238,12 +237,8 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                           "data": message,
                           "placeCode": placeCode,
                           "index": 1,
+                          "placeId": Message["id"]
                         });
-                        //print("result ${result}");
-                        // setState(() {
-                        //   mark = result[0];
-                        //   total = result[1];
-                        // });
                       },
                       child: Row(
                         children: [
@@ -376,7 +371,12 @@ Future<Object> placepopup(context, Message, type, placeCode) async {
                                           padding: EdgeInsets.only(
                                               left: 4.7 * width.w),
                                         ),
-                                        normalfont(total ?? "0.0", 54,
+                                        normalfont(
+                                            "${Message["reviewTotal"]}" ==
+                                                    "null"
+                                                ? "0.0"
+                                                : "${Message["reviewTotal"].toStringAsFixed(1)}",
+                                            54,
                                             Color(0xff4d4d4d))
                                       ],
                                     )

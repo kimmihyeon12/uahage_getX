@@ -98,17 +98,17 @@ class _ListMapState extends State<ListMap> {
               ? GestureDetector(
                   onTap: () async {
                     setState(() {
-                      greyImage = [
-                        false,
-                        false,
-                        false,
-                        false,
-                        false,
-                        false,
-                        false,
-                        false,
-                        false
-                      ];
+                      // greyImage = [
+                      //   false,
+                      //   false,
+                      //   false,
+                      //   false,
+                      //   false,
+                      //   false,
+                      //   false,
+                      //   false,
+                      //   false
+                      // ];
                     });
 
                     List okButton = await popup(context, greyImage);

@@ -57,12 +57,9 @@ class _ListSubState extends State<ListSub> {
   Bookmark bookmark = new Bookmark();
 
   getList() async {
-    print(data);
     Place place = new Place();
     data = await place.getPlaceDetailList(placeCode, placeId);
-    setState(() {
-      print(data);
-    });
+    setState(() {});
   }
 
   //리뷰
@@ -133,8 +130,6 @@ class _ListSubState extends State<ListSub> {
   void initState() {
     super.initState();
     getList();
-    print('PlaceDetailController.to.place');
-    // print(PlaceDetailController.to.place.id);
     select("DATE");
     selectImage();
   }
@@ -146,12 +141,14 @@ class _ListSubState extends State<ListSub> {
   @override
   Widget build(BuildContext context) {
     connection();
-    print("placeCode $placeCode");
     ScreenUtil.init(context, width: 1500, height: 2667);
     return WillPopScope(
       onWillPop: () {
         if (placeCode == 1)
-          Get.back(result: [datas.isBookmarked, averageTotalRating]);
+          Get.back(result: [
+            data == null ? 0 : data.isBookmarked,
+            averageTotalRating
+          ]);
         else
           Get.back(result: "");
       },
@@ -163,7 +160,7 @@ class _ListSubState extends State<ListSub> {
               return appBar(
                 context,
                 datas.name,
-                [datas.isBookmarked, averageTotalRating],
+                [data == null ? 0 : data.isBookmarked, averageTotalRating],
               );
             else
               return appBar(context, datas.name, "");
